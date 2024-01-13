@@ -34,10 +34,6 @@ Install WPI Lib
 
 Install Git
 
-dont play mongus
-
-
 Install GitHub Desktop
 
-get silly
 >>>>>>> Stashed changes
