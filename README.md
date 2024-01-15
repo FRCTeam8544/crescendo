@@ -1,15 +1,9 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-# crescendo
-=======
-=======
 
->>>>>>> Stashed changes
 # crescendo
 
 Software versions and requirements:
 
-If you are on Mac, install XCode from the mac app store, git comes with it. WPI Lib installer requires Xcode
+If you are on Mac, install XCode from the mac app store, git comes with it, WPI Lib installer requires Xcode
 
 WPI Lib version 2024.1.1 
 https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1
@@ -25,21 +19,10 @@ https://desktop.github.com/
 
 ---------------------------------------------------------------------
 
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 Install WPI Lib
 
 - ensure Xcode is installed if you're on a mac
 
-<<<<<<< Updated upstream
-- visit https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1 and download version 2024.1.1
-
-- open the setup executable
-
-=======
 - visit https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1 (2.0GB) and download version 2024.1.1
 
 - open the iso / disk image
@@ -55,16 +38,10 @@ Install WPI Lib
 - It will now continue installing fully
 
 - If you had VS Code installed prior to installing WPI Lib, you can tell which one you just opened as the WPI one has a little W surrounded by a red polygon in the top right, in the same panel as your file tabs within VS Code
->>>>>>> Stashed changes
 
 
 Install Git
 
-<<<<<<< Updated upstream
-Install GitHub Desktop
-
->>>>>>> Stashed changes
-=======
 - If you have a mac with XCode installed, git is included and you may skip installing git entirely
     (If you want to make sure you have git, open your terminal and just type git (Doing this should give a huge list of commands and other stuff, if it does, DON'T INSTALL GIT))
 
@@ -102,4 +79,5 @@ Install GitHub Desktop
 - If you skipped the last step y̶o̶u̶'̶r̶e̶ ̶a̶ ̶b̶a̶d̶ ̶l̶i̶s̶t̶e̶n̶e̶r̶ you need to input a name and email so you can be identified by others when making commits and other forms of GitHuby activities
 
 - Congratulations, you now have GitHub Desktop installed on your computer
->>>>>>> Stashed changes
+
+Happy Coding!
