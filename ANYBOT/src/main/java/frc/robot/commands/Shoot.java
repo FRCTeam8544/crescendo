@@ -4,23 +4,26 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.shoot_subsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends Command {
+public class Shoot extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+  private final shoot_subsystem shoot_subsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public Shoot(shoot_subsystem flyingFish) {
+    this.shoot_subsystem = flyingFish;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(flyingFish);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +32,21 @@ public class ExampleCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    if(RobotContainer.bingus.getRawButtonPressed(Constants.loadButtoon))
+      shoot_subsystem.loadShooter();
+    else if(RobotContainer.bingus.getRawButtonReleased(Constants.loadButtoon))
+      shoot_subsystem.stopIt();
+
+    if(RobotContainer.bingus.getRawButtonPressed(Constants.shootButton))
+      shoot_subsystem.fireInTheHole();
+    else if(RobotContainer.bingus.getRawButtonReleased(Constants.shootButton))
+      shoot_subsystem.stopIt();
+
+    if(RobotContainer.bingus.getRawButtonPressed(Constants.emergencyStop))
+      shoot_subsystem.stopIt();
+  }
 
   // Called once the command ends or is interrupted.
   @Override

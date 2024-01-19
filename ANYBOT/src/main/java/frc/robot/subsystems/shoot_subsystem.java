@@ -6,10 +6,19 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel;
 
-public class ExampleSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
+public class shoot_subsystem extends SubsystemBase {
+
+  static CANSparkMax motor1 = new CANSparkMax(Constants.Motor1CANID, CANSparkLowLevel.MotorType.kBrushless);
+  static CANSparkMax motor2 = new CANSparkMax(Constants.Motor2CANID, CANSparkLowLevel.MotorType.kBrushless);
+    
+
+
+  public shoot_subsystem() {}
 
   /**
    * Example command factory method.
@@ -30,10 +39,24 @@ public class ExampleSubsystem extends SubsystemBase {
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  public void loadShooter() {
+    motor1.set(-.5);
+    motor2.set(-.5);
   }
+
+  public void fireInTheHole(){
+    motor1.set(.5);
+    motor2.set(.5);
+    //this may or may not do smth funky idk
+  }
+
+  public void stopIt()
+  {
+    motor1.set(0);
+    motor2.set(0);
+  }
+
+
 
   @Override
   public void periodic() {
