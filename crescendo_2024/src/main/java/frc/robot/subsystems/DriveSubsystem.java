@@ -69,6 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    
   }
 
   @Override
@@ -124,6 +125,7 @@ public class DriveSubsystem extends SubsystemBase {
     
     double xSpeedCommanded;
     double ySpeedCommanded;
+    
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
