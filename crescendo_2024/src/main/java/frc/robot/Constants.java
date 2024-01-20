@@ -30,9 +30,9 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4.8;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 1.2; // radians per second
-    public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 0.8; // radians per second originally 1.2
+    public static final double kMagnitudeSlewRate = 1; // percent per second (1 = 100%) originally 1.8
+    public static final double kRotationalSlewRate = 1.5; // percent per second (1 = 100%)originally 2
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(24.5);
@@ -46,10 +46,10 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
+    public static final double kFrontLeftChassisAngularOffset = -Math.PI/2;
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI / 2;
+    public static final double kBackRightChassisAngularOffset = Math.PI/2;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 5;
@@ -95,7 +95,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public final double kDrivingP = 0.04;
+    public final static double kDrivingP = 0.04;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
