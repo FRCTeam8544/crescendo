@@ -23,8 +23,8 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   public void loadShooter() {
-    topMotor.set(-.3);
-    bottomMotor.set(-.3);
+    topMotor.set(-.01);
+    bottomMotor.set(-.01);
   }
 
   public void fireInTheHole() {

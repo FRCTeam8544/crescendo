@@ -142,6 +142,6 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int TopMotorCANID = 10, BottomMotorCANID = 9;
-    public static final int loadButton_X = 1, shootButton_A = 2, emergencyStop_B = 3;
+    // unused: public static final int loadButton_X = 1, shootButton_A = 2, emergencyStop_B = 3;
   }
 }
