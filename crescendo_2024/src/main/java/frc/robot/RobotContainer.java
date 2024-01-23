@@ -58,8 +58,8 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRawAxis(2), OIConstants.kDriveDeadband),
-                false, true),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true, true),
             m_robotDrive));
   }
 
@@ -73,6 +73,16 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.setX(),
+            m_robotDrive));
+
+    new JoystickButton(m_driverController, Button.kStart.value)
+        .whileTrue(new RunCommand(
+        () -> m_robotDrive.zeroHeading(), m_robotDrive));
+
     new JoystickButton(m_driverController, Button.kRightBumper.value)  
         .whileTrue(new RunCommand( 
             () -> m_robotDrive.setX(),
