@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.StadiaController.Button;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -143,14 +142,5 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int TopMotorCANID = 10, BottomMotorCANID = 9;
-    // unused: public static final int loadButton_X = 1, shootButton_A = 2, emergencyStop_B = 3;
-  }
-
-  public static final class ControllersSuck {
-    public final static int kRightBumper = Button.kRightBumper.value;
-    public final static int kX = Button.kX.value;
-    public final static int kY = Button.kY.value;
-    public final static int kB = Button.kB.value;
-    public final static int kA = Button.kA.value;
   }
 }

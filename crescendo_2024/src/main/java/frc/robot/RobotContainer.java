@@ -14,18 +14,15 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ControllersSuck;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController; 
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -76,29 +73,27 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    //These button bindings are currently set to PS4, with XBox Alternatives
-    //The XBox value variables are in constants, and it doesn't work unless I do it this way and I have no clue why
-    new JoystickButton(m_driverController, Button.kR1.value)  //RB | for xbox use ControllersSuck.kRightBumper
+    new JoystickButton(m_driverController, Button.kRightBumper.value)  
         .whileTrue(new RunCommand( 
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(m_driverController, Button.kSquare.value) // X | for xbox use ControllersSuck.kX
+    new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.loadShooter(),
             shooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kCross.value) // A | for xbox use ControllersSuck.kA
+    new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.fireInTheHole(),
             shooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kCircle.value) // B | for xbox use ControllersSuck.kB
+    new JoystickButton(m_driverController, Button.kB.value) 
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.stopIt(),
             shooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kTriangle.value) // Y | for xbox use ControllersSuck.kY
+    new JoystickButton(m_driverController, Button.kY.value) 
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.prep(),
             shooterSubsystem));
