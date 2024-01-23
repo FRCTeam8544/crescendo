@@ -16,15 +16,16 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ControllersSuck;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup; //unused
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController; //unused
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController; 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShootSubsystem shooterSubsystem = new ShootSubsystem();
+  
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -74,29 +76,29 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    //These button bindings use PS4 button names on a XboxController, which is kinda wack
-    //TODO: Fix?
-    new JoystickButton(m_driverController, Button.kR1.value) 
-        .whileTrue(new RunCommand(
+    //These button bindings are currently set to PS4, with XBox Alternatives
+    //The XBox value variables are in constants, and it doesn't work unless I do it this way and I have no clue why
+    new JoystickButton(m_driverController, Button.kR1.value)  //RB | for xbox use ControllersSuck.kRightBumper
+        .whileTrue(new RunCommand( 
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    new JoystickButton(m_driverController, Button.kSquare.value) // X
+    new JoystickButton(m_driverController, Button.kSquare.value) // X | for xbox use ControllersSuck.kX
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.loadShooter(),
             shooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kCross.value) // A
+    new JoystickButton(m_driverController, Button.kCross.value) // A | for xbox use ControllersSuck.kA
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.fireInTheHole(),
             shooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kCircle.value) // B
+    new JoystickButton(m_driverController, Button.kCircle.value) // B | for xbox use ControllersSuck.kB
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.stopIt(),
             shooterSubsystem));
 
-    new JoystickButton(m_driverController, Button.kTriangle.value) // Y
+    new JoystickButton(m_driverController, Button.kTriangle.value) // Y | for xbox use ControllersSuck.kY
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.prep(),
             shooterSubsystem));
