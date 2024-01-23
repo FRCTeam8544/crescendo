@@ -19,11 +19,10 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -36,9 +35,13 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ShootSubsystem shooterSubsystem = new ShootSubsystem();
+  
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -70,7 +73,9 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kX.value)
+
+
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
@@ -78,9 +83,26 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
+    
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whileTrue(new RunCommand(
+            () -> shooterSubsystem.loadShooter(),
+            shooterSubsystem));
 
-    
-    
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whileTrue(new RunCommand(
+            () -> shooterSubsystem.fireInTheHole(),
+            shooterSubsystem));
+
+    new JoystickButton(m_driverController, Button.kB.value) 
+        .whileTrue(new RunCommand(
+            () -> shooterSubsystem.stopIt(),
+            shooterSubsystem));
+
+    new JoystickButton(m_driverController, Button.kY.value) 
+        .whileTrue(new RunCommand(
+            () -> shooterSubsystem.prep(),
+            shooterSubsystem)); 
   }
 
   /**
