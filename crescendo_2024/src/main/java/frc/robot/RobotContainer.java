@@ -28,8 +28,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController; //unused
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
-import frc.robot.commands.Shoot;
-
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -43,7 +41,6 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  Shoot gun = new Shoot();
 
 
 
@@ -86,7 +83,7 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kSquare.value) // X
         .whileTrue(new RunCommand(
-            () -> gun.intake(),
+            () -> shooterSubsystem.loadShooter(),
             shooterSubsystem));
 
     new JoystickButton(m_driverController, Button.kCross.value) // A
