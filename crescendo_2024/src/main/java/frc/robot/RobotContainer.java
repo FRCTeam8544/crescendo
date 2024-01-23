@@ -74,6 +74,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -82,12 +83,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
-
-    new JoystickButton(m_driverController, Button.kRightBumper.value)  
-        .whileTrue(new RunCommand( 
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
+    
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.loadShooter(),
@@ -106,7 +102,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kY.value) 
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.prep(),
-            shooterSubsystem));
+            shooterSubsystem)); 
   }
 
   /**
