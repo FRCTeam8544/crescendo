@@ -34,7 +34,7 @@ public class ShootSubsystem extends SubsystemBase {
     shooter.setD(0);shooter.setI(0);shooter.setP(1);
     loader.setD(0);loader.setI(0);loader.setP(1);
 
-    shooter.setOutputRange(-1, 1);loader.setOutputRange(-1, 1);
+    shooter.setOutputRange(-0.5, 0.5);loader.setOutputRange(-0.5, 0.5);
 
   }
 
@@ -45,21 +45,24 @@ public class ShootSubsystem extends SubsystemBase {
 
 
   public void sourceIntake(){
-    shooter.setReference(-100, CANSparkBase.ControlType.kSmartVelocity);
-    loader.setReference(-75, CANSparkBase.ControlType.kSmartVelocity); 
+    System.out.println("sourceIntake");
+    shooter.setReference(-100, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
+    loader.setReference(-75, CANSparkBase.ControlType.kVelocity); 
   }
 
   public void shoot(){
-    shooter.setReference(2000, CANSparkBase.ControlType.kSmartVelocity);
-    if (shootingEncoder.getVelocity() > 1900){
-      loader.setReference(100, CANSparkBase.ControlType.kSmartVelocity);
+    System.out.println("Shoot");
+    shooter.setReference(1000, CANSparkBase.ControlType.kVelocity);
+    if (shootingEncoder.getVelocity() > 190){
+      loader.setReference(100, CANSparkBase.ControlType.kVelocity);
     }
   }
 
 
   public void stopMovement(){
-    shooter.setReference(0, CANSparkBase.ControlType.kSmartVelocity);
-    loader.setReference(0, CANSparkBase.ControlType.kSmartVelocity);
+    System.out.println("stop movement");
+    shooter.setReference(0, CANSparkBase.ControlType.kVelocity);
+    loader.setReference(0, CANSparkBase.ControlType.kVelocity);
   }
 
   public void fireInTheHole() {
