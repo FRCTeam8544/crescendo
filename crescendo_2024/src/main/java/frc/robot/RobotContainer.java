@@ -35,7 +35,8 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ShootSubsystem shooterSubsystem = new ShootSubsystem();
+  //private final ShootSubsystem shooterSubsystem = new ShootSubsystem();
+  private final ShootSubsystem m_shooter = new ShootSubsystem();
   
 
   // The driver's controller
@@ -83,7 +84,30 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
+
+
+        /**
+         * shooter commands
+         */
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whileTrue(new RunCommand(
+        () -> m_shooter.sourceIntake(), 
+            m_shooter)).onFalse(
+                new RunCommand(() -> m_shooter.stopMovement(), m_shooter));
+
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whileTrue(new RunCommand(
+            () -> m_shooter.shoot(),
+            m_shooter)).onFalse(
+                new RunCommand(() -> m_shooter.stopMovement(), m_shooter));
+
+    /*new JoystickButton(m_driverController, Button.kA.value)
+        .whileFalse(new RunCommand(
+        () -> m_shooter.stopMovement(),
+        m_shooter));*/
+
     
+    /*
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.loadShooter(),
@@ -103,6 +127,9 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> shooterSubsystem.prep(),
             shooterSubsystem)); 
+            */
+
+   
   }
 
   /**
