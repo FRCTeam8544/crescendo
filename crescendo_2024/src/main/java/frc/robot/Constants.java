@@ -142,5 +142,10 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int TopMotorCANID = 10, BottomMotorCANID = 9;
+
+    public final double kP = 0.000005;
+    public final double kI = 5e-7;
+    public final double kD = 0.0005;
+    public final double kF = 0.0002;
   }
 }
