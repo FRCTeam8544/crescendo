@@ -92,15 +92,22 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
         () -> m_shooter.sourceIntake(), 
-            m_shooter)).onFalse(
-                new RunCommand(() -> m_shooter.stopMovement(), m_shooter));
+            m_shooter))
+                .onFalse(new RunCommand(
+                () -> m_shooter.stopMovement(), m_shooter));
 
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(),
-            m_shooter)).onFalse(
-                new RunCommand(() -> m_shooter.stopMovement(), m_shooter));
+            m_shooter))
+            .onFalse(new RunCommand(
+            () -> m_shooter.stopMovement(), m_shooter));
 
+
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new RunCommand(
+        () -> m_shooter.stopMovement(),
+        m_shooter));
     /*new JoystickButton(m_driverController, Button.kA.value)
         .whileFalse(new RunCommand(
         () -> m_shooter.stopMovement(),
