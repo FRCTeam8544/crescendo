@@ -108,35 +108,6 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
         () -> m_shooter.stopMovement(),
         m_shooter));
-    /*new JoystickButton(m_driverController, Button.kA.value)
-        .whileFalse(new RunCommand(
-        () -> m_shooter.stopMovement(),
-        m_shooter));*/
-
-    
-    /*
-    new JoystickButton(m_driverController, Button.kX.value)
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.loadShooter(),
-            shooterSubsystem));
-
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.fireInTheHole(),
-            shooterSubsystem));
-
-    new JoystickButton(m_driverController, Button.kB.value) 
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.stopIt(),
-            shooterSubsystem));
-
-    new JoystickButton(m_driverController, Button.kY.value) 
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.prep(),
-            shooterSubsystem)); 
-            */
-
-   
   }
 
   /**

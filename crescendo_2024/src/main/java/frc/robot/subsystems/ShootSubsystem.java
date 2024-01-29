@@ -94,18 +94,4 @@ public class ShootSubsystem extends SubsystemBase {
     //loader.setSetpoint(0);
 
   }
-
-  public void fireInTheHole() {
-    bottomMotor.set(1);
-  }
-
-  public void prep() { 
-    topMotor.set(1);
-  }
-
-  public void stopIt()
-  {
-    topMotor.set(0);
-    bottomMotor.set(0);
-  }
 }
