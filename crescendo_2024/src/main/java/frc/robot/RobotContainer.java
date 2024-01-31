@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
+import org.littletonrobotics.junction.AutoLog;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -33,21 +35,20 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+    
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private final ShootSubsystem shooterSubsystem = new ShootSubsystem();
   private final ShootSubsystem m_shooter = new ShootSubsystem();
-  
-
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-
-
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
     // Configure the button bindings
     configureButtonBindings();
 

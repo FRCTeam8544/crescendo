@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
