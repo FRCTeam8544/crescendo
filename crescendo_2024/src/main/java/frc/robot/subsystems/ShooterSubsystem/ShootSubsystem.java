@@ -38,7 +38,7 @@ public class ShootSubsystem extends SubsystemBase {
     leftMotor.restoreFactoryDefaults();
     rightMotor.restoreFactoryDefaults();
 
-    leftMotor.follow(leftMotor, true); // Right motor is the leader
+    //leftMotor.follow(leftMotor, true); // Right motor is the leader
 
     leftMotorPID.setP(0.000005);leftMotorPID.setI(5e-7);leftMotorPID.setD(0.0005);
     rightMotorPID.setP(0.000005);rightMotorPID.setI(5e-7);rightMotorPID.setD(0.0005);
@@ -54,7 +54,7 @@ public class ShootSubsystem extends SubsystemBase {
 
   public void sourceIntake(){
     System.out.println("sourceIntake");
-    // We probably don't need this | leftMotorPID.setReference(ShooterConstants.intakeSetpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
+    leftMotorPID.setReference(-ShooterConstants.intakeSetpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
     rightMotorPID.setReference(ShooterConstants.intakeSetpoint, CANSparkBase.ControlType.kVelocity); 
     //topMotor.set(shooter.calculate(shootingEncoder.getVelocity(), -100));
     //bottomMotor.set(loader.calculate(loadingEncoder.getVelocity(), -75));
@@ -65,8 +65,8 @@ public class ShootSubsystem extends SubsystemBase {
 
   public void shoot(){
     System.out.println("Shoot");
-    // We probably don't need this | leftMotorPID.setReference(ShooterConstants.shootSetpoint, CANSparkBase.ControlType.kVelocity);
-    rightMotorPID.setReference(ShooterConstants.shootSetpoint, CANSparkBase.ControlType.kVelocity);
+    leftMotorPID.setReference(ShooterConstants.shootSetpoint, CANSparkBase.ControlType.kVelocity);
+    rightMotorPID.setReference(-ShooterConstants.shootSetpoint, CANSparkBase.ControlType.kVelocity);
     }
     //topMotor.set(shooter.calculate(shootingEncoder.getVelocity(), 100));
     //if (shooter.atSetpoint()){bottomMotor.set(loader.calculate(loadingEncoder.getVelocity(), 100));}
@@ -80,7 +80,7 @@ public class ShootSubsystem extends SubsystemBase {
 
   public void stopMovement(){
     System.out.println("stop movement");
-    // We probably don't need this | leftMotorPID.setReference(ShooterConstants.stopSetpoint, CANSparkBase.ControlType.kVelocity);
+    leftMotorPID.setReference(ShooterConstants.stopSetpoint, CANSparkBase.ControlType.kVelocity);
     rightMotorPID.setReference(ShooterConstants.stopSetpoint, CANSparkBase.ControlType.kVelocity);
     //topMotor.set(0);
     //bottomMotor.set(0);
