@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -24,6 +25,7 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final RobotType ROBOT = RobotType.SIMULATED_ROBOT;
   public static final Mode currentMode = Mode.SIM;
   public static enum Mode {
     /* Running a real robot */
@@ -32,6 +34,39 @@ public final class Constants {
     SIM,
     /* Replaying from a log file */
     REPLAY
+  }
+
+  public enum RobotType {
+    ROBOT_2024,
+    SIMULATED_ROBOT
+  }
+
+  public static RobotType getRobot() {
+    if (RobotBase.isReal()) {
+      if(ROBOT != RobotType.SIMULATED_ROBOT || ROBOT != RobotType.ROBOT_2024) {
+        System.out.println("Invalid Robot, using competition robot as default");
+        return RobotType.ROBOT_2024;
+      }
+      else {
+        return ROBOT;
+      }
+    }
+    else {
+      return ROBOT;
+    }
+  }
+
+  public static Mode getMode() {
+    switch (getRobot()) {
+      case ROBOT_2024:
+        return RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
+
+      case SIMULATED_ROBOT:
+        return Mode.SIM;
+
+      default:
+        return Mode.REAL;
+    }
   }
 
   public static final class DriveConstants {
@@ -151,11 +186,15 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int TopMotorCANID = 10, BottomMotorCANID = 9;
+    public static final int leftMotorCANID = 11, rightMotorCANID = 12;
 
     public final double kP = 0.000005;
     public final double kI = 5e-7;
     public final double kD = 0.0005;
     public final double kF = 0.0002;
+
+    public final static double shootSetpoint = 5000;
+    public final static double stopSetpoint = 0;
+    public final static double intakeSetpoint = -100; // should be negative, spinning in reverse for intake
   }
 }
