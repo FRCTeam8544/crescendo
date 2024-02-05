@@ -59,6 +59,11 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
+  // These are up here so we can log it
+  //double xSpeedDelivered;
+  //double ySpeedDelivered;
+  //double rotDelivered;
+
   StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
     .getStructTopic("MyPose", Pose2d.struct).publish();
 
@@ -97,12 +102,13 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
  
-    if (DriverStation.isDisabled()) {
-      Logger.recordOutput("SwerveStates/Setpoints", new SwerveModulePosition[] {});
-      Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModulePosition[] {});
-    }
+    if (DriverStation.isDisabled()) {}
     
     publisher.set(getPose());
+
+    //Logger.recordOutput("Odometry/X", xSpeedDelivered);
+    //Logger.recordOutput("Odometry/Y", ySpeedDelivered);
+    //Logger.recordOutput("Odometry/Rot", rotDelivered);
   }
 
   /**
@@ -145,10 +151,6 @@ public class DriveSubsystem extends SubsystemBase {
     
     double xSpeedCommanded;
     double ySpeedCommanded;
-
-
-    
-    
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
