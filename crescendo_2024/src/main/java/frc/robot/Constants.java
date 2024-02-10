@@ -141,11 +141,15 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int TopMotorCANID = 10, BottomMotorCANID = 9;
+    public static final int leftMotorCANID = 11, rightMotorCANID = 12;
 
     public final double kP = 0.000005;
     public final double kI = 5e-7;
     public final double kD = 0.0005;
     public final double kF = 0.0002;
-  }
+
+    public final static double shootSetpoint = 5000;
+    public final static double stopSetpoint = 0;
+    public final static double intakeSetpoint = -100; // should be negative, spinning in reverse for intake
+  } 
 }
