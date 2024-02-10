@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
   public static final RobotType ROBOT = RobotType.SIMULATED_ROBOT;
   public static final Mode currentMode = Mode.SIM;
   public static enum Mode {
@@ -196,5 +197,5 @@ public final class Constants {
     public final static double shootSetpoint = 5000;
     public final static double stopSetpoint = 0;
     public final static double intakeSetpoint = -100; // should be negative, spinning in reverse for intake
-  }
+  } 
 }

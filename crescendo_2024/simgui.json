@@ -4,41 +4,7 @@
       "/FMSInfo": "FMSInfo"
     }
   },
-  "NetworkTables": {
-    "transitory": {
-      "AdvantageKit": {
-        "open": true
-      },
-      "FMSInfo": {
-        "open": true
-      },
-      "LiveWindow": {
-        ".status": {
-          "open": true
-        },
-        "open": true
-      },
-      "Shuffleboard": {
-        ".metadata": {
-          "open": true
-        },
-        ".recording": {
-          "open": true
-        },
-        "open": true
-      }
-    }
-  },
   "NetworkTables Info": {
-    "Connections": {
-      "open": true
-    },
-    "Server": {
-      "Publishers": {
-        "open": true
-      },
-      "open": true
-    },
     "visible": true
   }
 }
