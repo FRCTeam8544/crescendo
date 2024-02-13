@@ -140,6 +140,11 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
+  public static final class StopConstant {
+    public final static double stopSetpoint = 0;
+  }
+
+
   public static final class ShooterConstants {
     public static final int leftMotorCANID = 11, rightMotorCANID = 12;
 
@@ -149,7 +154,19 @@ public final class Constants {
     public final double kF = 0.0002;
 
     public final static double shootSetpoint = 5000;
-    public final static double stopSetpoint = 0;
     public final static double intakeSetpoint = -100; // should be negative, spinning in reverse for intake
-  } 
+  }
+
+  public static final class IntakeConstants {
+    public static final int RollerCANID = 14;
+    public static final int ArmCANID = 13;
+
+    public static final double suckySuckSpeed = -.4; //percentage please
+    public static final double rateMachineIsFed = .4; //percentage please
+
+    public static final double armkP = 0;
+    public static final double armkI = 0;
+    public static final double armkD = 0;
+    public static final double armkF = 0;
+  }
 }

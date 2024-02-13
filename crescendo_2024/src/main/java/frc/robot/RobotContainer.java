@@ -18,7 +18,10 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.StopConstant;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -35,9 +38,8 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  //private final ShootSubsystem shooterSubsystem = new ShootSubsystem();
   private final ShootSubsystem m_shooter = new ShootSubsystem();
-  
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -75,68 +77,42 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-
-/*     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive)); */
-
     new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-
-        /**
-         * shooter commands
-         */
+    //shooter commands
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
-        () -> m_shooter.sourceIntake(), 
+        () -> m_shooter.sourceIntake(ShooterConstants.intakeSetpoint), 
             m_shooter))
                 .onFalse(new RunCommand(
-                () -> m_shooter.stopMovement(), m_shooter));
+                () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
 
     new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new RunCommand(
-            () -> m_shooter.shoot(),
+            () -> m_shooter.shoot(ShooterConstants.shootSetpoint),
             m_shooter))
             .onFalse(new RunCommand(
-            () -> m_shooter.stopMovement(), m_shooter));
-
+            () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
 
     new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new RunCommand(
-        () -> m_shooter.stopMovement(),
+        () -> m_shooter.stopMovement(StopConstant.stopSetpoint),
         m_shooter));
-    /*new JoystickButton(m_driverController, Button.kA.value)
-        .whileFalse(new RunCommand(
-        () -> m_shooter.stopMovement(),
-        m_shooter));*/
 
+    //intake commands
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+        .whileTrue(new RunCommand(
+            () -> m_intake.suckySuck()))
+            .onFalse(new RunCommand(
+            () -> m_intake.stop()));
     
-    /*
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
-            () -> shooterSubsystem.loadShooter(),
-            shooterSubsystem));
-
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.fireInTheHole(),
-            shooterSubsystem));
-
-    new JoystickButton(m_driverController, Button.kB.value) 
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.stopIt(),
-            shooterSubsystem));
-
-    new JoystickButton(m_driverController, Button.kY.value) 
-        .whileTrue(new RunCommand(
-            () -> shooterSubsystem.prep(),
-            shooterSubsystem)); 
-            */
-
-   
+            () -> m_intake.feedTheMachine()))
+            .onFalse(new RunCommand(
+            () -> m_intake.stop()));
   }
 
   /**

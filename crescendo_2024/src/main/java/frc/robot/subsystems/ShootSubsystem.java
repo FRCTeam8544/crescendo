@@ -52,21 +52,21 @@ public class ShootSubsystem extends SubsystemBase {
     //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
   }
 
-  public void sourceIntake(){
+  public void sourceIntake(double setpoint){
     System.out.println("sourceIntake");
-    leftMotorPID.setReference(-ShooterConstants.intakeSetpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
-    rightMotorPID.setReference(ShooterConstants.intakeSetpoint, CANSparkBase.ControlType.kVelocity); 
+    leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
+    rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity); 
   }
 
-  public void shoot(){
+  public void shoot(double setpoint){
     System.out.println("Shoot");
-    leftMotorPID.setReference(ShooterConstants.shootSetpoint, CANSparkBase.ControlType.kVelocity);
-    rightMotorPID.setReference(-ShooterConstants.shootSetpoint, CANSparkBase.ControlType.kVelocity);
+    leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+    rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
     }
 
-  public void stopMovement(){
+  public void stopMovement(double setpoint){
     System.out.println("stop movement");
-    leftMotorPID.setReference(ShooterConstants.stopSetpoint, CANSparkBase.ControlType.kVelocity);
-    rightMotorPID.setReference(ShooterConstants.stopSetpoint, CANSparkBase.ControlType.kVelocity);
+    leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+    rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
   }
 }
