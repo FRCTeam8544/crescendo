@@ -5,7 +5,7 @@ Software versions and requirements:
 
 If you are on Mac, install XCode from the mac app store, git comes with it, WPI Lib installer requires Xcode
 
-WPI Lib version 2024.1.1 
+WPI Lib version 2024.2.1 
 https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1
 
 WPI Lib Documentation 2024
@@ -23,7 +23,7 @@ Install WPI Lib
 
 - ensure Xcode is installed if you're on a mac
 
-- visit https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.1.1 (2.0GB) and download version 2024.1.1
+- visit https://github.com/wpilibsuite/allwpilib/releases/tag/v2024.2.1 (2.0GB) and download version 2024.2.1
 
 - open the iso / disk image
 
