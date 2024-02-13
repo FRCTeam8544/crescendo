@@ -16,13 +16,17 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ClimbElevatorConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
+import frc.robot.subsystems.ClimberElevator;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
+import frc.robot.subsystems.ShooterElevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
@@ -40,6 +44,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final ShooterElevator m_shootElevator = new ShooterElevator();
+  private final ClimberElevator m_climber = new ClimberElevator();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -75,44 +81,94 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
 
     new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
     //shooter commands
-    new JoystickButton(m_driverController, Button.kX.value)
-        .whileTrue(new RunCommand(
-        () -> m_shooter.sourceIntake(ShooterConstants.intakeSetpoint), 
-            m_shooter))
-                .onFalse(new RunCommand(
-                () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
-
-    new JoystickButton(m_driverController, Button.kA.value)
+    new JoystickButton(m_driverController, Button.kA.value) //A Button
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(ShooterConstants.shootSetpoint),
             m_shooter))
             .onFalse(new RunCommand(
-            () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
+            () -> m_shooter.stop(StopConstant.stopSetpoint), m_shooter));
 
-    new JoystickButton(m_driverController, Button.kB.value)
+    /* This is a kill switch that could be removed whenever, but it probably shouldnt be for now */
+    new JoystickButton(m_driverController, Button.kB.value) // B Button
         .whileTrue(new RunCommand(
-        () -> m_shooter.stopMovement(StopConstant.stopSetpoint),
+        () -> m_shooter.stop(StopConstant.stopSetpoint),
         m_shooter));
 
+    /*
+        Likely uneeded since we won't intake via shooter anymore
+
+    new JoystickButton(m_driverController, Button.k-.value) X button now conflicts with intaking fron ground,
+        .whileTrue(new RunCommand(                          which is worth noting if we ever re-implement this
+        () -> m_shooter.sourceIntake(ShooterConstants.intakeSetpoint), 
+            m_shooter))
+                .onFalse(new RunCommand(
+                () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
+    */
+
     //intake commands
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    new JoystickButton(m_driverController, Button.kX.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
             () -> m_intake.suckySuck()))
             .onFalse(new RunCommand(
             () -> m_intake.stop()));
     
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_driverController, Button.kY.value) // changed to Y from right bumper
         .whileTrue(new RunCommand(
             () -> m_intake.feedTheMachine()))
             .onFalse(new RunCommand(
             () -> m_intake.stop()));
+
+    //shooter elevator commands
+    new JoystickButton(m_driverController, Button.kRightBumper.value) // Right Bumper
+        .whileTrue(new RunCommand(
+        () -> m_shootElevator.muévete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
+        m_shootElevator))
+        .onFalse(new RunCommand(
+            () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
+    
+    new JoystickButton(m_driverController, Button.kLeftBumper.value) // Left Bumper
+        .whileTrue(new RunCommand(
+        () -> m_shootElevator.muévete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
+        m_shootElevator))
+        .onFalse(new RunCommand(
+            () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
+
+    new JoystickButton(m_driverController, Button.kStart.value) // Start Button (no clue where it is)
+        .whileTrue(new RunCommand(
+        () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for upward motion
+        m_shootElevator))
+        .onFalse(new RunCommand(
+            () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
+    
+    new JoystickButton(m_driverController, Button.kBack.value) // Back Button (no clue where this is either)
+        .whileTrue(new RunCommand(
+        () -> m_shootElevator.rotatePivot(-ShootElevatorConstants.pivotSetpoint), //for downward motion
+        m_shootElevator))
+        .onFalse(new RunCommand(
+            () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
+
+    //climber commands
+    new JoystickButton(m_driverController, Button.kRightStick.value) // Right Stick pressed in
+        .whileTrue(new RunCommand(
+        () -> m_climber.moveClimber(ClimbElevatorConstants.elevatorSetpoint), //for upward motion
+        m_climber))
+        .onFalse(new RunCommand(
+            () -> m_climber.stop(StopConstant.stopSetpoint)));
+    
+    new JoystickButton(m_driverController, Button.kLeftStick.value) // Left Stick pressed in
+        .whileTrue(new RunCommand(
+        () -> m_climber.moveClimber(-ClimbElevatorConstants.elevatorSetpoint), //for downward motion
+        m_shootElevator))
+        .onFalse(new RunCommand(
+            () -> m_climber.stop(StopConstant.stopSetpoint)));
+
   }
 
   /**

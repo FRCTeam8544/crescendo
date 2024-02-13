@@ -6,11 +6,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.StopConstant;
 
-public class IntakeSubsystem {
+public class IntakeSubsystem extends SubsystemBase{
     private static CANSparkMax rollerMotor = new CANSparkMax(Constants.IntakeConstants.RollerCANID, CANSparkLowLevel.MotorType.kBrushless);
     private static CANSparkMax armMotor = new CANSparkMax(Constants.IntakeConstants.ArmCANID, CANSparkLowLevel.MotorType.kBrushless);
 
@@ -21,6 +22,11 @@ public class IntakeSubsystem {
         armMotor.restoreFactoryDefaults();
     
         armPID.setP(Constants.IntakeConstants.armkP);armPID.setI(Constants.IntakeConstants.armkI);armPID.setD(Constants.IntakeConstants.armkD);
+    }
+
+    @Override
+    public void periodic(){
+        updateDashboard();
     }
 
     public void suckySuck(){
@@ -41,6 +47,6 @@ public class IntakeSubsystem {
     
     public void updateDashboard(){
         SmartDashboard.putNumber("Arm Velocity", armMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Arm Position", armMotor.getEncoder().getPosition());  
+        SmartDashboard.putNumber("Arm Position", armMotor.getEncoder().getPosition());
     }
 }

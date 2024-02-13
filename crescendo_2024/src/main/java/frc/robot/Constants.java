@@ -144,13 +144,12 @@ public final class Constants {
     public final static double stopSetpoint = 0;
   }
 
-
   public static final class ShooterConstants {
     public static final int leftMotorCANID = 11, rightMotorCANID = 12;
 
-    public final double kP = 0.000005;
-    public final double kI = 5e-7;
-    public final double kD = 0.0005;
+    public static final double kP = 0.000005;
+    public static final double kI = 5e-7;
+    public static final double kD = 0.0005;
     public final double kF = 0.0002;
 
     public final static double shootSetpoint = 5000;
@@ -158,15 +157,53 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int RollerCANID = 14;
     public static final int ArmCANID = 13;
+    public static final int RollerCANID = 14;
 
     public static final double suckySuckSpeed = -.4; //percentage please
     public static final double rateMachineIsFed = .4; //percentage please
 
+    //Values are 0 where tuning is required
     public static final double armkP = 0;
     public static final double armkI = 0;
     public static final double armkD = 0;
     public static final double armkF = 0;
+  }
+
+  public static final class ShootElevatorConstants {
+    public static final int ElevatorCANID = 17;
+    public static final int PivotCANID = 18;
+    //pivot is what im calling the mechanism to aim the shooter up or down angularly
+
+    //Values are 0 where tuning is required
+    public static final double elevatorSetpoint = 0; //levantanse por favor
+    public static final double pivotSetpoint = 0;
+
+    public static final double elevkP = 0;
+    public static final double elevkI = 0;
+    public static final double elevkD = 0;
+    public static final double elevkF = 0;
+
+    public static final double pivotkP = 0;
+    public static final double pivotkI = 0;
+    public static final double pivotkD = 0;
+    public static final double pivotkF = 0;
+  }
+
+  public static final class ClimbElevatorConstants {
+    public static final int LeftElevatorCANID = 15;
+    public static final int RightElevatorCANID = 16;
+
+    //Values are 0 where tuning is required
+    public static final double elevatorSetpoint = 0; //levantanse por favor
+    //only here if follow doesn't work
+    public static final double elevatorRightSetpoint = elevatorSetpoint;
+
+    public static final double elevkP = 0;
+    public static final double elevkI = 0;
+    public static final double elevkD = 0;
+    public static final double elevkF = 0;
+
+    //Seperate PID values need to be added if follow doesn't work
   }
 }
