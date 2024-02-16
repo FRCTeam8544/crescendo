@@ -58,10 +58,18 @@ public class ShooterElevator extends SubsystemBase {
   }
 
 
-  public void updateDashboard(){
-        SmartDashboard.putNumber("Elevator Velocity", elevatorMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Elevator Position", elevatorMotor.getEncoder().getPosition());  
-        SmartDashboard.putNumber("Pivot Velocity", elevatorMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Pivot Position", elevatorMotor.getEncoder().getPosition());  
-    }
+  public void updateDashboard(){ 
+    SmartDashboard.putNumber("Elevator Velocity", elevatorMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Elevator Position", elevatorMotor.getEncoder().getPosition());  
+    SmartDashboard.putNumber("Pivot Velocity", elevatorMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Pivot Position", elevatorMotor.getEncoder().getPosition());  
+  }
+
+  public double getElevatorVelocity(){
+    return elevatorMotor.getEncoder().getVelocity();
+  }
+
+  public double getElevatorPosition(){
+    return elevatorMotor.getEncoder().getPosition();
+  }
 }

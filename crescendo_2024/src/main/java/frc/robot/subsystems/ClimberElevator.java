@@ -45,7 +45,15 @@ public class ClimberElevator extends SubsystemBase {
   }
 
   public void updateDashboard(){
-        SmartDashboard.putNumber("Climber Velocity", elevatorMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Climber Position", elevatorMotor.getEncoder().getPosition());  
-    }
+    SmartDashboard.putNumber("Climber Velocity", elevatorMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Climber Position", elevatorMotor.getEncoder().getPosition());  
+  }
+
+  public double getElevatorVelocity(){
+    return elevatorMotor.getEncoder().getVelocity();
+  }
+
+  public double getElevatorPosition(){
+    return elevatorMotor.getEncoder().getPosition();
+  }
 }

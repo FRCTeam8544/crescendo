@@ -64,7 +64,15 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   public void updateDashboard(){
-        SmartDashboard.putNumber("Left Motor Velocity", leftMotor.getEncoder().getVelocity());
-        SmartDashboard.putNumber("Right Motor Velocity", rightMotor.getEncoder().getVelocity());  
-    }
+    SmartDashboard.putNumber("Left Motor Velocity", leftMotor.getEncoder().getVelocity());
+    SmartDashboard.putNumber("Right Motor Velocity", rightMotor.getEncoder().getVelocity());  
+  }
+
+  public double getRightVelocity(){
+    return rightMotor.getEncoder().getVelocity();
+  }
+
+  public double getLeftVelocity(){
+    return leftMotor.getEncoder().getVelocity();
+  }
 }
