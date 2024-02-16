@@ -17,17 +17,19 @@ public class IntakeSubsystem extends SubsystemBase{
     private static CANSparkMax armMotor = new CANSparkMax(Constants.IntakeConstants.ArmCANID, CANSparkLowLevel.MotorType.kBrushless);
     private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
     private SparkPIDController armPID = armMotor.getPIDController();
-    private boolean thisValueIsDangerous;
 
     public IntakeSubsystem() {
         rollerMotor.restoreFactoryDefaults();
         armMotor.restoreFactoryDefaults();
-        armPID.setP(Constants.IntakeConstants.armkP);armPID.setI(Constants.IntakeConstants.armkI);armPID.setD(Constants.IntakeConstants.armkD);
+        armPID.setP(Constants.IntakeConstants.armkP);
+        armPID.setI(Constants.IntakeConstants.armkI);
+        armPID.setD(Constants.IntakeConstants.armkD);
     }
 
     @Override
     public void periodic(){
-        thisValueIsDangerous = bobsFavoritePart.get();
+        if(bobsFavoritePart.get())
+            stop();
         updateDashboard();
     }
 
@@ -44,8 +46,7 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void moveArm(double setpoint){
-        while(!thisValueIsDangerous)
-            armPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+        armPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
     }
     
     public void updateDashboard(){

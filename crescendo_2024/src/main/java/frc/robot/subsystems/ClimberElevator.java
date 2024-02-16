@@ -7,6 +7,8 @@ import frc.robot.Constants.ClimbElevatorConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 
@@ -16,11 +18,13 @@ public class ClimberElevator extends SubsystemBase {
   private static CANSparkMax rightElevatorMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
 
   private SparkPIDController elevatorMotorPID = elevatorMotor.getPIDController();
+  private AbsoluteEncoder elevatorEncoder = elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
   public ClimberElevator() {
 
     elevatorMotor.restoreFactoryDefaults();
     rightElevatorMotor.restoreFactoryDefaults();
+    elevatorMotorPID.setFeedbackDevice(elevatorEncoder);
 
     rightElevatorMotor.follow(elevatorMotor, true);
 
