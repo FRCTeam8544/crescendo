@@ -128,14 +128,14 @@ public class RobotContainer {
     //shooter elevator commands
     new JoystickButton(m_driverController, Button.kRightBumper.value) // Right Bumper
         .whileTrue(new RunCommand(
-        () -> m_shootElevator.muévete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
+        () -> m_shootElevator.muevete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
         m_shootElevator))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
     
     new JoystickButton(m_driverController, Button.kLeftBumper.value) // Left Bumper
         .whileTrue(new RunCommand(
-        () -> m_shootElevator.muévete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
+        () -> m_shootElevator.muevete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
         m_shootElevator))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));

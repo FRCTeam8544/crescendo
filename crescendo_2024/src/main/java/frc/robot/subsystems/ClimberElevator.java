@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimbElevatorConstants;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.StopConstant;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
@@ -16,7 +19,7 @@ public class ClimberElevator extends SubsystemBase {
 
   private static CANSparkMax elevatorMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static CANSparkMax rightElevatorMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
-
+  private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
   private SparkPIDController elevatorMotorPID = elevatorMotor.getPIDController();
   private AbsoluteEncoder elevatorEncoder = elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle);
 
@@ -35,6 +38,8 @@ public class ClimberElevator extends SubsystemBase {
 
   @Override
   public void periodic(){
+    if(bobsFavoritePart.get())
+      stop(StopConstant.stopSetpoint);
     updateDashboard();
   }
 
