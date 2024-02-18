@@ -27,6 +27,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.ShooterElevator;
+import frc.robot.vision.Cameras;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
@@ -46,6 +47,8 @@ public class RobotContainer {
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final ShooterElevator m_shootElevator = new ShooterElevator();
   private final ClimberElevator m_climber = new ClimberElevator();
+
+  private final Cameras cameras = new Cameras(m_robotDrive);
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -149,7 +152,7 @@ public class RobotContainer {
     
     new JoystickButton(m_driverController, Button.kBack.value) // Back Button (no clue where this is either)
         .whileTrue(new RunCommand(
-        () -> m_shootElevator.rotatePivot(-ShootElevatorConstants.pivotSetpoint), //for downward motion
+        () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for downward motion
         m_shootElevator))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
