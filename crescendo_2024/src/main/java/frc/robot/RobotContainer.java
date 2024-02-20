@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -53,6 +54,13 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  BooleanSupplier init = () -> {
+    return (m_driverController.getLeftTriggerAxis() > 0.1);
+  };
+
+  BooleanSupplier run = () -> {
+    return (m_driverController.getRightTriggerAxis() > 0.1);
+  };
 
 
   /**
@@ -116,30 +124,30 @@ public class RobotContainer {
     */
 
     //intake commands
-    new JoystickButton(m_driverController, Button.kX.value) // changed to X from left bumper
+    new JoystickButton(m_driverController, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
-            () -> m_intake.suckySuck()))
+            () -> m_intake.suckySuck()).onlyIf(init))
             .onFalse(new RunCommand(
             () -> m_intake.stop()));
     
-    new JoystickButton(m_driverController, Button.kY.value) // changed to Y from right bumper
+    new JoystickButton(m_driverController, Button.kB.value) // changed to Y from right bumper
         .whileTrue(new RunCommand(
-            () -> m_intake.feedTheMachine()))
+            () -> m_intake.feedTheMachine()).onlyIf(run))
             .onFalse(new RunCommand(
             () -> m_intake.stop()));
 
     //shooter elevator commands
-    new JoystickButton(m_driverController, Button.kRightBumper.value) // Right Bumper
+    new JoystickButton(m_driverController, Button.kY.value) // Right Bumper
         .whileTrue(new RunCommand(
         () -> m_shootElevator.muevete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
-        m_shootElevator))
+        m_shootElevator).onlyIf(init))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
     
-    new JoystickButton(m_driverController, Button.kLeftBumper.value) // Left Bumper
+    new JoystickButton(m_driverController, Button.kY.value) // Left Bumper
         .whileTrue(new RunCommand(
         () -> m_shootElevator.muevete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
-        m_shootElevator))
+        m_shootElevator).onlyIf(run))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
 
@@ -158,17 +166,17 @@ public class RobotContainer {
             () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
 
     //climber commands
-    new JoystickButton(m_driverController, Button.kRightStick.value) // Right Stick pressed in
+    new JoystickButton(m_driverController, Button.kX.value) // Right Stick pressed in
         .whileTrue(new RunCommand(
         () -> m_climber.moveClimber(ClimbElevatorConstants.elevatorSetpoint), //for upward motion
-        m_climber))
+        m_climber).onlyIf(init))
         .onFalse(new RunCommand(
             () -> m_climber.stop(StopConstant.stopSetpoint)));
     
-    new JoystickButton(m_driverController, Button.kLeftStick.value) // Left Stick pressed in
+    new JoystickButton(m_driverController, Button.kX.value) // Left Stick pressed in
         .whileTrue(new RunCommand(
         () -> m_climber.moveClimber(-ClimbElevatorConstants.elevatorSetpoint), //for downward motion
-        m_shootElevator))
+        m_shootElevator).onlyIf(run))
         .onFalse(new RunCommand(
             () -> m_climber.stop(StopConstant.stopSetpoint)));
 
