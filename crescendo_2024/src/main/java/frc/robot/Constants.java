@@ -197,6 +197,7 @@ public final class Constants {
     public static final int ArmCANID = 13;
     public static final int RollerCANID = 14;
     public static final int IntakeLimitSwPort = 1;
+    public static final int NoteLimitSwitchPort = 2;
 
     public static final double suckySuckSpeed = -.4; //percentage please
     public static final double rateMachineIsFed = .4; //percentage please
