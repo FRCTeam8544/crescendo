@@ -37,6 +37,8 @@ public class Cameras extends SubsystemBase{
             var camPose = Constants.visionConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
             poseEstimator.addVisionMeasurement(
                 camPose.transformBy(Constants.visionConstants.kCameraToRobot).toPose2d(), imageCaputreTime);
+
+            driveSubsystem.resetOdometry(poseEstimator.getEstimatedPosition());
         }
     }
 
