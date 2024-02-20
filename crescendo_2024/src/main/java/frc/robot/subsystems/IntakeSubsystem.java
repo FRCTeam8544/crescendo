@@ -28,8 +28,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        if(bobsFavoritePart.get())
-            stop();
+        if(bobsFavoritePart.get()){stop();}
         updateDashboard();
     }
 
