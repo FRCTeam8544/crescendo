@@ -149,15 +149,11 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(true), m_intake))
-            .onFalse(new RunCommand(
-            () -> m_intake.rotateStop(), m_intake));
+            () -> m_intake.moveArm(4), m_intake));
 
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(false), m_intake))
-            .onFalse(new RunCommand(
-            () -> m_intake.rotateStop(), m_intake));
+            () -> m_intake.moveArm(50), m_intake));
 
     //shooter elevator commands
     /*
