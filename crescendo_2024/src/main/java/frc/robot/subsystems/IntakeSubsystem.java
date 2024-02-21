@@ -21,27 +21,27 @@ import frc.robot.Constants.StopConstant;
 public class IntakeSubsystem extends SubsystemBase{
     private static CANSparkMax rollerMotor = new CANSparkMax(Constants.IntakeConstants.RollerCANID, CANSparkLowLevel.MotorType.kBrushless);
     private static CANSparkMax armMotor = new CANSparkMax(Constants.IntakeConstants.ArmCANID, CANSparkLowLevel.MotorType.kBrushless);
-    private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
-    private DigitalInput noteSensor = new DigitalInput(Constants.IntakeConstants.NoteLimitSwitchPort);
-    private SparkPIDController armPID = armMotor.getPIDController();
+   // private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
+    //private DigitalInput noteSensor = new DigitalInput(Constants.IntakeConstants.NoteLimitSwitchPort);
+    //private SparkPIDController armPID = armMotor.getPIDController();
     private AbsoluteEncoder armEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
     private double pubSet = 0.0;
 
     public IntakeSubsystem() {
         rollerMotor.restoreFactoryDefaults();
         armMotor.restoreFactoryDefaults();
-        armPID.setP(Constants.IntakeConstants.armkP);
+       /* armPID.setP(Constants.IntakeConstants.armkP);
         armPID.setI(Constants.IntakeConstants.armkI);
-        armPID.setD(Constants.IntakeConstants.armkD);
+        armPID.setD(Constants.IntakeConstants.armkD);*/
     }
 
-    public BooleanSupplier noteInIntake = () -> {
+    /*public BooleanSupplier noteInIntake = () -> {
         return noteSensor.get();
-    };
+    };*/
 
     @Override
     public void periodic(){
-        if(bobsFavoritePart.get()){stop();}
+        //if(bobsFavoritePart.get()){stop();}
         updateDashboard();
     }
 
@@ -57,9 +57,17 @@ public class IntakeSubsystem extends SubsystemBase{
         rollerMotor.set(StopConstant.stopSetpoint);
     }
 
+    public void rotateStop(){
+        armMotor.set(0);
+    }
+
     public void moveArm(double setpoint){
-        armPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+        //armPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
         pubSet = setpoint;
+    }
+
+    public void testRotate(boolean forward){
+        armMotor.set(forward? 0.2: -0.2);
     }
 
     public BooleanSupplier atSetpoint = () -> {

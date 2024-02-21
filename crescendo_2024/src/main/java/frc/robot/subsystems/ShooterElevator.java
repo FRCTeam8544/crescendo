@@ -16,7 +16,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 
 public class ShooterElevator extends SubsystemBase {
-
+/*
   private static CANSparkMax elevatorMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static CANSparkMax pivotMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private AbsoluteEncoder elevatorEncoder = elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -25,7 +25,7 @@ public class ShooterElevator extends SubsystemBase {
   private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
 
   public ShooterElevator() {
-
+  
     elevatorMotor.restoreFactoryDefaults();
     pivotMotor.restoreFactoryDefaults();
     elevatorMotorPID.setFeedbackDevice(elevatorEncoder);
@@ -80,5 +80,5 @@ public class ShooterElevator extends SubsystemBase {
 
   public double getElevatorPosition(){
     return elevatorMotor.getEncoder().getPosition();
-  }
+  }*/
 }

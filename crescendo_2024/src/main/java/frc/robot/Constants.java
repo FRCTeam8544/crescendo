@@ -50,10 +50,10 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI/2;
-    public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI/2;
+    public static final double kFrontLeftChassisAngularOffset = Math.PI/2;//was negative
+    public static final double kFrontRightChassisAngularOffset = Math.PI;//was 0
+    public static final double kBackLeftChassisAngularOffset = 0;//pi/2
+    public static final double kBackRightChassisAngularOffset = -Math.PI/2;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 5;
@@ -199,8 +199,8 @@ public final class Constants {
     public static final int IntakeLimitSwPort = 1;
     public static final int NoteLimitSwitchPort = 2;
 
-    public static final double suckySuckSpeed = -.4; //percentage please
-    public static final double rateMachineIsFed = .4; //percentage please
+    public static final double suckySuckSpeed = -.95; //percentage please
+    public static final double rateMachineIsFed = .95; //percentage please
 
     //Values are 0 where tuning is required
     public static final double armkP = 0;

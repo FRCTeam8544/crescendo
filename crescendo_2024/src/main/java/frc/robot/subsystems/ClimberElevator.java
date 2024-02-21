@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkLowLevel;
 
 public class ClimberElevator extends SubsystemBase {
 
-  private static CANSparkMax elevatorMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
+  /*private static CANSparkMax elevatorMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static CANSparkMax rightElevatorMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
   private SparkPIDController elevatorMotorPID = elevatorMotor.getPIDController();
@@ -64,5 +64,5 @@ public class ClimberElevator extends SubsystemBase {
 
   public double getElevatorPosition(){
     return elevatorMotor.getEncoder().getPosition();
-  }
+  }*/
 }

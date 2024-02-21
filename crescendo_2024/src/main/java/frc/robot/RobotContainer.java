@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
@@ -44,22 +45,30 @@ import java.util.function.BooleanSupplier;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ShootSubsystem m_shooter = new ShootSubsystem();
+  //private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final ShooterElevator m_shootElevator = new ShooterElevator();
-  private final ClimberElevator m_climber = new ClimberElevator();
+  //private final ShooterElevator m_shootElevator = new ShooterElevator();
+  //private final ClimberElevator m_climber = new ClimberElevator();
 
-  private final Cameras cameras = new Cameras(m_robotDrive);
+  //private final Cameras cameras = new Cameras(m_robotDrive);
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   BooleanSupplier init = () -> {
-    return (m_driverController.getLeftTriggerAxis() > 0.1);
+    return (m_driverController.getLeftTriggerAxis() > 0.5);
   };
 
   BooleanSupplier run = () -> {
-    return (m_driverController.getRightTriggerAxis() > 0.1);
+    return (m_driverController.getRightTriggerAxis() > 0.5);
+  };
+
+  BooleanSupplier initDone = () -> {
+    return (m_driverController.getLeftTriggerAxis() <= 0.1);
+  };
+
+  BooleanSupplier runDone = () -> {
+    return (m_driverController.getRightTriggerAxis() <= 0.1);
   };
 
 
@@ -99,19 +108,21 @@ public class RobotContainer {
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
     //shooter commands
+    /*
+     * 
     new JoystickButton(m_driverController, Button.kA.value) //A Button
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(ShooterConstants.shootSetpoint),
             m_shooter))
             .onFalse(new RunCommand(
             () -> m_shooter.stop(StopConstant.stopSetpoint), m_shooter));
-
-    /* This is a kill switch that could be removed whenever, but it probably shouldnt be for now */
+    */
+    /* This is a kill switch that could be removed whenever, but it probably shouldnt be for now 
     new JoystickButton(m_driverController, Button.kB.value) // B Button
         .whileTrue(new RunCommand(
         () -> m_shooter.stop(StopConstant.stopSetpoint),
         m_shooter));
-
+    */
     /*
         Likely uneeded since we won't intake via shooter anymore
 
@@ -126,17 +137,31 @@ public class RobotContainer {
     //intake commands
     new JoystickButton(m_driverController, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
-            () -> m_intake.suckySuck()).onlyIf(init))
+            () -> m_intake.suckySuck(), m_intake))
             .onFalse(new RunCommand(
-            () -> m_intake.stop()));
+            () -> m_intake.stop(), m_intake));
     
-    new JoystickButton(m_driverController, Button.kB.value) // changed to Y from right bumper
+    new JoystickButton(m_driverController, Button.kA.value) // changed to Y from right bumper
         .whileTrue(new RunCommand(
-            () -> m_intake.feedTheMachine()).onlyIf(run))
+            () -> m_intake.feedTheMachine(), m_intake))
             .onFalse(new RunCommand(
-            () -> m_intake.stop()));
+            () -> m_intake.stop(), m_intake));
+
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whileTrue(new RunCommand(
+            () -> m_intake.testRotate(true), m_intake))
+            .onFalse(new RunCommand(
+            () -> m_intake.rotateStop(), m_intake));
+
+    new JoystickButton(m_driverController, Button.kX.value)
+        .whileTrue(new RunCommand(
+            () -> m_intake.testRotate(false), m_intake))
+            .onFalse(new RunCommand(
+            () -> m_intake.rotateStop(), m_intake));
 
     //shooter elevator commands
+    /*
+     * 
     new JoystickButton(m_driverController, Button.kY.value) // Right Bumper
         .whileTrue(new RunCommand(
         () -> m_shootElevator.muevete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
@@ -179,6 +204,7 @@ public class RobotContainer {
         m_shootElevator).onlyIf(run))
         .onFalse(new RunCommand(
             () -> m_climber.stop(StopConstant.stopSetpoint)));
+    */
 
   }
 

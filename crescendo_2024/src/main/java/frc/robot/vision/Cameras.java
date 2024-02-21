@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class Cameras extends SubsystemBase{
-    
+    /*
     PhotonCamera camA;
     PoseEstimator poseEstimator;
     DriveSubsystem driveSubsystem;
@@ -40,7 +40,7 @@ public class Cameras extends SubsystemBase{
 
             driveSubsystem.resetOdometry(poseEstimator.getEstimatedPosition());
         }
-    }
+    }*/
 
 
 }

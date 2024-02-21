@@ -15,7 +15,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 
 public class ShootSubsystem extends SubsystemBase {
-
+/* 
   private static CANSparkMax leftMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static CANSparkMax rightMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
 
@@ -42,7 +42,7 @@ public class ShootSubsystem extends SubsystemBase {
     //topMotor.set(shooter.calculate(shootingEncoder.getVelocity()));
     //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
   }
-
+*/
   /*  
     The way that the shooter works currently, and will likely work, 
     we don't need to intake via shooter
@@ -52,7 +52,7 @@ public class ShootSubsystem extends SubsystemBase {
     leftMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
     rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity); 
   }*/
-
+/* 
   public void shoot(double setpoint){
     leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
     rightMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);
@@ -74,5 +74,5 @@ public class ShootSubsystem extends SubsystemBase {
 
   public double getLeftVelocity(){
     return leftMotor.getEncoder().getVelocity();
-  }
+  }*/
 }
