@@ -20,7 +20,7 @@ import frc.robot.Constants.StopConstant;
 public class IntakeSubsystem extends SubsystemBase{
     private static CANSparkMax rollerMotor = new CANSparkMax(Constants.IntakeConstants.RollerCANID, CANSparkLowLevel.MotorType.kBrushless);
     private static CANSparkMax armMotor = new CANSparkMax(Constants.IntakeConstants.ArmCANID, CANSparkLowLevel.MotorType.kBrushless);
-    //private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
+    private static DigitalInput limit = new DigitalInput(IntakeConstants.IntakeLimitSwPort);
     private DigitalInput noteSensor = new DigitalInput(Constants.IntakeConstants.NoteLimitSwitchPort);
     private SparkPIDController armPID;
     private AbsoluteEncoder armEncoder;
@@ -31,18 +31,18 @@ public class IntakeSubsystem extends SubsystemBase{
         armMotor.restoreFactoryDefaults();
 
         armEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        armPID = armMotor.getPIDController();
+        /*armPID = armMotor.getPIDController();
         armPID.setFeedbackDevice(armEncoder);
         
         armPID.setP(0.02);
         armPID.setI(1e-7);
         armPID.setD(0.002);
         armPID.setFF(0);
-        armPID.setOutputRange(-0.5, 0.5);
+        armPID.setOutputRange(-0.5, 0.5);*/
         armMotor.setIdleMode(IdleMode.kCoast);
 
-        armMotor.setSoftLimit(SoftLimitDirection.kForward, 25);
-        armMotor.setSoftLimit(SoftLimitDirection.kReverse, -3);
+        //armMotor.setSoftLimit(SoftLimitDirection.kForward, 25);
+        //armMotor.setSoftLimit(SoftLimitDirection.kReverse, -3);
 
         pubSet = armEncoder.getPosition();
 
@@ -53,10 +53,17 @@ public class IntakeSubsystem extends SubsystemBase{
         return noteSensor.get();
     };
 
+    public BooleanSupplier limitSwitch = () -> {
+        return limit.get();
+    };
+
     @Override
     public void periodic(){
-        //if(bobsFavoritePart.get()){stop();}
-        armPID.setReference(pubSet, CANSparkMax.ControlType.kPosition);
+        if (limit.get()){
+            armMotor.stopMotor();
+        }/*else{
+            armPID.setReference(pubSet, CANSparkMax.ControlType.kPosition);
+        }*/
         updateDashboard();
     }
 
@@ -86,7 +93,9 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void testRotate(boolean forward){
-        armMotor.set(forward? 0.2: -0.2);
+        if (limitSwitch.getAsBoolean()){
+           armMotor.set(forward? 0.1: -0.1); 
+        }
     }
 
     public BooleanSupplier atSetpoint = () -> {

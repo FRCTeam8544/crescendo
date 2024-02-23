@@ -139,8 +139,6 @@ public class RobotContainer {
     */
 
     //intake commands
-    /*
-     * 
     new JoystickButton(m_driverController, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
             () -> m_intake.suckySuck(), m_intake))
@@ -155,24 +153,28 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new RunCommand(
-            () -> m_intake.moveArm(4), m_intake));
+            () -> m_intake.testRotate(false)).withTimeout(0.7))
+            .onFalse(new RunCommand(
+                () -> m_intake.rotateStop(), m_intake));
 
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
-            () -> m_intake.moveArm(50), m_intake));
-            */
-    new JoystickButton(m_driverController, Button.kA.value)
+            () -> m_intake.testRotate(true)).withTimeout(0.7))
+            .onFalse(new RunCommand(
+                () -> m_intake.rotateStop(), m_intake));
+          //test from earlier  
+    /*new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new IntakeCommand(m_intake, m_driverController));
 
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_driverController))
         .onFalse(new RunCommand(
             () -> m_shooter.shoot(0), m_shooter));
-
+    */
     //hand off
-    new JoystickButton(m_driverController, Button.kB.value)
+    /*new JoystickButton(m_driverController, Button.kB.value)
         .whileTrue(new HandoffCommand(m_intake, m_shooter));
-
+    */
     //shooter elevator commands
     /*
      * 
