@@ -23,6 +23,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
+import frc.robot.commands.AmpScore.HandoffCommand;
+import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.commands.SpeakerScore.SpeakerCommand;
 import frc.robot.subsystems.ClimberElevator;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -45,7 +48,7 @@ import java.util.function.BooleanSupplier;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  //private final ShootSubsystem m_shooter = new ShootSubsystem();
+  private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   //private final ShooterElevator m_shootElevator = new ShooterElevator();
   //private final ClimberElevator m_climber = new ClimberElevator();
@@ -88,6 +91,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightY(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
   }
@@ -135,6 +139,8 @@ public class RobotContainer {
     */
 
     //intake commands
+    /*
+     * 
     new JoystickButton(m_driverController, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
             () -> m_intake.suckySuck(), m_intake))
@@ -154,6 +160,18 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> m_intake.moveArm(50), m_intake));
+            */
+    new JoystickButton(m_driverController, Button.kA.value)
+        .whileTrue(new IntakeCommand(m_intake, m_driverController));
+
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_driverController))
+        .onFalse(new RunCommand(
+            () -> m_shooter.shoot(0), m_shooter));
+
+    //hand off
+    new JoystickButton(m_driverController, Button.kB.value)
+        .whileTrue(new HandoffCommand(m_intake, m_shooter));
 
     //shooter elevator commands
     /*
@@ -247,6 +265,6 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0,true, false));
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, 0,true, false));
   }
 }

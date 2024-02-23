@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -11,16 +12,21 @@ import frc.robot.Constants.ShooterConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 
 public class ShootSubsystem extends SubsystemBase {
-/* 
+
   private static CANSparkMax leftMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static CANSparkMax rightMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
 
   private SparkPIDController leftMotorPID = leftMotor.getPIDController();
   private SparkPIDController rightMotorPID = rightMotor.getPIDController();
+
+  private DigitalInput limitSwitch = new DigitalInput(4);
 
   public ShootSubsystem() {
 
@@ -36,13 +42,17 @@ public class ShootSubsystem extends SubsystemBase {
     rightMotorPID.setD(ShooterConstants.kD);
   }
 
+  public BooleanSupplier noteInShooter = () -> {
+    return limitSwitch.get();
+  };
+
   @Override
   public void periodic(){
-    updateDashboard();
+    //updateDashboard();
     //topMotor.set(shooter.calculate(shootingEncoder.getVelocity()));
     //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
   }
-*/
+
   /*  
     The way that the shooter works currently, and will likely work, 
     we don't need to intake via shooter
@@ -52,7 +62,12 @@ public class ShootSubsystem extends SubsystemBase {
     leftMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
     rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity); 
   }*/
-/* 
+
+  public void handoff(){
+    leftMotor.set(-0.1);
+    rightMotor.set(0.1);
+  }
+
   public void shoot(double setpoint){
     leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
     rightMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);
@@ -74,5 +89,5 @@ public class ShootSubsystem extends SubsystemBase {
 
   public double getLeftVelocity(){
     return leftMotor.getEncoder().getVelocity();
-  }*/
+  }
 }

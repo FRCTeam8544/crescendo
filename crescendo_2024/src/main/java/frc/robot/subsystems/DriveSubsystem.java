@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.util.WPIUtilJNI;
 //import edu.wpi.first.wpilibj.ADIS16470_IMU;  unused
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -44,6 +46,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
+  PIDController rotationPID;
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -70,6 +73,10 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_gyro.zeroYaw();
+
+    rotationPID = new PIDController(0.01, 0, 0);  
+    rotationPID.enableContinuousInput(-90, 270);
+
   }
 
   
@@ -123,12 +130,12 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void drive(double xSpeed, double ySpeed, double rot, double yTurn, boolean fieldRelative, boolean rateLimit) {
     
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-
+    
     
     
 
@@ -173,12 +180,28 @@ public class DriveSubsystem extends SubsystemBase {
       ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
       m_currentRotation = m_rotLimiter.calculate(rot);
 
-
     } else {
       xSpeedCommanded = xSpeed;
       ySpeedCommanded = ySpeed;
       m_currentRotation = rot;
     }
+    /*if (fieldRelative){
+      if (rot != 0 && yTurn != 0){rot = Math.atan2(yTurn, rot) * (180/Math.PI);}
+      else if (rot == 0 && yTurn != 0){rot = 90 * (Math.abs(yTurn)/yTurn);}//{rot = 0;}
+      else if (rot != 0 && yTurn == 0){rot = 180 * (Math.abs(rot)/rot);}
+      else {rot = m_gyro.getYaw() + 90;}
+      /*{
+        if (rot > 0){rot = 90;}
+        else { rot = -90;}
+      }*/
+      /*
+      rot = rotationPID.calculate(m_gyro.getYaw() + 90, rot);
+
+      m_currentRotation = rateLimit? 
+      m_rotLimiter.calculate(rot) 
+      :rot;
+    }*/
+    
 
     // Convert the commanded speeds into the correct units for the drivetrain
     double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
