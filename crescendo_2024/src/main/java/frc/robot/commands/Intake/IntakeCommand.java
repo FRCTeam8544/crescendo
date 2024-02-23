@@ -39,6 +39,6 @@ public class IntakeCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        return (!intake.atSetpoint.getAsBoolean() && !intake.noteInIntake.getAsBoolean());
+        return (intake.atSetpoint.getAsBoolean() && intake.noteInIntake.getAsBoolean());
     }
 }
