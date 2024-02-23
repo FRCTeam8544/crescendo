@@ -71,11 +71,11 @@ public class ShootSubsystem extends SubsystemBase {
   public void shoot(double setpoint){
     leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
     rightMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);
-    }
+  }
 
-  public void stop(double setpoint){
-    leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
-    rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+  public void stop(){
+    leftMotorPID.setReference(0, CANSparkBase.ControlType.kVelocity);
+    rightMotorPID.setReference(0, CANSparkBase.ControlType.kVelocity);
   }
 
   public void updateDashboard(){
@@ -86,6 +86,10 @@ public class ShootSubsystem extends SubsystemBase {
   public double getRightVelocity(){
     return rightMotor.getEncoder().getVelocity();
   }
+
+  public BooleanSupplier atSpeed = () -> {
+    return getRightVelocity() == 5000;
+  };
 
   public double getLeftVelocity(){
     return leftMotor.getEncoder().getVelocity();

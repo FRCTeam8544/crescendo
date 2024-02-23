@@ -24,11 +24,11 @@ public class IntakeCommand extends Command{
             intake.moveArm(0);
         }
         else if (controller.getRightTriggerAxis() > 0.1){
-            if (!intake.noteInIntake.getAsBoolean()){intake.suckySuck();}
-            else{
+            //if (!intake.noteInIntake.getAsBoolean()){intake.suckySuck();}
+            /*else{
                 intake.stop();
                 intake.moveArm(10);
-            }
+            }*/
         }
     }
 
@@ -39,6 +39,7 @@ public class IntakeCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        return (intake.atSetpoint.getAsBoolean() && intake.noteInIntake.getAsBoolean());
+        //return (intake.atSetpoint.getAsBoolean() && intake.noteInIntake.getAsBoolean());4
+        return true;
     }
 }

@@ -33,7 +33,9 @@ import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.ShooterElevator;
 import frc.robot.vision.Cameras;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -145,23 +147,36 @@ public class RobotContainer {
             .onFalse(new RunCommand(
             () -> m_intake.stop(), m_intake));
     
-    new JoystickButton(m_driverController, Button.kA.value) // changed to Y from right bumper
+    /*new JoystickButton(m_driverController, Button.kA.value) // changed to Y from right bumper
+        .whileTrue(new ParallelCommandGroup(
+            new RunCommand(() -> m_intake.feedTheMachine(), m_intake),
+            new RunCommand(() -> m_shooter.shoot(5000), m_shooter))
+        ).onFalse(new ParallelCommandGroup(
+            new RunCommand(() -> m_intake.stop(), m_intake),
+            new RunCommand(() -> m_shooter.shoot(0), m_shooter)));*/
+
+    new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_intake.feedTheMachine(), m_intake))
-            .onFalse(new RunCommand(
-            () -> m_intake.stop(), m_intake));
+            .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));
 
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(false)).withTimeout(0.7))
+            () -> m_intake.testRotate(false)).withTimeout(2))
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));
 
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(true)).withTimeout(0.7))
+            () -> m_intake.testRotate(true)).withTimeout(2.5))
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));
+
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+        .whileTrue(new RunCommand(
+            () -> m_shooter.shoot(5000), m_shooter))
+            .onFalse(new RunCommand(
+                () -> m_shooter.stop(), m_shooter));
           //test from earlier  
     /*new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new IntakeCommand(m_intake, m_driverController));

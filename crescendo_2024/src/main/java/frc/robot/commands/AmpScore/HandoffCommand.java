@@ -29,7 +29,7 @@ public class HandoffCommand extends Command{
         }
         else{
             intake.stop();
-            shooter.stop(0);
+            shooter.stop();
         }
         
 
