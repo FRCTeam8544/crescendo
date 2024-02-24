@@ -26,7 +26,7 @@ public class ShootSubsystem extends SubsystemBase {
   private SparkPIDController leftMotorPID = leftMotor.getPIDController();
   private SparkPIDController rightMotorPID = rightMotor.getPIDController();
 
-  private DigitalInput limitSwitch = new DigitalInput(4);
+  private DigitalInput limitSwitch = new DigitalInput(3);
 
   public ShootSubsystem() {
 
@@ -43,7 +43,7 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   public BooleanSupplier noteInShooter = () -> {
-    return limitSwitch.get();
+    return !limitSwitch.get();
   };
 
   @Override
@@ -64,8 +64,8 @@ public class ShootSubsystem extends SubsystemBase {
   }*/
 
   public void handoff(){
-    leftMotor.set(-0.1);
-    rightMotor.set(0.1);
+    leftMotor.set(0.1);
+    rightMotor.set(-0.1);
   }
 
   public void shoot(double setpoint){

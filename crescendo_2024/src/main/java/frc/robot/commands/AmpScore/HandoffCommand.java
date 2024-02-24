@@ -25,7 +25,6 @@ public class HandoffCommand extends Command{
         if (!shooter.noteInShooter.getAsBoolean()){
             intake.rageAgainsTheMachine();
             shooter.handoff();
-            intake.moveArm(20);
         }
         else{
             intake.stop();
@@ -37,11 +36,12 @@ public class HandoffCommand extends Command{
 
     @Override
     public void end(boolean interupted){
-
+        intake.stop();
+        shooter.stop();
     }
 
     @Override
     public boolean isFinished(){
-        return false;
+        return shooter.noteInShooter.getAsBoolean();
     }
 }

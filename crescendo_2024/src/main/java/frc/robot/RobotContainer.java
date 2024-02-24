@@ -59,6 +59,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_opController = new XboxController(1);
 
   BooleanSupplier init = () -> {
     return (m_driverController.getLeftTriggerAxis() > 0.5);
@@ -93,7 +94,6 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightY(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
   }
@@ -141,7 +141,7 @@ public class RobotContainer {
     */
 
     //intake commands
-    new JoystickButton(m_driverController, Button.kB.value) // changed to X from left bumper
+    new JoystickButton(m_opController, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
             () -> m_intake.suckySuck(), m_intake))
             .onFalse(new RunCommand(
@@ -155,28 +155,31 @@ public class RobotContainer {
             new RunCommand(() -> m_intake.stop(), m_intake),
             new RunCommand(() -> m_shooter.shoot(0), m_shooter)));*/
 
-    new JoystickButton(m_driverController, Button.kA.value)
+    new JoystickButton(m_opController, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_intake.feedTheMachine(), m_intake))
             .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));
 
-    new JoystickButton(m_driverController, Button.kY.value)
+    new JoystickButton(m_opController, Button.kY.value)
         .whileTrue(new RunCommand(
             () -> m_intake.testRotate(false)).withTimeout(2))
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));
 
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_opController, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> m_intake.testRotate(true)).withTimeout(2.5))
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_opController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(5000), m_shooter))
             .onFalse(new RunCommand(
                 () -> m_shooter.stop(), m_shooter));
+
+    new JoystickButton(m_opController, Button.kLeftBumper.value)
+        .whileTrue(new HandoffCommand(m_intake, m_shooter));
           //test from earlier  
     /*new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new IntakeCommand(m_intake, m_driverController));
@@ -282,6 +285,6 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, 0,true, false));
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0,true, false));
   }
 }
