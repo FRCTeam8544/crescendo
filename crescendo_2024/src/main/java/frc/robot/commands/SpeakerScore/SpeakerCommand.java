@@ -25,24 +25,30 @@ public class SpeakerCommand extends Command{
 
     @Override
     public void execute(){
-        if (controller.getLeftTriggerAxis() > 0.1){
+        if (controller.getRightTriggerAxis() > 0){
             shooter.shoot(5000);
+            if (shooter.atSpeed.getAsBoolean()){intake.feedTheMachine();}
         }
-        else if (controller.getRightTriggerAxis() > 0.1){
+        else if (controller.getLeftTriggerAxis() > 0){
             shooter.shoot(5000);
-            intake.feedTheMachine();
         }
     }
 
     @Override
     public void end(boolean interupted){
         if (interupted){
-            shooter.shoot(0);
+            shooter.stop();
+            intake.stop();
         }
     }
 
     @Override
     public boolean isFinished(){
+        if (controller.getRightBumperReleased()){
+            shooter.stop();
+            intake.stop();
+            return true;
+        }
         return false;
     }
 }

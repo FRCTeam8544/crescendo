@@ -97,6 +97,10 @@ public class IntakeSubsystem extends SubsystemBase{
         else{rollerMotor.set(0);}
     }
 
+    public void sourceIntake(){
+        rollerMotor.set(-0.1);
+    }
+
     public void feedTheMachine(){
         rollerMotor.set(IntakeConstants.rateMachineIsFed);
     }

@@ -40,6 +40,9 @@ public class ShootSubsystem extends SubsystemBase {
     rightMotorPID.setP(ShooterConstants.kP);
     rightMotorPID.setI(ShooterConstants.kI);
     rightMotorPID.setD(ShooterConstants.kD);
+
+    leftMotorPID.setOutputRange(-1, 1);
+    rightMotorPID.setOutputRange(-1, 1);
   }
 
   public BooleanSupplier noteInShooter = () -> {
@@ -68,6 +71,11 @@ public class ShootSubsystem extends SubsystemBase {
     rightMotor.set(-0.1);
   }
 
+  public void sourceIntake(){
+    leftMotor.set(-0.25);
+    rightMotor.set(0.25);
+  }
+
   public void shoot(double setpoint){
     leftMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
     rightMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);
@@ -88,7 +96,11 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   public BooleanSupplier atSpeed = () -> {
-    return getRightVelocity() == 5000;
+    return getLeftVelocity() < 5000 + 100 && getLeftVelocity() > 5000 - 100;
+  };
+
+  public BooleanSupplier atTestSpeed = () -> {
+    return (getLeftVelocity() < 100 + 50 && getLeftVelocity() > 100 - 50);
   };
 
   public double getLeftVelocity(){

@@ -25,6 +25,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
 import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.commands.Intake.SourceIntake;
 import frc.robot.commands.SpeakerScore.SpeakerCommand;
 import frc.robot.subsystems.ClimberElevator;
 import frc.robot.subsystems.DriveSubsystem;
@@ -172,14 +173,19 @@ public class RobotContainer {
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));
 
-    new JoystickButton(m_opController, Button.kRightBumper.value)
+    /*new JoystickButton(m_opController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(5000), m_shooter))
             .onFalse(new RunCommand(
-                () -> m_shooter.stop(), m_shooter));
+                () -> m_shooter.stop(), m_shooter));*/
+    new JoystickButton(m_opController, Button.kRightBumper.value)
+        .onTrue(new SpeakerCommand(m_shooter, m_intake, m_opController));
 
     new JoystickButton(m_opController, Button.kLeftBumper.value)
         .whileTrue(new HandoffCommand(m_intake, m_shooter));
+
+    new JoystickButton(m_opController, Button.kStart.value)
+        .whileTrue(new SourceIntake(m_intake, m_shooter));
           //test from earlier  
     /*new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new IntakeCommand(m_intake, m_driverController));
