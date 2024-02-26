@@ -6,7 +6,11 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -46,10 +50,10 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = -Math.PI/2;
-    public static final double kFrontRightChassisAngularOffset = 0;
-    public static final double kBackLeftChassisAngularOffset = Math.PI;
-    public static final double kBackRightChassisAngularOffset = Math.PI/2;
+    public static final double kFrontLeftChassisAngularOffset = Math.PI/2;//was negative
+    public static final double kFrontRightChassisAngularOffset = Math.PI;//was 0
+    public static final double kBackLeftChassisAngularOffset = 0;//pi/2
+    public static final double kBackRightChassisAngularOffset = -Math.PI/2;
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 5;
@@ -63,6 +67,39 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 4;
 
     public static final boolean kGyroReversed = false;
+  }
+
+  public static final class visionConstants {
+    /*
+     * copied and pasted from https://docs.photonvision.org/en/latest/docs/examples/simposeest.html
+     * should be reviewed
+     */
+    // See
+    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+    // page 208
+    public static final double targetWidth =
+            Units.inchesToMeters(41.30) - Units.inchesToMeters(6.70); // meters
+
+    // See
+    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+    // page 197
+    public static final double targetHeight =
+            Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
+
+    // See https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
+    // pages 4 and 5
+    public static final double kFarTgtXPos = Units.feetToMeters(54);
+    public static final double kFarTgtYPos =
+            Units.feetToMeters(27 / 2) - Units.inchesToMeters(43.75) - Units.inchesToMeters(48.0 / 2.0);
+    public static final double kFarTgtZPos =
+            (Units.inchesToMeters(98.19) - targetHeight) / 2 + targetHeight;
+
+    public static final Pose3d kFarTargetPose =
+            new Pose3d(
+                    new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
+                    new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
+
+    public static final Transform3d kCameraToRobot = new Transform3d();
   }
 
   public static final class ModuleConstants {
@@ -140,16 +177,72 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
+  public static final class StopConstant {
+    public final static double stopSetpoint = 0;
+  }
+
   public static final class ShooterConstants {
     public static final int leftMotorCANID = 11, rightMotorCANID = 12;
 
-    public final double kP = 0.000005;
-    public final double kI = 5e-7;
-    public final double kD = 0.0005;
+    public static final double kP = 0.000005;
+    public static final double kI = 5e-7;
+    public static final double kD = 0.0005;
     public final double kF = 0.0002;
 
     public final static double shootSetpoint = 5000;
-    public final static double stopSetpoint = 0;
     public final static double intakeSetpoint = -100; // should be negative, spinning in reverse for intake
-  } 
+  }
+
+  public static final class IntakeConstants {
+    public static final int ArmCANID = 13;
+    public static final int RollerCANID = 14;
+    public static final int IntakeLimitSwPort = 1;
+    public static final int NoteLimitSwitchPort = 2;
+
+    public static final double suckySuckSpeed = -.95; //percentage please
+    public static final double rateMachineIsFed = .95; //percentage please
+
+    //Values are 0 where tuning is required
+    public static final double armkP = 0;
+    public static final double armkI = 0;
+    public static final double armkD = 0;
+    public static final double armkF = 0;
+  }
+
+  public static final class ShootElevatorConstants {
+    public static final int ElevatorCANID = 17;
+    public static final int PivotCANID = 18;
+    //pivot is what im calling the mechanism to aim the shooter up or down angularly
+
+    //Values are 0 where tuning is required
+    public static final double elevatorSetpoint = 0; //levantanse por favor
+    public static final double pivotSetpoint = 0;
+
+    public static final double elevkP = 0;
+    public static final double elevkI = 0;
+    public static final double elevkD = 0;
+    public static final double elevkF = 0;
+
+    public static final double pivotkP = 0;
+    public static final double pivotkI = 0;
+    public static final double pivotkD = 0;
+    public static final double pivotkF = 0;
+  }
+
+  public static final class ClimbElevatorConstants {
+    public static final int LeftElevatorCANID = 15;
+    public static final int RightElevatorCANID = 16;
+
+    //Values are 0 where tuning is required
+    public static final double elevatorSetpoint = 0; //levantanse por favor
+    //only here if follow doesn't work
+    public static final double elevatorRightSetpoint = elevatorSetpoint;
+
+    public static final double elevkP = 0;
+    public static final double elevkI = 0;
+    public static final double elevkD = 0;
+    public static final double elevkF = 0;
+
+    //Seperate PID values need to be added if follow doesn't work
+  }
 }
