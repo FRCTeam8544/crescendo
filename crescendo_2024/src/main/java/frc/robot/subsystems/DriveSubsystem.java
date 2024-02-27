@@ -128,7 +128,11 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-
+    /*if (opController.getAButton()){
+      xSpeed = opController.getLeftX();
+      ySpeed = opController.getLeftY();
+      rot = opController.getRightX();
+    }*/
     
     
 

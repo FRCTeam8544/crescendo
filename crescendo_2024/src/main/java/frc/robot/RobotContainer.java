@@ -16,6 +16,8 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ClimbElevatorConstants;
 import frc.robot.Constants.DriveConstants;
@@ -24,6 +26,8 @@ import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
+import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
+import frc.robot.commands.Autos.AutoSequences.testAuto;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Intake.SourceIntake;
 import frc.robot.commands.SpeakerScore.SpeakerCommand;
@@ -58,6 +62,9 @@ public class RobotContainer {
 
   //private final Cameras cameras = new Cameras(m_robotDrive);
 
+
+  private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_opController = new XboxController(1);
@@ -78,11 +85,20 @@ public class RobotContainer {
     return (m_driverController.getRightTriggerAxis() <= 0.1);
   };
 
+  private SendableChooser<Command> toggle = new SendableChooser<>();
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    toggle.setDefaultOption("driveAuto", m_testAuto);
+    //toggle.addOption("option1", m_option);
+
+    SmartDashboard.putData("Select Autonomous", toggle);
+    
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -156,10 +172,10 @@ public class RobotContainer {
             new RunCommand(() -> m_intake.stop(), m_intake),
             new RunCommand(() -> m_shooter.shoot(0), m_shooter)));*/
 
-    new JoystickButton(m_opController, Button.kA.value)
+    /*new JoystickButton(m_opController, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_intake.feedTheMachine(), m_intake))
-            .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));
+            .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));*/
 
     new JoystickButton(m_opController, Button.kY.value)
         .whileTrue(new RunCommand(
@@ -254,7 +270,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
+    /*Pose2d initPose2d = new Pose2d(0, 0, new Rotation2d(0));
+    Translation2d firstTrans = new Translation2d(0.5, 0.5);
+    Translation2d secondTrans = new Translation2d(2, -1);
+    Pose2d emoPose2d = new Pose2d(0, 0, new Rotation2d(90));
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -264,11 +283,9 @@ public class RobotContainer {
     // An example trajectory to follow. All units in meters.
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
+        initPose2d, 
+        List.of(firstTrans),
+        emoPose2d,
         config);
 
     var thetaController = new ProfiledPIDController(
@@ -291,6 +308,15 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0,true, false));
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));
+    //return toggle.getSelected();*/
+    //SpeakerAuto speaker = new SpeakerAuto(m_shooter, m_intake);
+    //testAuto test = new testAuto(m_robotDrive, m_shooter, m_intake);
+    /*SequentialCommandGroup test = new SequentialCommandGroup(
+        new testAuto(m_robotDrive, m_shooter, m_intake).asProxy()
+    );*/
+
+    return m_testAuto;
+
   }
 }

@@ -99,6 +99,10 @@ public class ShootSubsystem extends SubsystemBase {
     return getLeftVelocity() < 5000 + 100 && getLeftVelocity() > 5000 - 100;
   };
 
+  public boolean booleanSpeed(double speed){
+    return  getLeftVelocity() < speed + 100 && getLeftVelocity() > speed - 100;
+  }
+
   public BooleanSupplier atTestSpeed = () -> {
     return (getLeftVelocity() < 100 + 50 && getLeftVelocity() > 100 - 50);
   };
