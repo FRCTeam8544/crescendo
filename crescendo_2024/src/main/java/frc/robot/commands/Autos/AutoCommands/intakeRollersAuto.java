@@ -1,11 +1,13 @@
 package frc.robot.commands.Autos.AutoCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeAuto extends Command{
+public class intakeRollersAuto extends Command{
 
-    public IntakeAuto(){
-
+    IntakeSubsystem intake;
+    public intakeRollersAuto(IntakeSubsystem intake){
+        this.intake = intake;
     }
 
     @Override
@@ -15,17 +17,17 @@ public class IntakeAuto extends Command{
 
     @Override
     public void execute(){
-
+        intake.suckySuck();
     }
 
     @Override
     public void end(boolean interupted){
-
+        if (interupted){intake.stop();}
     }
 
     @Override
     public boolean isFinished(){
-        return false;
+        return intake.noteInIntake.getAsBoolean();
     }
     
 }
