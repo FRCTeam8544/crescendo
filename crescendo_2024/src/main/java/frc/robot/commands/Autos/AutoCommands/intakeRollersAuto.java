@@ -17,7 +17,8 @@ public class intakeRollersAuto extends Command{
 
     @Override
     public void execute(){
-        intake.suckySuck();
+        if (intake.noteInside){intake.suckySuck();}
+        else{intake.stop();}
     }
 
     @Override
@@ -27,7 +28,11 @@ public class intakeRollersAuto extends Command{
 
     @Override
     public boolean isFinished(){
-        return intake.noteInIntake.getAsBoolean();
+        if (!intake.noteInside){
+            intake.stop();
+            return true;
+        }
+        return false;
     }
     
 }

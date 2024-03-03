@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_gyro.zeroYaw();
+    //m_gyro.reset();
   }
 
   

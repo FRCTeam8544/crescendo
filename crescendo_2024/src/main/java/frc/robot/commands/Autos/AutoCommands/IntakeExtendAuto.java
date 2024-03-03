@@ -18,7 +18,7 @@ public class IntakeExtendAuto extends Command{
 
     @Override
     public void execute(){
-        if (!intake.forwardLimitSwitch.getAsBoolean()){intake.testRotate(true);}
+        if (!intake.reverseLimitSwitch.getAsBoolean()){intake.testRotate(false);}
         else{intake.rotateStop();}
     }
 
@@ -29,7 +29,7 @@ public class IntakeExtendAuto extends Command{
 
     @Override
     public boolean isFinished(){
-        return intake.forwardLimitSwitch.getAsBoolean();
+        return intake.reverseLimitSwitch.getAsBoolean();
     }
     
 }

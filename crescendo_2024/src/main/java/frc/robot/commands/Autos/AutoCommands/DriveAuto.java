@@ -30,7 +30,7 @@ public class DriveAuto extends Command{
     SwerveControllerCommand swerveControllerCommand;
     DriveSubsystem m_robotDrive;
     public DriveAuto(DriveSubsystem m_robotDrive, Pose2d initPose, Pose2d endPose, Translation2d firstTrans, Translation2d secondTrans){
-         m_robotDrive.zeroHeading();
+        //m_robotDrive.zeroHeading();
         this.m_robotDrive = m_robotDrive;
          // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
@@ -39,13 +39,15 @@ public class DriveAuto extends Command{
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DriveConstants.kDriveKinematics);
 
+
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(List.of(initPose, endPose), config);
         // An example trajectory to follow. All units in meters.
-        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        /*Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
             initPose, 
             List.of(firstTrans, secondTrans),
             endPose,
-            config);
+            config);*/
 
         var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);

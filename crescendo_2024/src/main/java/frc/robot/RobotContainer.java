@@ -66,8 +66,9 @@ public class RobotContainer {
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_opController = new XboxController(1);
+  XboxController m_driverController = m_opController;
 
   BooleanSupplier init = () -> {
     return (m_driverController.getLeftTriggerAxis() > 0.5);
@@ -126,7 +127,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
 
-    new JoystickButton(m_driverController, Button.kStart.value)
+    new JoystickButton(m_driverController, Button.kLeftStick.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 

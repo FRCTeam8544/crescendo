@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private boolean forwardStopRequested = false;
     private boolean reverseStopRequested = false;
     private String dir = "na";
-    private boolean noteInside = false;
+    public boolean noteInside = false;
 
     public IntakeSubsystem() {
         rollerMotor.restoreFactoryDefaults();
@@ -123,11 +123,11 @@ public class IntakeSubsystem extends SubsystemBase{
         pubSet = setpoint;
     }
 
-    public void testRotate(boolean forward){
-        if (!forwardStopRequested && forward){
+    public void testRotate(boolean reverse){//low key messed up forward and reversed so the names are all wrong so dont touch
+        if (!forwardStopRequested && reverse){
            armMotor.set(0.20); 
            dir = "fr";
-        }else if (!reverseStopRequested && !forward){
+        }else if (!reverseStopRequested && !reverse){
             armMotor.set(-0.15);
             dir = "re";
         }

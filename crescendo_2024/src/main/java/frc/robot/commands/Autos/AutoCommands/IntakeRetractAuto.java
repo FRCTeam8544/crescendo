@@ -17,16 +17,20 @@ public class IntakeRetractAuto extends Command{
 
     @Override
     public void execute(){
-        intake.testRotate(false);
+        intake.testRotate(true);
     }
 
     @Override
     public void end(boolean interupted){
-        intake.rotateStop();
+        if (interupted){intake.rotateStop();}
     }   
     
     @Override
     public boolean isFinished(){
-        return intake.reverseLimitSwitch.getAsBoolean();
+        if (intake.reverseLimitSwitch.getAsBoolean()){
+            intake.stop();
+            return true;
+        }
+        return false;
     }
 }

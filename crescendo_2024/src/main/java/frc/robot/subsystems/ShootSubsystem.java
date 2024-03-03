@@ -67,8 +67,8 @@ public class ShootSubsystem extends SubsystemBase {
   }*/
 
   public void handoff(){
-    leftMotor.set(0.1);
-    rightMotor.set(-0.1);
+    leftMotor.set(0.25);
+    rightMotor.set(-0.25);
   }
 
   public void sourceIntake(){
