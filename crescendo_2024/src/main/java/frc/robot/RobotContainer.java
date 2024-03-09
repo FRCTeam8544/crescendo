@@ -66,9 +66,9 @@ public class RobotContainer {
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
 
   // The driver's controller
-  //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_opController = new XboxController(1);
-  XboxController m_driverController = m_opController;
+  //XboxController m_driverController = m_opController;
 
   BooleanSupplier init = () -> {
     return (m_driverController.getLeftTriggerAxis() > 0.5);
