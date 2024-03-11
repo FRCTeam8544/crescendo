@@ -30,15 +30,18 @@ public class testAuto extends SequentialCommandGroup{
         Pose2d revPoseTwo2d = new Pose2d(3, 0, new Rotation2d(0));
         addCommands(
         new SequentialCommandGroup(
-            new SpeakerAuto(shooter, intake).withTimeout(1.5),
             new ParallelCommandGroup(
-                new DriveAuto(driveSubsystem, initPose2d, emoPose2d, fristTrans, secondTrans),
-                new IntakeExtendAuto(intake).withTimeout(2),
+                new DriveAuto(driveSubsystem, initPose2d, emoPose2d, fristTrans, secondTrans).withTimeout(0.2),
+                new SpeakerAuto(shooter, intake).withTimeout(1.5)
+            ),
+            new ParallelCommandGroup(
+                new DriveAuto(driveSubsystem, initPose2d, emoPose2d, fristTrans, secondTrans).withTimeout(0.5),
+                new IntakeExtendAuto(intake).withTimeout(1),
                 new intakeRollersAuto(intake)//.withTimeout(3)
             ),
             
             new ParallelCommandGroup(
-                new IntakeRetractAuto(intake).withTimeout(2.7),
+                new IntakeRetractAuto(intake).withTimeout(1),
                 new DriveAuto(driveSubsystem, revPose, revPoseTwo2d, revTrans, revTransTwo)
             ),
             new WaitCommand(0.5),

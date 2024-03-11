@@ -30,7 +30,7 @@ public class SpeakerCommand extends Command{
             shooter.shoot(5300);
             if (shooter.booleanSpeed(5300)){intake.feedTheMachine();}
         }
-        else if (controller.getLeftTriggerAxis() > 0){
+        else{
             shooter.shoot(5300);
         }
     }

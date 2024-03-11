@@ -26,7 +26,13 @@ import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
+import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
+import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
+import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
+import frc.robot.commands.Autos.AutoSequences.ShootAndMove;
+import frc.robot.commands.Autos.AutoSequences.ShootAuto;
 import frc.robot.commands.Autos.AutoSequences.testAuto;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Intake.SourceIntake;
@@ -58,12 +64,18 @@ public class RobotContainer {
   private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   //private final ShooterElevator m_shootElevator = new ShooterElevator();
-  //private final ClimberElevator m_climber = new ClimberElevator();
+  private final ClimberElevator m_climber = new ClimberElevator();
 
   //private final Cameras cameras = new Cameras(m_robotDrive);
 
 
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
+  private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
+  private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
+
+
+  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake);
+  private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -92,10 +104,13 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
 
-    toggle.setDefaultOption("driveAuto", m_testAuto);
-    //toggle.addOption("option1", m_option);
+    toggle.setDefaultOption("2 note Auto (center)", m_testAuto);
+    toggle.addOption("speaker Only", m_shootOnlyAuto);
+    toggle.addOption("shoot And Move", m_shootAndMoveAuto);
+    toggle.addOption("null", null);
 
     SmartDashboard.putData("Select Autonomous", toggle);
     
@@ -111,7 +126,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * -1,
                 true, true),
             m_robotDrive));
   }
@@ -127,7 +142,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
 
-    new JoystickButton(m_driverController, Button.kLeftStick.value)
+    new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
@@ -157,13 +172,29 @@ public class RobotContainer {
                 .onFalse(new RunCommand(
                 () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
     */
+    new JoystickButton(m_opController, Button.kA.value)
+        .whileTrue(new RunCommand(
+            () -> m_climber.moveClimber(0.1), m_climber)).onFalse(
+                new RunCommand(() -> m_climber.stop(), m_climber));
+    new JoystickButton(m_opController, Button.kBack.value)
+        .whileTrue(new RunCommand(
+            () -> m_climber.moveClimber(-0.1), m_climber)).onFalse(
+                new RunCommand(() -> m_climber.stop(), m_climber));
 
     //intake commands
-    new JoystickButton(m_opController, Button.kB.value) // changed to X from left bumper
+    /*new JoystickButton(m_opController, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
             () -> m_intake.suckySuck(), m_intake))
             .onFalse(new RunCommand(
-            () -> m_intake.stop(), m_intake));
+            () -> m_intake.stop(), m_intake));*/
+    /*new JoystickButton(m_opController, Button.kB.value)
+        .onTrue(intakeAuto);
+
+    new JoystickButton(m_opController, Button.kA.value)
+        .onTrue(intakeStopAuto);*/
+
+    new JoystickButton(m_opController, Button.kB.value)
+        .onTrue(intakeAuto).whileFalse(intakeStopAuto);
     
     /*new JoystickButton(m_driverController, Button.kA.value) // changed to Y from right bumper
         .whileTrue(new ParallelCommandGroup(
@@ -178,7 +209,12 @@ public class RobotContainer {
             () -> m_intake.feedTheMachine(), m_intake))
             .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));*/
 
-    new JoystickButton(m_opController, Button.kY.value)
+
+            /*
+             * 
+             * old intake code
+             */
+    /*new JoystickButton(m_opController, Button.kY.value)
         .whileTrue(new RunCommand(
             () -> m_intake.testRotate(false)).withTimeout(2))
             .onFalse(new RunCommand(
@@ -188,7 +224,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_intake.testRotate(true)).withTimeout(2.5))
             .onFalse(new RunCommand(
-                () -> m_intake.rotateStop(), m_intake));
+                () -> m_intake.rotateStop(), m_intake));*/
 
     /*new JoystickButton(m_opController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
@@ -309,15 +345,15 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));
-    //return toggle.getSelected();*/
+    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));*/
+    return toggle.getSelected();
     //SpeakerAuto speaker = new SpeakerAuto(m_shooter, m_intake);
     //testAuto test = new testAuto(m_robotDrive, m_shooter, m_intake);
     /*SequentialCommandGroup test = new SequentialCommandGroup(
         new testAuto(m_robotDrive, m_shooter, m_intake).asProxy()
     );*/
 
-    return m_testAuto;
+   // return m_testAuto;
 
   }
 }
