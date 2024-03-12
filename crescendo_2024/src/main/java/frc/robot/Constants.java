@@ -245,4 +245,9 @@ public final class Constants {
 
     //Seperate PID values need to be added if follow doesn't work
   }
+
+  public static final class EpilepticSeizureOfProperty {
+    public static final int portNumber = 0;
+    public static final int ledLength = 0;
+  }
 }

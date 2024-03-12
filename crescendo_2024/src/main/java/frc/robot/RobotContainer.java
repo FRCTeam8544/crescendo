@@ -29,6 +29,7 @@ import frc.robot.commands.Intake.SourceIntake;
 import frc.robot.commands.SpeakerScore.SpeakerCommand;
 import frc.robot.subsystems.ClimberElevator;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Epilepsy;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.ShooterElevator;
@@ -53,6 +54,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final Epilepsy m_ledController = new Epilepsy();
   //private final ShooterElevator m_shootElevator = new ShooterElevator();
   //private final ClimberElevator m_climber = new ClimberElevator();
 
