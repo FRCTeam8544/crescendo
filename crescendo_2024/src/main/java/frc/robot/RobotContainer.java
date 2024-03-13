@@ -29,8 +29,10 @@ import frc.robot.commands.AmpScore.HandoffCommand;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
 import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
+import frc.robot.commands.Autos.AutoSequences.PrepareHangAuto;
 import frc.robot.commands.Autos.AutoSequences.ShootAndMove;
 import frc.robot.commands.Autos.AutoSequences.ShootAuto;
 import frc.robot.commands.Autos.AutoSequences.testAuto;
@@ -74,28 +76,33 @@ public class RobotContainer {
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
 
 
+  
+
+  // romeo and juliet, this is where our humble tale begins 
+  XboxController m_romeo = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_juliet = new XboxController(1);
+  //XboxController m_romeo = m_juliet;
+
   private final IntakeAuto intakeAuto = new IntakeAuto(m_intake);
   private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_opController = new XboxController(1);
-  //XboxController m_driverController = m_opController;
+  private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
+  private final FinishHangAuto finishHangAuto = new FinishHangAuto(m_intake, m_climber);
 
   BooleanSupplier init = () -> {
-    return (m_driverController.getLeftTriggerAxis() > 0.5);
+    return (m_romeo.getLeftTriggerAxis() > 0.5);
   };
 
   BooleanSupplier run = () -> {
-    return (m_driverController.getRightTriggerAxis() > 0.5);
+    return (m_romeo.getRightTriggerAxis() > 0.5);
   };
 
   BooleanSupplier initDone = () -> {
-    return (m_driverController.getLeftTriggerAxis() <= 0.1);
+    return (m_romeo.getLeftTriggerAxis() <= 0.1);
   };
 
   BooleanSupplier runDone = () -> {
-    return (m_driverController.getRightTriggerAxis() <= 0.1);
+    return (m_romeo.getRightTriggerAxis() <= 0.1);
   };
 
   private SendableChooser<Command> toggle = new SendableChooser<>();
@@ -107,12 +114,12 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    toggle.setDefaultOption("2 note Auto (center)", m_testAuto);
-    toggle.addOption("speaker Only", m_shootOnlyAuto);
-    toggle.addOption("shoot And Move", m_shootAndMoveAuto);
-    toggle.addOption("null", null);
+    toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
+    toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
+    toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
+    toggle.addOption("null", null);//cloud bong
 
-    SmartDashboard.putData("Select Autonomous", toggle);
+    SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
     
 
     // Configure the button bindings
@@ -123,10 +130,10 @@ public class RobotContainer {
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * -1,
+            () -> m_robotDrive.drive(//I drive
+                -MathUtil.applyDeadband(m_romeo.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_romeo.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
                 true, true),
             m_robotDrive));
   }
@@ -142,14 +149,14 @@ public class RobotContainer {
    */
   private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
 
-    new JoystickButton(m_driverController, Button.kStart.value)
+    new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
     //shooter commands
     /*
      * 
-    new JoystickButton(m_driverController, Button.kA.value) //A Button
+    new JoystickButton(m_romeo, Button.kA.value) //A Button
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(ShooterConstants.shootSetpoint),
             m_shooter))
@@ -157,7 +164,7 @@ public class RobotContainer {
             () -> m_shooter.stop(StopConstant.stopSetpoint), m_shooter));
     */
     /* This is a kill switch that could be removed whenever, but it probably shouldnt be for now 
-    new JoystickButton(m_driverController, Button.kB.value) // B Button
+    new JoystickButton(m_romeo, Button.kB.value) // B Button
         .whileTrue(new RunCommand(
         () -> m_shooter.stop(StopConstant.stopSetpoint),
         m_shooter));
@@ -165,38 +172,41 @@ public class RobotContainer {
     /*
         Likely uneeded since we won't intake via shooter anymore
 
-    new JoystickButton(m_driverController, Button.k-.value) X button now conflicts with intaking fron ground,
+    new JoystickButton(m_romeo, Button.k-.value) X button now conflicts with intaking fron ground,
         .whileTrue(new RunCommand(                          which is worth noting if we ever re-implement this
         () -> m_shooter.sourceIntake(ShooterConstants.intakeSetpoint), 
             m_shooter))
                 .onFalse(new RunCommand(
                 () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
     */
-    new JoystickButton(m_opController, Button.kA.value)
+    /*new JoystickButton(m_juliet, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_climber.moveClimber(0.1), m_climber)).onFalse(
                 new RunCommand(() -> m_climber.stop(), m_climber));
-    new JoystickButton(m_opController, Button.kBack.value)
+    new JoystickButton(m_juliet, Button.kBack.value)
         .whileTrue(new RunCommand(
             () -> m_climber.moveClimber(-0.1), m_climber)).onFalse(
-                new RunCommand(() -> m_climber.stop(), m_climber));
+                new RunCommand(() -> m_climber.stop(), m_climber));*/
 
     //intake commands
-    /*new JoystickButton(m_opController, Button.kB.value) // changed to X from left bumper
+    /*new JoystickButton(m_juliet, Button.kB.value) // changed to X from left bumper
         .whileTrue(new RunCommand(
             () -> m_intake.suckySuck(), m_intake))
             .onFalse(new RunCommand(
             () -> m_intake.stop(), m_intake));*/
-    /*new JoystickButton(m_opController, Button.kB.value)
+    /*new JoystickButton(m_juliet, Button.kB.value)
         .onTrue(intakeAuto);
 
-    new JoystickButton(m_opController, Button.kA.value)
+    new JoystickButton(m_juliet, Button.kA.value)
         .onTrue(intakeStopAuto);*/
 
-    new JoystickButton(m_opController, Button.kB.value)
+    new JoystickButton(m_juliet, Button.kB.value)
         .onTrue(intakeAuto).whileFalse(intakeStopAuto);
+
+    new JoystickButton(m_juliet, Button.kX.value)
+        .onTrue(prepareHangAuto.andThen(finishHangAuto));
     
-    /*new JoystickButton(m_driverController, Button.kA.value) // changed to Y from right bumper
+    /*new JoystickButton(m_romeo, Button.kA.value) // changed to Y from right bumper
         .whileTrue(new ParallelCommandGroup(
             new RunCommand(() -> m_intake.feedTheMachine(), m_intake),
             new RunCommand(() -> m_shooter.shoot(5000), m_shooter))
@@ -204,7 +214,7 @@ public class RobotContainer {
             new RunCommand(() -> m_intake.stop(), m_intake),
             new RunCommand(() -> m_shooter.shoot(0), m_shooter)));*/
 
-    /*new JoystickButton(m_opController, Button.kA.value)
+    /*new JoystickButton(m_juliet, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_intake.feedTheMachine(), m_intake))
             .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));*/
@@ -214,69 +224,69 @@ public class RobotContainer {
              * 
              * old intake code
              */
-    /*new JoystickButton(m_opController, Button.kY.value)
+    /*new JoystickButton(m_juliet, Button.kY.value)
         .whileTrue(new RunCommand(
             () -> m_intake.testRotate(false)).withTimeout(2))
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));
 
-    new JoystickButton(m_opController, Button.kX.value)
+    new JoystickButton(m_juliet, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> m_intake.testRotate(true)).withTimeout(2.5))
             .onFalse(new RunCommand(
                 () -> m_intake.rotateStop(), m_intake));*/
 
-    /*new JoystickButton(m_opController, Button.kRightBumper.value)
+    /*new JoystickButton(m_juliet, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_shooter.shoot(5000), m_shooter))
             .onFalse(new RunCommand(
                 () -> m_shooter.stop(), m_shooter));*/
-    new JoystickButton(m_opController, Button.kRightBumper.value)
-        .onTrue(new SpeakerCommand(m_shooter, m_intake, m_opController));
+    new JoystickButton(m_juliet, Button.kRightBumper.value)
+        .onTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
 
-    new JoystickButton(m_opController, Button.kLeftBumper.value)
+    new JoystickButton(m_juliet, Button.kLeftBumper.value)
         .whileTrue(new HandoffCommand(m_intake, m_shooter));
 
-    new JoystickButton(m_opController, Button.kStart.value)
+    new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
           //test from earlier  
-    /*new JoystickButton(m_driverController, Button.kA.value)
-        .whileTrue(new IntakeCommand(m_intake, m_driverController));
+    /*new JoystickButton(m_romeo, Button.kA.value)
+        .whileTrue(new IntakeCommand(m_intake, m_romeo));
 
-    new JoystickButton(m_driverController, Button.kY.value)
-        .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_driverController))
+    new JoystickButton(m_romeo, Button.kY.value)
+        .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_romeo))
         .onFalse(new RunCommand(
             () -> m_shooter.shoot(0), m_shooter));
     */
     //hand off
-    /*new JoystickButton(m_driverController, Button.kB.value)
+    /*new JoystickButton(m_romeo, Button.kB.value)
         .whileTrue(new HandoffCommand(m_intake, m_shooter));
     */
     //shooter elevator commands
     /*
      * 
-    new JoystickButton(m_driverController, Button.kY.value) // Right Bumper
+    new JoystickButton(m_romeo, Button.kY.value) // Right Bumper
         .whileTrue(new RunCommand(
         () -> m_shootElevator.muevete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
         m_shootElevator).onlyIf(init))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
     
-    new JoystickButton(m_driverController, Button.kY.value) // Left Bumper
+    new JoystickButton(m_romeo, Button.kY.value) // Left Bumper
         .whileTrue(new RunCommand(
         () -> m_shootElevator.muevete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
         m_shootElevator).onlyIf(run))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
 
-    new JoystickButton(m_driverController, Button.kStart.value) // Start Button (no clue where it is)
+    new JoystickButton(m_romeo, Button.kStart.value) // Start Button (no clue where it is)
         .whileTrue(new RunCommand(
         () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for upward motion
         m_shootElevator))
         .onFalse(new RunCommand(
             () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
     
-    new JoystickButton(m_driverController, Button.kBack.value) // Back Button (no clue where this is either)
+    new JoystickButton(m_romeo, Button.kBack.value) // Back Button (no clue where this is either)
         .whileTrue(new RunCommand(
         () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for downward motion
         m_shootElevator))
@@ -284,14 +294,14 @@ public class RobotContainer {
             () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
 
     //climber commands
-    new JoystickButton(m_driverController, Button.kX.value) // Right Stick pressed in
+    new JoystickButton(m_romeo, Button.kX.value) // Right Stick pressed in
         .whileTrue(new RunCommand(
         () -> m_climber.moveClimber(ClimbElevatorConstants.elevatorSetpoint), //for upward motion
         m_climber).onlyIf(init))
         .onFalse(new RunCommand(
             () -> m_climber.stop(StopConstant.stopSetpoint)));
     
-    new JoystickButton(m_driverController, Button.kX.value) // Left Stick pressed in
+    new JoystickButton(m_romeo, Button.kX.value) // Left Stick pressed in
         .whileTrue(new RunCommand(
         () -> m_climber.moveClimber(-ClimbElevatorConstants.elevatorSetpoint), //for downward motion
         m_shootElevator).onlyIf(run))
@@ -306,7 +316,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {//the machine is alive
     /*Pose2d initPose2d = new Pose2d(0, 0, new Rotation2d(0));
     Translation2d firstTrans = new Translation2d(0.5, 0.5);
     Translation2d secondTrans = new Translation2d(2, -1);
@@ -346,7 +356,7 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));*/
-    return toggle.getSelected();
+    return toggle.getSelected();//lucas got bored and is next to me send help
     //SpeakerAuto speaker = new SpeakerAuto(m_shooter, m_intake);
     //testAuto test = new testAuto(m_robotDrive, m_shooter, m_intake);
     /*SequentialCommandGroup test = new SequentialCommandGroup(
