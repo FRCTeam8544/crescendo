@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase{
     private boolean forwardStopRequested = false;
     private boolean reverseStopRequested = false;
     private String dir = "na";
-    private boolean noteInside = false;
+    public boolean noteInside = false;
 
     public IntakeSubsystem() {
         rollerMotor.restoreFactoryDefaults();
@@ -58,6 +58,10 @@ public class IntakeSubsystem extends SubsystemBase{
 
     public BooleanSupplier noteInIntake = () -> {
         return noteSensor.get();
+    };
+
+    public BooleanSupplier properNoteInIntake = () -> {
+        return !noteSensor.get();
     };
 
     public BooleanSupplier forwardLimitSwitch = () -> {
@@ -106,7 +110,7 @@ public class IntakeSubsystem extends SubsystemBase{
     }
     
     public void rageAgainsTheMachine(){
-        rollerMotor.set(0.2);
+        rollerMotor.set(0.15);
     }
 
     public void stop(){
@@ -123,12 +127,12 @@ public class IntakeSubsystem extends SubsystemBase{
         pubSet = setpoint;
     }
 
-    public void testRotate(boolean forward){
-        if (!forwardStopRequested && forward){
-           armMotor.set(0.20); 
+    public void testRotate(boolean reverse){//low key messed up forward and reversed so the names are all wrong so dont touch
+        if (!forwardStopRequested && reverse){
+           armMotor.set(0.25); 
            dir = "fr";
-        }else if (!reverseStopRequested && !forward){
-            armMotor.set(-0.15);
+        }else if (!reverseStopRequested && !reverse){
+            armMotor.set(-0.35);
             dir = "re";
         }
     }

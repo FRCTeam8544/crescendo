@@ -69,7 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_gyro.zeroYaw();
+    //m_gyro.reset();
   }
 
   
@@ -128,7 +128,11 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-
+    /*if (opController.getAButton()){
+      xSpeed = opController.getLeftX();
+      ySpeed = opController.getLeftY();
+      rot = opController.getRightX();
+    }*/
     
     
 

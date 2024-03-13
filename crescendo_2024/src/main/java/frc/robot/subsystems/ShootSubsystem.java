@@ -67,8 +67,8 @@ public class ShootSubsystem extends SubsystemBase {
   }*/
 
   public void handoff(){
-    leftMotor.set(0.1);
-    rightMotor.set(-0.1);
+    leftMotor.set(0.15);
+    rightMotor.set(-0.15);
   }
 
   public void sourceIntake(){
@@ -98,6 +98,10 @@ public class ShootSubsystem extends SubsystemBase {
   public BooleanSupplier atSpeed = () -> {
     return getLeftVelocity() < 5000 + 100 && getLeftVelocity() > 5000 - 100;
   };
+
+  public boolean booleanSpeed(double speed){
+    return  getLeftVelocity() < speed + 100 && getLeftVelocity() > speed - 100;
+  }
 
   public BooleanSupplier atTestSpeed = () -> {
     return (getLeftVelocity() < 100 + 50 && getLeftVelocity() > 100 - 50);

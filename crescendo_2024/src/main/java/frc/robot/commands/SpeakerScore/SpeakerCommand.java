@@ -25,12 +25,13 @@ public class SpeakerCommand extends Command{
 
     @Override
     public void execute(){
+        System.err.println(shooter.getLeftVelocity());
         if (controller.getRightTriggerAxis() > 0){
-            shooter.shoot(5000);
-            if (shooter.atSpeed.getAsBoolean()){intake.feedTheMachine();}
+            shooter.shoot(5300);
+            if (shooter.booleanSpeed(5300)){intake.feedTheMachine();}
         }
-        else if (controller.getLeftTriggerAxis() > 0){
-            shooter.shoot(5000);
+        else{
+            shooter.shoot(5300);
         }
     }
 
