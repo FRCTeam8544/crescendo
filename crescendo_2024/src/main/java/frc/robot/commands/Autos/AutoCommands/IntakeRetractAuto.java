@@ -12,7 +12,7 @@ public class IntakeRetractAuto extends Command{
 
     @Override
     public void initialize(){
-
+        System.out.println("intake retract");
     }
 
     @Override
@@ -27,10 +27,10 @@ public class IntakeRetractAuto extends Command{
     
     @Override
     public boolean isFinished(){
-        if (intake.reverseLimitSwitch.getAsBoolean()){
+        /*if (intake.forwardLimitSwitch.getAsBoolean()){
             intake.stop();
             return true;
-        }
+        }*/
         return false;
     }
 }

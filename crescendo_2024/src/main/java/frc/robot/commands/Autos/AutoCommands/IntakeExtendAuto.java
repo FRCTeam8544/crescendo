@@ -29,7 +29,8 @@ public class IntakeExtendAuto extends Command{
 
     @Override
     public boolean isFinished(){
-        return intake.reverseLimitSwitch.getAsBoolean();
+        //return intake.reverseLimitSwitch.getAsBoolean();
+        return false;
     }
     
 }
