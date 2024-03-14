@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.SerialPort.StopBits;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -38,14 +39,7 @@ public class IntakeSubsystem extends SubsystemBase{
         rollerMotor.setIdleMode(IdleMode.kBrake);
 
         armEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        /*armPID = armMotor.getPIDController();
-        armPID.setFeedbackDevice(armEncoder);
-        
-        armPID.setP(0.02);
-        armPID.setI(1e-7);
-        armPID.setD(0.002);
-        armPID.setFF(0);
-        armPID.setOutputRange(-0.5, 0.5);*/
+
         armMotor.setIdleMode(IdleMode.kCoast);
 
         //armMotor.setSoftLimit(SoftLimitDirection.kForward, 25);
@@ -98,7 +92,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
     public void suckySuck(){
         if(noteInside){rollerMotor.set(IntakeConstants.suckySuckSpeed);}
-        else{rollerMotor.set(0);}
+        else{rollerMotor.set(StopConstant.stopSetpoint);}
     }
 
     public void sourceIntake(){
@@ -118,7 +112,7 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void rotateStop(){
-        armMotor.set(0);
+        armMotor.set(StopConstant.stopSetpoint);
         pubSet = armEncoder.getPosition();
         dir = "na";
     }

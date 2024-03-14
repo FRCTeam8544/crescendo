@@ -26,10 +26,10 @@ public class ClimberElevator extends SubsystemBase {
 
   private static CANSparkMax elevatorMotor = new CANSparkMax(Constants.ClimbElevatorConstants.LeftElevatorCANID, CANSparkLowLevel.MotorType.kBrushless);
   private static CANSparkMax rightElevatorMotor = new CANSparkMax(Constants.ClimbElevatorConstants.RightElevatorCANID, CANSparkLowLevel.MotorType.kBrushless);
-  private static DigitalInput upLimit = new DigitalInput(9);
-  private static DigitalInput downLimit = new DigitalInput(8);
+  private static DigitalInput upLimit = new DigitalInput(ClimbElevatorConstants.UpLimitPort);
+  private static DigitalInput downLimit = new DigitalInput(ClimbElevatorConstants.DownLimitPort);
   //private SparkPIDController elevatorMotorPID = elevatorMotor.getPIDController();
-  private RelativeEncoder elevatorEncoder = elevatorMotor.getAlternateEncoder(8192);
+  private RelativeEncoder elevatorEncoder = elevatorMotor.getAlternateEncoder(ClimbElevatorConstants.CountsPerRev);
   private boolean upStopRequested = false;
   private boolean downStopRequested = true;
 
@@ -76,25 +76,19 @@ public class ClimberElevator extends SubsystemBase {
     }
     
     if (downStopRequested && dir == "re"){
-      elevatorMotor.set(0);
-      //rightElevatorMotor.set(0);
+      elevatorMotor.set(StopConstant.stopSetpoint);
     }else if (upStopRequested && dir == "fr"){
-      elevatorMotor.set(0);
-      //rightElevatorMotor.set(0);
+      elevatorMotor.set(StopConstant.stopSetpoint);
     }
-
-
     updateDashboard();
   }
 
   public void moveClimber(boolean up){//alex honnold would be proud
     if (!upStopRequested && up){
-      elevatorMotor.set(0.2);
-      //rightElevatorMotor.set(-0.2);
+      elevatorMotor.set(ClimbElevatorConstants.elevatorPercentMove);
       dir = "fr";
     }else if (!downStopRequested && !up){
-      elevatorMotor.set(-0.2);
-      //rightElevatorMotor.set(0.2);
+      elevatorMotor.set(-ClimbElevatorConstants.elevatorPercentMove);
       dir = "re";
     }
 
@@ -102,9 +96,7 @@ public class ClimberElevator extends SubsystemBase {
 
   public void stop(){//double setpoint){
     //elevatorMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
-    elevatorMotor.set(0);
-    //rightElevatorMotor.set(0);
-    //rightElevatorMotor.stopMotor();
+    elevatorMotor.set(StopConstant.stopSetpoint);
     dir = "na";
   }
 

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.StopConstant;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
@@ -26,7 +27,7 @@ public class ShootSubsystem extends SubsystemBase {
   private SparkPIDController leftMotorPID = leftMotor.getPIDController();
   private SparkPIDController rightMotorPID = rightMotor.getPIDController();
 
-  private DigitalInput limitSwitch = new DigitalInput(3);
+  private DigitalInput limitSwitch = new DigitalInput(ShooterConstants.limitSwitchPort);
 
   public ShootSubsystem() {
 
@@ -67,13 +68,13 @@ public class ShootSubsystem extends SubsystemBase {
   }*/
 
   public void handoff(){
-    leftMotor.set(0.15);
-    rightMotor.set(-0.15);
+    leftMotor.set(ShooterConstants.handoffSpeed);
+    rightMotor.set(-ShooterConstants.handoffSpeed);
   }
 
   public void sourceIntake(){
-    leftMotor.set(-0.25);
-    rightMotor.set(0.25);
+    leftMotor.set(-ShooterConstants.sourceSpeed);
+    rightMotor.set(ShooterConstants.sourceSpeed);
   }
 
   public void shoot(double setpoint){
@@ -82,8 +83,8 @@ public class ShootSubsystem extends SubsystemBase {
   }
 
   public void stop(){
-    leftMotorPID.setReference(0, CANSparkBase.ControlType.kVelocity);
-    rightMotorPID.setReference(0, CANSparkBase.ControlType.kVelocity);
+    leftMotorPID.setReference(StopConstant.stopSetpoint, CANSparkBase.ControlType.kVelocity);
+    rightMotorPID.setReference(StopConstant.stopSetpoint, CANSparkBase.ControlType.kVelocity);
   }
 
   public void updateDashboard(){

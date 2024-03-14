@@ -1,13 +1,12 @@
-package frc.robot.commands.Autos.AutoCommands;
+package frc.robot.commands.Autos.AutoCommands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeExtendAuto extends Command{
-
+public class IntakeRetractAuto extends Command{
 
     IntakeSubsystem intake;
-    public IntakeExtendAuto(IntakeSubsystem intake){
+    public IntakeRetractAuto(IntakeSubsystem intake){
         this.intake = intake;
     }
 
@@ -18,18 +17,20 @@ public class IntakeExtendAuto extends Command{
 
     @Override
     public void execute(){
-        if (!intake.reverseLimitSwitch.getAsBoolean()){intake.testRotate(false);}
-        else{intake.rotateStop();}
+        intake.testRotate(true);
     }
 
     @Override
     public void end(boolean interupted){
         if (interupted){intake.rotateStop();}
-    }
-
+    }   
+    
     @Override
     public boolean isFinished(){
-        return intake.reverseLimitSwitch.getAsBoolean();
+        if (intake.reverseLimitSwitch.getAsBoolean()){
+            intake.stop();
+            return true;
+        }
+        return false;
     }
-    
 }

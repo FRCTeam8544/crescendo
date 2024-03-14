@@ -1,4 +1,4 @@
-package frc.robot.commands.Autos.AutoCommands;
+package frc.robot.commands.Autos.AutoCommands.Drive;
 
 import java.util.List;
 
@@ -91,5 +91,4 @@ public class DriveAuto extends Command{
     public boolean isFinished(){
         return swerveControllerCommand.isFinished();
     }
-    
 }

@@ -1,4 +1,4 @@
-package frc.robot.commands.Autos.AutoCommands;
+package frc.robot.commands.Autos.AutoCommands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -15,18 +15,13 @@ public class IntakeRollersStopAuto extends Command{
         intake.stop();
     }
     @Override
-    public void execute(){
-
-    }
+    public void execute(){}
 
     @Override
-    public void end(boolean Interupted){
-        
-    }
+    public void end(boolean Interupted){}
 
     @Override
     public boolean isFinished(){
         return false;
-    }
-    
+    }   
 }

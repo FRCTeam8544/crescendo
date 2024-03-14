@@ -11,14 +11,10 @@ public class HandoffCommand extends Command{
     public HandoffCommand(IntakeSubsystem intake, ShootSubsystem shooter){
         this.shooter = shooter;
         this.intake = intake;
-
     }
-    
 
     @Override
-    public void initialize(){
-
-    }
+    public void initialize(){}
 
     @Override
     public void execute(){
@@ -30,8 +26,6 @@ public class HandoffCommand extends Command{
             intake.stop();
             shooter.stop();
         }
-        
-
     }
 
     @Override

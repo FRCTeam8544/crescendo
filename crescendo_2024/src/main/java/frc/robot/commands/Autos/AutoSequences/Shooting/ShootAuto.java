@@ -1,12 +1,12 @@
-package frc.robot.commands.Autos.AutoSequences;
+package frc.robot.commands.Autos.AutoSequences.Shooting;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Autos.AutoCommands.DriveAuto;
-import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
+import frc.robot.commands.Autos.AutoCommands.Drive.DriveAuto;
+import frc.robot.commands.Autos.AutoCommands.Speaker.SpeakerAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
@@ -25,5 +25,4 @@ public class ShootAuto extends SequentialCommandGroup{
             )
         );
     }
-    
 }

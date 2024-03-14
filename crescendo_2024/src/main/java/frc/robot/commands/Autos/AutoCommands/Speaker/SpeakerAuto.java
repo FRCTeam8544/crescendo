@@ -1,8 +1,9 @@
-package frc.robot.commands.Autos.AutoCommands;
+package frc.robot.commands.Autos.AutoCommands.Speaker;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
+import frc.robot.Constants.ShooterConstants;;
 
 public class SpeakerAuto extends Command{
 
@@ -15,13 +16,11 @@ public class SpeakerAuto extends Command{
     }
 
     @Override
-    public void initialize(){
-
-    }
+    public void initialize(){}
 
     @Override
     public void execute(){
-        shooter.shoot(5000);
+        shooter.shoot(ShooterConstants.shootSetpoint);
         if (shooter.atSpeed.getAsBoolean()){
             intake.feedTheMachine();
         }
@@ -40,5 +39,4 @@ public class SpeakerAuto extends Command{
         //return shooter.noteInShooter.getAsBoolean();
         return false;
     }
-    
 }

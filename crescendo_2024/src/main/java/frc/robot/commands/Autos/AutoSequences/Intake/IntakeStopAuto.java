@@ -1,11 +1,12 @@
-package frc.robot.commands.Autos.AutoSequences;
+package frc.robot.commands.Autos.AutoSequences.Intake;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
-import frc.robot.commands.Autos.AutoCommands.IntakeRollersStopAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.Autos.AutoCommands.Intake.IntakeRetractAuto;
+import frc.robot.commands.Autos.AutoCommands.Intake.IntakeRollersStopAuto;
+import frc.robot.commands.Autos.AutoCommands.Intake.intakeRollersAuto;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeStopAuto extends SequentialCommandGroup{
@@ -14,9 +15,8 @@ public class IntakeStopAuto extends SequentialCommandGroup{
         addCommands(
             new ParallelCommandGroup(
                 new RunCommand(() -> intake.stop(), intake),
-                new IntakeRetractAuto(intake).withTimeout(1)
+                new IntakeRetractAuto(intake).withTimeout(IntakeConstants.intakeCommandRetractTimeout)
             )
         );
     }
-    
 }

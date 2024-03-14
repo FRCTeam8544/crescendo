@@ -155,6 +155,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
   }
 
@@ -183,6 +184,10 @@ public final class Constants {
 
   public static final class ShooterConstants {
     public static final int leftMotorCANID = 11, rightMotorCANID = 12;
+    public static final int limitSwitchPort = 3;
+
+    public static final double handoffSpeed = 0.15;
+    public static final double sourceSpeed = 0.25;
 
     public static final double kP = 0.000005;
     public static final double kI = 5e-7;
@@ -198,6 +203,10 @@ public final class Constants {
     public static final int RollerCANID = 14;
     public static final int IntakeLimitSwPort = 1;
     public static final int NoteLimitSwitchPort = 2;
+
+    public static final double intakeCommandExtendTimeout = 1;
+    public static final double intakeCommandRetractTimeout = 1;
+    
 
     public static final double suckySuckSpeed = -.95; //percentage please
     public static final double rateMachineIsFed = .95; //percentage please
@@ -232,17 +241,17 @@ public final class Constants {
   public static final class ClimbElevatorConstants {
     public static final int LeftElevatorCANID = 15;
     public static final int RightElevatorCANID = 16;
+    public static final int DownLimitPort = 8;
+    public static final int UpLimitPort = 9;
+    public static final int CountsPerRev = 8192;
 
     //Values are 0 where tuning is required
     public static final double elevatorSetpoint = 0; //levantanse por favor
-    //only here if follow doesn't work
     public static final double elevatorRightSetpoint = elevatorSetpoint;
-
+    public static final double elevatorPercentMove = 0.2;
     public static final double elevkP = 0;
     public static final double elevkI = 0;
     public static final double elevkD = 0;
     public static final double elevkF = 0;
-
-    //Seperate PID values need to be added if follow doesn't work
   }
 }

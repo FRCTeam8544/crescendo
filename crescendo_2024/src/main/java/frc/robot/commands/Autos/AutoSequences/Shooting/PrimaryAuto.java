@@ -1,4 +1,4 @@
-package frc.robot.commands.Autos.AutoSequences;
+package frc.robot.commands.Autos.AutoSequences.Shooting;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -6,18 +6,19 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Autos.AutoCommands.DriveAuto;
-import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
-import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
-import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.Autos.AutoCommands.Drive.DriveAuto;
+import frc.robot.commands.Autos.AutoCommands.Intake.IntakeExtendAuto;
+import frc.robot.commands.Autos.AutoCommands.Intake.IntakeRetractAuto;
+import frc.robot.commands.Autos.AutoCommands.Intake.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoCommands.Speaker.SpeakerAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 
-public class testAuto extends SequentialCommandGroup{
+public class PrimaryAuto extends SequentialCommandGroup{
 
-    public testAuto(DriveSubsystem driveSubsystem, ShootSubsystem shooter, IntakeSubsystem intake){
+    public PrimaryAuto(DriveSubsystem driveSubsystem, ShootSubsystem shooter, IntakeSubsystem intake){
         
         Pose2d initPose2d = new Pose2d(-3, 0, new Rotation2d(0));
         Translation2d fristTrans = new Translation2d(-0.5, 0);
@@ -36,17 +37,16 @@ public class testAuto extends SequentialCommandGroup{
             ),
             new ParallelCommandGroup(
                 new DriveAuto(driveSubsystem, initPose2d, emoPose2d, fristTrans, secondTrans).withTimeout(0.5),
-                new IntakeExtendAuto(intake).withTimeout(1),
+                new IntakeExtendAuto(intake).withTimeout(IntakeConstants.intakeCommandExtendTimeout),
                 new intakeRollersAuto(intake)//.withTimeout(3)
             ),
             
             new ParallelCommandGroup(
-                new IntakeRetractAuto(intake).withTimeout(1),
+                new IntakeRetractAuto(intake).withTimeout(IntakeConstants.intakeCommandRetractTimeout),
                 new DriveAuto(driveSubsystem, revPose, revPoseTwo2d, revTrans, revTransTwo)
             ),
             new WaitCommand(0.5),
             new SpeakerAuto(shooter, intake).withTimeout(3)
-
         ));
     }
 }
