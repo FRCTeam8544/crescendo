@@ -71,9 +71,9 @@ public class RobotContainer {
   //private final Cameras cameras = new Cameras(m_robotDrive);
 
 
-  //private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
-  //private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
-  //private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
+  private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
+  private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
+  private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
 
 
   
@@ -120,10 +120,10 @@ public class RobotContainer {
 
     toggle.setDefaultOption("null", null);
     //toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
-    //toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
-    //toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
-    //toggle.addOption("null", null);//cloud bong
-    //toggle.addOption("2 not auto (center)", m_testAuto);
+    toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
+    toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
+    toggle.addOption("null", null);//cloud bong
+    toggle.addOption("2 not auto (center)", m_testAuto);
 
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
     
@@ -207,7 +207,7 @@ public class RobotContainer {
         .onTrue(intakeStopAuto);*/
 
     new JoystickButton(m_juliet, Button.kB.value)
-        .onTrue(new IntakeAuto(m_intake)).whileFalse(new IntakeStopAuto(m_intake));
+        .toggleOnTrue(new IntakeAuto(m_intake)).whileFalse(new IntakeStopAuto(m_intake));
 
     new JoystickButton(m_juliet, Button.kX.value)
         .onTrue(new PrepareHangAuto(m_intake, m_climber, m_juliet));//.andThen(new FinishHangAuto(m_intake, m_climber)));
