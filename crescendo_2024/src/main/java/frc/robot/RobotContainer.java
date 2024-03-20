@@ -54,6 +54,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -74,6 +76,7 @@ public class RobotContainer {
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
+  private final PathPlannerAuto m_realestTestAuto = new PathPlannerAuto("PrimaryAuto");
 
 
   
@@ -113,8 +116,9 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
-
-    toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
+    
+    toggle.setDefaultOption("pick this one", m_realestTestAuto);//intercontinental ballistic missile
+    toggle.addOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
     toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
@@ -357,6 +361,8 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));*/
     return toggle.getSelected();//lucas got bored and is next to me send help
+    //what the clutter
+    
     //SpeakerAuto speaker = new SpeakerAuto(m_shooter, m_intake);
     //testAuto test = new testAuto(m_robotDrive, m_shooter, m_intake);
     /*SequentialCommandGroup test = new SequentialCommandGroup(
