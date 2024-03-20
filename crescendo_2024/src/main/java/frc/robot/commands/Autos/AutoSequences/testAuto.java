@@ -10,7 +10,7 @@ import frc.robot.commands.Autos.AutoCommands.DriveAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoCommands.IntakeRollersAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
@@ -37,7 +37,7 @@ public class testAuto extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new DriveAuto(driveSubsystem, initPose2d, emoPose2d, fristTrans, secondTrans).withTimeout(0.5),
                 new IntakeExtendAuto(intake).withTimeout(1),
-                new intakeRollersAuto(intake)//.withTimeout(3)
+                new IntakeRollersAuto(intake)//.withTimeout(3)
             ),
             
             new ParallelCommandGroup(

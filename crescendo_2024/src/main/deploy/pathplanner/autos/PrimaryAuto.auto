@@ -16,6 +16,12 @@
           "data": {
             "pathName": "AutoPath"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
         }
       ]
     }

@@ -26,9 +26,11 @@ import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
+import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoCommands.IntakeRollersAuto;
+import frc.robot.commands.Autos.AutoCommands.IntakeRollersStopAuto;
 import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
@@ -54,6 +56,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /*
@@ -124,7 +128,15 @@ public class RobotContainer {
     toggle.addOption("null", null);//cloud bong
 
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
-    
+    //autoChooser = AutoBuilder.buildAutoChooser(); - for when we fully convert to AutoBuilder
+
+    //declare commands for path software, this needs to be before configureButtonBindings();
+    NamedCommands.registerCommand("IntakeExtendAuto", new IntakeExtendAuto(m_intake));
+    NamedCommands.registerCommand("IntakeRetractAuto", new IntakeRetractAuto(m_intake));
+    NamedCommands.registerCommand("IntakeRollersAuto", new IntakeRollersAuto(m_intake));
+    NamedCommands.registerCommand("IntakeRollersStopAuto", new IntakeRollersStopAuto(m_intake));
+    NamedCommands.registerCommand("IntakeStopAuto", new IntakeStopAuto(m_intake));
+    NamedCommands.registerCommand("SpeakerAuto", new SpeakerAuto(m_shooter, m_intake));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -140,6 +152,13 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
                 true, true),
             m_robotDrive));
+  }
+
+  public Command getAutonomousCommand() {
+
+    //return autoChooser.getSelected(); - for when we fully commit to AutoBuilder
+    return toggle.getSelected();//lucas got bored and is next to me send help
+    //what the clutter
   }
 
   /**
@@ -320,56 +339,5 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {//the machine is alive
-    /*Pose2d initPose2d = new Pose2d(0, 0, new Rotation2d(0));
-    Translation2d firstTrans = new Translation2d(0.5, 0.5);
-    Translation2d secondTrans = new Translation2d(2, -1);
-    Pose2d emoPose2d = new Pose2d(0, 0, new Rotation2d(90));
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        initPose2d, 
-        List.of(firstTrans),
-        emoPose2d,
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));*/
-    return toggle.getSelected();//lucas got bored and is next to me send help
-    //what the clutter
-    
-    //SpeakerAuto speaker = new SpeakerAuto(m_shooter, m_intake);
-    //testAuto test = new testAuto(m_robotDrive, m_shooter, m_intake);
-    /*SequentialCommandGroup test = new SequentialCommandGroup(
-        new testAuto(m_robotDrive, m_shooter, m_intake).asProxy()
-    );*/
-
-   // return m_testAuto;
-
-  }
+  
 }
