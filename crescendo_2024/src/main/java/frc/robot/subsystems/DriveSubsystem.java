@@ -101,12 +101,8 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
   
-  public void switchDriveMode(){
-    //This only runs once, putting the drivetrain to field relative for teleop
-  }
-
   public ChassisSpeeds getRobotRelativeSpeeds(){
-    return new ChassisSpeeds();
+    return new ChassisSpeeds(3.0, -2.0, Math.PI);
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds){

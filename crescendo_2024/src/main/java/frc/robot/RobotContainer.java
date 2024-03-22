@@ -18,13 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ClimbElevatorConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShootElevatorConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
 import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
@@ -38,7 +32,6 @@ import frc.robot.commands.Autos.AutoSequences.PrepareHangAuto;
 import frc.robot.commands.Autos.AutoSequences.ShootAndMove;
 import frc.robot.commands.Autos.AutoSequences.ShootAuto;
 import frc.robot.commands.Autos.AutoSequences.testAuto;
-import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Intake.SourceIntake;
 import frc.robot.commands.SpeakerScore.SpeakerCommand;
 import frc.robot.subsystems.ClimberElevator;
@@ -128,7 +121,9 @@ public class RobotContainer {
     toggle.addOption("null", null);//cloud bong
 
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
-    //autoChooser = AutoBuilder.buildAutoChooser(); - for when we fully convert to AutoBuilder
+    
+    /*autoChooser = AutoBuilder.buildAutoChooser(); - for when we fully convert to AutoBuilder
+    SmartDashboard.putData("Auto Chooser", autoChooser);*/
 
     //declare commands for path software, this needs to be before configureButtonBindings();
     NamedCommands.registerCommand("IntakeExtendAuto", new IntakeExtendAuto(m_intake));
