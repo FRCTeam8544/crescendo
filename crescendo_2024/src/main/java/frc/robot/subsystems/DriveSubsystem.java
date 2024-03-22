@@ -100,8 +100,18 @@ public class DriveSubsystem extends SubsystemBase {
             this // Reference to this subsystem to set requirements
     );
   }
-
   
+  public void switchDriveMode(){
+    //This only runs once, putting the drivetrain to field relative for teleop
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds(){
+    return new ChassisSpeeds();
+  }
+
+  public void driveRobotRelative(ChassisSpeeds speeds){
+
+  }
 
   @Override
   public void periodic() {
@@ -157,14 +167,6 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    /*if (opController.getAButton()){
-      xSpeed = opController.getLeftX();
-      ySpeed = opController.getLeftY();
-      rot = opController.getRightX();
-    }*/
-    
-    
-
     if (rateLimit) {
       // Convert XY to polar for rate limiting
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
@@ -177,7 +179,6 @@ public class DriveSubsystem extends SubsystemBase {
       } else {
         directionSlewRate = 500.0; //some high number that means the slew rate is effectively instantaneous
       }
-      
 
       double currentTime = WPIUtilJNI.now() * 1e-6;
       double elapsedTime = currentTime - m_prevTime;
