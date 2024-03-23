@@ -83,7 +83,7 @@ public class RobotContainer {
   XboxController m_juliet = new XboxController(1);
   //XboxController m_romeo = m_juliet;
 
-  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake);
+  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
   private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
   private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
