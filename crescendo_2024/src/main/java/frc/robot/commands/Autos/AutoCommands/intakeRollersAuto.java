@@ -2,6 +2,7 @@ package frc.robot.commands.Autos.AutoCommands;
 
 import java.util.concurrent.TimeoutException;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -20,14 +21,19 @@ public class intakeRollersAuto extends Command{
 
     @Override
     public void execute(){
+        /*SmartDashboard.putBoolean("my testing thingy", intake.noteInside);
         if (intake.noteInside){
             intake.suckySuck();
             count = 0;
         }
         else{
-            count = count + 1;//not having ++ or += is so lame
-            if (count > 5);
-        }
+            //count = count + 1;//not having ++ or += is so lame
+            //if (count > 5){
+                intake.stop();
+            //}
+        }*/
+        if (intake.noteInside){intake.suckySuck();}
+        else{intake.stop();}
     }
 
     @Override
@@ -37,7 +43,7 @@ public class intakeRollersAuto extends Command{
 
     @Override
     public boolean isFinished(){
-        if (!intake.noteInside && count > 5){
+        if (!intake.noteInside){// && count > 5){
             intake.stop();
             return true;
         }
