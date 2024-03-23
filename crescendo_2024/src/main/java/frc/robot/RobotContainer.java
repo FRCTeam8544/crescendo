@@ -114,12 +114,12 @@ public class RobotContainer {
 
   public RobotContainer() {
     
-    toggle.setDefaultOption("pick this one", m_realestTestAuto);//intercontinental ballistic missile
+    toggle.setDefaultOption("pick this one", m_realestTestAuto);//intercontinental ballistic missile gambit
     toggle.addOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
     toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
-
+    //toggle.addOption("Those who danced were seen as crazy by those who couldnt hear the music", m_fightGod);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
 
     /*autoChooser = AutoBuilder.buildAutoChooser(); - for when we fully convert to AutoBuilder
@@ -165,7 +165,7 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
+  private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE :3
 
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
