@@ -13,7 +13,8 @@ public class PrepareHangAuto extends SequentialCommandGroup{
         addCommands(
             new SequentialCommandGroup(
                 new IntakeExtendAuto(intake).withTimeout(1),
-                new ClimbUpAuto(climber, controller)
+                new ClimbUpAuto(climber, controller),
+                new FinishHangAuto(intake, climber)
             )
         );
     }

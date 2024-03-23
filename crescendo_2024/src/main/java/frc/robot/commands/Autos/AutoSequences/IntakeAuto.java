@@ -11,12 +11,12 @@ public class IntakeAuto extends SequentialCommandGroup{
 
     public IntakeAuto(IntakeSubsystem intake){
         addCommands(
-            new ParallelCommandGroup(
-                new intakeRollersAuto(intake),
-                new IntakeExtendAuto(intake).withTimeout(1)
+            new ParallelCommandGroup(//has issues with rollers
+                new IntakeExtendAuto(intake).withTimeout(1),
+                new intakeRollersAuto(intake)
             ).unless(intake.properNoteInIntake),
             new SequentialCommandGroup(
-                new IntakeRetractAuto(intake).withTimeout(1)
+                new IntakeRetractAuto(intake).withTimeout(1.75)
             ));
     }
 

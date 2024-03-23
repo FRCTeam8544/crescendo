@@ -30,6 +30,7 @@ import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
 import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
 import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
+import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
 import frc.robot.commands.Autos.AutoSequences.PrepareHangAuto;
@@ -74,8 +75,8 @@ public class RobotContainer {
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
-
-
+  private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
+  //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
   
 
   // romeo and juliet, this is where our humble tale begins 
@@ -83,11 +84,15 @@ public class RobotContainer {
   XboxController m_juliet = new XboxController(1);
   //XboxController m_romeo = m_juliet;
 
-  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake);
-  private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
+  //private final IntakeAuto intakeAuto = new IntakeAuto(m_intake);
+  //private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
-  private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
-  private final FinishHangAuto finishHangAuto = new FinishHangAuto(m_intake, m_climber);
+  /*public BooleanSupplier intakeAutoRunning = () -> {
+    return intakeAuto.isScheduled();
+  };*/
+
+  //private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
+  //private final FinishHangAuto finishHangAuto = new FinishHangAuto(m_intake, m_climber);
 
   BooleanSupplier init = () -> {
     return (m_romeo.getLeftTriggerAxis() > 0.5);
@@ -114,11 +119,14 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
+    toggle.setDefaultOption("Fixed shoot only", m_fixedShooter);
+    //toggle.setDefaultOption("null", null);
+    //toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
     toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
-
+    toggle.addOption("2 not auto (center)", m_testAuto);
+   // toggle.addOption("Fixed Shoot Only", m_fixedShooter);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
     
 
@@ -201,11 +209,13 @@ public class RobotContainer {
         .onTrue(intakeStopAuto);*/
 
     new JoystickButton(m_juliet, Button.kB.value)
-        .onTrue(intakeAuto).whileFalse(intakeStopAuto);
+        .toggleOnTrue(new IntakeAuto(m_intake)).whileFalse(new IntakeStopAuto(m_intake));
 
     new JoystickButton(m_juliet, Button.kX.value)
-        .onTrue(prepareHangAuto.andThen(finishHangAuto));
-    
+        .toggleOnTrue(new PrepareHangAuto(m_intake, m_climber, m_juliet));//.andThen(new FinishHangAuto(m_intake, m_climber)));
+
+
+
     /*new JoystickButton(m_romeo, Button.kA.value) // changed to Y from right bumper
         .whileTrue(new ParallelCommandGroup(
             new RunCommand(() -> m_intake.feedTheMachine(), m_intake),
@@ -241,6 +251,11 @@ public class RobotContainer {
             () -> m_shooter.shoot(5000), m_shooter))
             .onFalse(new RunCommand(
                 () -> m_shooter.stop(), m_shooter));*/
+
+
+
+
+
     new JoystickButton(m_juliet, Button.kRightBumper.value)
         .onTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
 
@@ -249,6 +264,9 @@ public class RobotContainer {
 
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
+        
+
+
           //test from earlier  
     /*new JoystickButton(m_romeo, Button.kA.value)
         .whileTrue(new IntakeCommand(m_intake, m_romeo));
@@ -356,7 +374,10 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, true, false));*/
-    return toggle.getSelected();//lucas got bored and is next to me send help
+
+
+
+    //return toggle.getSelected();//lucas got bored and is next to me send help
     //SpeakerAuto speaker = new SpeakerAuto(m_shooter, m_intake);
     //testAuto test = new testAuto(m_robotDrive, m_shooter, m_intake);
     /*SequentialCommandGroup test = new SequentialCommandGroup(
@@ -364,6 +385,9 @@ public class RobotContainer {
     );*/
 
    // return m_testAuto;
+
+
+   return m_fixedShooter;
 
   }
 }
