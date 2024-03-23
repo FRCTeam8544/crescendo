@@ -209,7 +209,7 @@ public class RobotContainer {
         .onTrue(intakeStopAuto);*/
 
     new JoystickButton(m_juliet, Button.kB.value)
-        .toggleOnTrue(new IntakeAuto(m_intake)).whileFalse(new IntakeStopAuto(m_intake));
+        .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake));
 
     new JoystickButton(m_juliet, Button.kX.value)
         .toggleOnTrue(new PrepareHangAuto(m_intake, m_climber, m_juliet));//.andThen(new FinishHangAuto(m_intake, m_climber)));
