@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -24,6 +25,8 @@ import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -49,6 +52,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+
+  private SwerveDriveKinematics kinematics;
+  private Field2d field = new Field2d();
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -77,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
@@ -99,15 +105,29 @@ public class DriveSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
-  }
-  
-  public ChassisSpeeds getRobotRelativeSpeeds(){
-    return new ChassisSpeeds(3.0, -2.0, Math.PI);
+
+    // Set up custom logging to add the current path to a field 2d widget
+    PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+
+    SmartDashboard.putData("Field", field);
   }
 
-  public void driveRobotRelative(ChassisSpeeds speeds){
-
+  public ChassisSpeeds getSpeeds() {
+    return kinematics.toChassisSpeeds(getModuleStates());
   }
+
+  public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+    driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
+  }
+
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    SwerveModuleState[] targetStates = kinematics.toSwerveModuleStates(targetSpeeds);
+    setModuleStates(targetStates);
+  }
+
+
 
   @Override
   public void periodic() {
@@ -250,6 +270,15 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
     m_rearRight.setDesiredState(desiredStates[3]);
+  }
+
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    states[0] = m_frontLeft.getState();
+    states[1] = m_frontRight.getState();
+    states[2] = m_rearLeft.getState();
+    states[3] = m_rearRight.getState();
+    return states;
   }
 
   /** Resets the drive encoders to currently read a position of 0. */

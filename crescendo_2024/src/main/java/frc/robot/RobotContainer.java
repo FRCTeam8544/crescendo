@@ -121,7 +121,7 @@ public class RobotContainer {
     toggle.addOption("null", null);//cloud bong
 
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
-    
+
     /*autoChooser = AutoBuilder.buildAutoChooser(); - for when we fully convert to AutoBuilder
     SmartDashboard.putData("Auto Chooser", autoChooser);*/
 
@@ -170,14 +170,12 @@ public class RobotContainer {
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
-
     
     new JoystickButton(m_juliet, Button.kB.value)
         .onTrue(intakeAuto).whileFalse(intakeStopAuto);
 
     new JoystickButton(m_juliet, Button.kX.value)
         .onTrue(prepareHangAuto.andThen(finishHangAuto));
-    
     
     new JoystickButton(m_juliet, Button.kRightBumper.value)
         .onTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
