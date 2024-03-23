@@ -41,7 +41,7 @@ public class testAuto extends SequentialCommandGroup{
             ),
             
             new ParallelCommandGroup(
-                new IntakeRetractAuto(intake).withTimeout(1),
+                new IntakeRetractAuto(intake).withTimeout(1.75),
                 new DriveAuto(driveSubsystem, revPose, revPoseTwo2d, revTrans, revTransTwo)
             ),
             new WaitCommand(0.5),

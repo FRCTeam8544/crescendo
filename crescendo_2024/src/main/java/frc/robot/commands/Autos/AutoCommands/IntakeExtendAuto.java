@@ -13,11 +13,12 @@ public class IntakeExtendAuto extends Command{
 
     @Override
     public void initialize(){
-
+        System.out.println("initialize extend");
     }
 
     @Override
     public void execute(){
+        System.out.println("exec Extend lim: "+ intake.reverseLimitSwitch.getAsBoolean());
         if (!intake.reverseLimitSwitch.getAsBoolean()){intake.testRotate(false);}
         else{intake.rotateStop();}
     }
@@ -25,11 +26,14 @@ public class IntakeExtendAuto extends Command{
     @Override
     public void end(boolean interupted){
         if (interupted){intake.rotateStop();}
+        System.out.println("extend end");
     }
 
     @Override
     public boolean isFinished(){
-        return intake.reverseLimitSwitch.getAsBoolean();
+        System.out.println("extend fin");
+        //return intake.reverseLimitSwitch.getAsBoolean();
+        return false;
     }
     
 }
