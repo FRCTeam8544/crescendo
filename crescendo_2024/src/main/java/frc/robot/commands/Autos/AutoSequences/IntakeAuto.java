@@ -16,7 +16,7 @@ public class IntakeAuto extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
                     new intakeRollersAuto(intake),
-                    new ControllerVibrate(juliet, romeo).withTimeout(0.2)
+                    new ControllerVibrate(juliet, romeo).withTimeout(0.5)
                 ),
                 new IntakeExtendAuto(intake).withTimeout(1)
             ).unless(intake.properNoteInIntake),
