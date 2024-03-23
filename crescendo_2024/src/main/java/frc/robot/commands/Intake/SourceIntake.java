@@ -9,7 +9,7 @@ public class SourceIntake extends Command{
     IntakeSubsystem intake;
     ShootSubsystem shooter;
 
-    public SourceIntake(IntakeSubsystem intake, ShootSubsystem shooter){
+    public SourceIntake(IntakeSubsystem intake, ShootSubsystem shooter){//I love how this doesnt work for the actual source its kinda quirky yk
         this.shooter = shooter;
         this.intake = intake;
     }
@@ -33,11 +33,6 @@ public class SourceIntake extends Command{
 
     @Override
     public boolean isFinished(){
-        if (!intake.noteInIntake.getAsBoolean()){
-            intake.stop();
-            shooter.stop();
-            return true;
-        }
         return false;
     }
 

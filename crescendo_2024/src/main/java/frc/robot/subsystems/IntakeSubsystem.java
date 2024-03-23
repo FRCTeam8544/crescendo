@@ -97,8 +97,8 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void suckySuck(){
-        if(noteInside){rollerMotor.set(IntakeConstants.suckySuckSpeed);}
-        else{rollerMotor.set(0);}
+        //if(noteInside){rollerMotor.set(IntakeConstants.suckySuckSpeed);}
+        //else{rollerMotor.set(0);}
     }
 
     public void sourceIntake(){
