@@ -7,7 +7,7 @@ public class IntakeRollersAuto extends Command{
 
     IntakeSubsystem intake;
     //int count = 0;
-    public intakeRollersAuto(IntakeSubsystem intake){
+    public IntakeRollersAuto(IntakeSubsystem intake){
         this.intake = intake;
     }
 

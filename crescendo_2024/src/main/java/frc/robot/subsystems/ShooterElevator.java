@@ -39,6 +39,8 @@ public class ShooterElevator extends SubsystemBase {
     pivotMotorPID.setD(ShootElevatorConstants.pivotkD);
   }
 
+  //github desktop is the worst part of my setup
+
   @Override
   public void periodic(){
     if(bobsFavoritePart.get())

@@ -57,7 +57,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -83,7 +82,7 @@ public class RobotContainer {
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
   private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
   //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
-    private final PathPlannerAuto m_realestTestAuto = new PathPlannerAuto("PrimaryAuto");
+  private final PathPlannerAuto m_realestTestAuto = new PathPlannerAuto("PrimaryAuto");
 
   // romeo and juliet, this is where our humble tale begins 
   XboxController m_romeo = new XboxController(OIConstants.kDriverControllerPort);
@@ -130,7 +129,7 @@ public class RobotContainer {
     toggle.setDefaultOption("pick this one", m_realestTestAuto);//intercontinental ballistic missile gambit
     //toggle.addOption("Those who danced were seen as crazy by those who couldnt hear the music", m_fightGod);
 
-    toggle.setDefaultOption("Fixed shoot only", m_fixedShooter);
+    //toggle.setDefaultOption("Fixed shoot only", m_fixedShooter);
     //toggle.setDefaultOption("null", null);
     //toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
     toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
@@ -176,12 +175,13 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
+  public void configureButtonBindings(){
 
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
     new JoystickButton(m_juliet, Button.kB.value)
-        .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake));
+        .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake))
         .onTrue(intakeAuto).whileFalse(intakeStopAuto);
 
     new JoystickButton(m_juliet, Button.kX.value)
@@ -195,7 +195,9 @@ public class RobotContainer {
 
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
+  }
 
-    return m_fixedShooter;
+  public Command getAutoCommand(){
+    return toggle.getSelected();
   }
 }
