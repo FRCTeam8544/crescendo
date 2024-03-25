@@ -18,7 +18,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ClimbElevatorConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShootElevatorConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
 import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
@@ -26,12 +32,14 @@ import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRollersAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRollersStopAuto;
 import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
+import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
 import frc.robot.commands.Autos.AutoSequences.PrepareHangAuto;
 import frc.robot.commands.Autos.AutoSequences.ShootAndMove;
 import frc.robot.commands.Autos.AutoSequences.ShootAuto;
 import frc.robot.commands.Autos.AutoSequences.testAuto;
+import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Intake.SourceIntake;
 import frc.robot.commands.SpeakerScore.SpeakerCommand;
 import frc.robot.subsystems.ClimberElevator;
@@ -73,19 +81,24 @@ public class RobotContainer {
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
-  private final PathPlannerAuto m_realestTestAuto = new PathPlannerAuto("PrimaryAuto");
-
-
-  
+  private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
+  //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
+    private final PathPlannerAuto m_realestTestAuto = new PathPlannerAuto("PrimaryAuto");
 
   // romeo and juliet, this is where our humble tale begins 
   XboxController m_romeo = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_juliet = new XboxController(1);
   //XboxController m_romeo = m_juliet;
 
-  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake);
+  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
   private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
+  /*public BooleanSupplier intakeAutoRunning = () -> {
+    return intakeAuto.isScheduled();
+  };*/
+
+  //private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
+  //private final FinishHangAuto finishHangAuto = new FinishHangAuto(m_intake, m_climber);
   private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
   private final FinishHangAuto finishHangAuto = new FinishHangAuto(m_intake, m_climber);
 
@@ -115,11 +128,16 @@ public class RobotContainer {
   public RobotContainer() {
     
     toggle.setDefaultOption("pick this one", m_realestTestAuto);//intercontinental ballistic missile gambit
-    toggle.addOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
+    //toggle.addOption("Those who danced were seen as crazy by those who couldnt hear the music", m_fightGod);
+
+    toggle.setDefaultOption("Fixed shoot only", m_fixedShooter);
+    //toggle.setDefaultOption("null", null);
+    //toggle.setDefaultOption("2 note Auto (center)", m_testAuto);//kings gambit double muzio
     toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
-    //toggle.addOption("Those who danced were seen as crazy by those who couldnt hear the music", m_fightGod);
+    toggle.addOption("2 not auto (center)", m_testAuto);
+   // toggle.addOption("Fixed Shoot Only", m_fixedShooter);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
 
     /*autoChooser = AutoBuilder.buildAutoChooser(); - for when we fully convert to AutoBuilder
@@ -149,13 +167,6 @@ public class RobotContainer {
             m_robotDrive));
   }
 
-  public Command getAutonomousCommand() {
-
-    //return autoChooser.getSelected(); - for when we fully commit to AutoBuilder
-    return toggle.getSelected();//lucas got bored and is next to me send help
-    //what the clutter
-  }
-
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -165,13 +176,12 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE :3
 
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
-    
     new JoystickButton(m_juliet, Button.kB.value)
+        .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake));
         .onTrue(intakeAuto).whileFalse(intakeStopAuto);
 
     new JoystickButton(m_juliet, Button.kX.value)
@@ -185,5 +195,7 @@ public class RobotContainer {
 
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
+
+    return m_fixedShooter;
   }
 }

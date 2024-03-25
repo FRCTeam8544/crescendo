@@ -69,6 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(m_gyro.getAngle() * -1),
+      //Rotation2d.fromDegrees(0),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -183,6 +184,16 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
+    rot = setCurve(rot);
+
+    /*if (opController.getAButton()){
+      xSpeed = opController.getLeftX();
+      ySpeed = opController.getLeftY();
+      rot = opController.getRightX();
+    }*/
+    
+    
+
     if (rateLimit) {
       // Convert XY to polar for rate limiting
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
@@ -255,6 +266,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
+  private double setCurve(double input){
+    return input > 0? Math.atan((3/2) * (Math.pow(input, 2))): Math.atan((3/2) * (Math.pow(input, 2))) * -1;
   }
 
   

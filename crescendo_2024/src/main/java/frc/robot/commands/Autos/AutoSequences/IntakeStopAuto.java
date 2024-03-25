@@ -14,7 +14,8 @@ public class IntakeStopAuto extends SequentialCommandGroup{
         addCommands(
             new ParallelCommandGroup(
                 new RunCommand(() -> intake.stop(), intake),
-                new IntakeRetractAuto(intake).withTimeout(1)
+                //new IntakeRollersStopAuto(intake),
+                new IntakeRetractAuto(intake).withTimeout(1.75)
             )
         );
     }

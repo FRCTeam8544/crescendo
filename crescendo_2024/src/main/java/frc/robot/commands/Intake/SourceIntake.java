@@ -33,11 +33,6 @@ public class SourceIntake extends Command{
 
     @Override
     public boolean isFinished(){
-        if (!intake.noteInIntake.getAsBoolean()){
-            intake.stop();
-            shooter.stop();
-            return true;
-        }
         return false;
     }
 

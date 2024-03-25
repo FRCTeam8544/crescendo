@@ -26,7 +26,8 @@ public class IntakeRollersStopAuto extends Command{
 
     @Override
     public boolean isFinished(){
-        return false;
+        intake.stop();
+        return true;
     }
     
 }

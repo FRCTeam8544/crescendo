@@ -6,7 +6,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeRollersAuto extends Command{
 
     IntakeSubsystem intake;
-    public IntakeRollersAuto(IntakeSubsystem intake){
+    //int count = 0;
+    public intakeRollersAuto(IntakeSubsystem intake){
         this.intake = intake;
     }
 
@@ -17,8 +18,15 @@ public class IntakeRollersAuto extends Command{
 
     @Override
     public void execute(){
-        if (intake.noteInside){intake.suckySuck();}
-        else{intake.stop();}
+        if (intake.noteInside){
+            intake.suckySuck();
+            //count = 0;
+        }
+        else{
+            //if (count > 20){intake.stop();}
+            intake.stop();
+            //count = count + 1;
+        }
     }
 
     @Override
@@ -28,7 +36,7 @@ public class IntakeRollersAuto extends Command{
 
     @Override
     public boolean isFinished(){
-        if (!intake.noteInside){
+        if (!intake.noteInside){ //&& count > 19){
             intake.stop();
             return true;
         }
