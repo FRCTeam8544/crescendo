@@ -215,7 +215,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   private double setCurve(double input){
-    return Math.atan((3/2) * (Math.pow(input, 2)));
+    return input > 0? Math.atan((3/2) * (Math.pow(input, 2))): Math.atan((3/2) * (Math.pow(input, 2))) * -1;
   }
 
   
