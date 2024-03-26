@@ -53,7 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-  private SwerveDriveKinematics kinematics;
+  private SwerveDriveKinematics kinematics = DriveConstants.kDriveKinematics;
   private Field2d field = new Field2d();
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -109,16 +109,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Set up custom logging to add the current path to a field 2d widget
     PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
-
     SmartDashboard.putData("Field", field);
   }
 
   public ChassisSpeeds getSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
-  }
-
-  public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
-    driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
