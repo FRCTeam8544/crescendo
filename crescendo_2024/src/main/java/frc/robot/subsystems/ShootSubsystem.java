@@ -12,6 +12,7 @@ import frc.robot.Constants.ShooterConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import java.util.function.BooleanSupplier;
 
@@ -54,6 +55,8 @@ public class ShootSubsystem extends SubsystemBase {
     //updateDashboard();
     //topMotor.set(shooter.calculate(shootingEncoder.getVelocity()));
     //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
+
+    SmartDashboard.putBoolean("Shooter Brake", leftMotor.getIdleMode() == IdleMode.kBrake);
   }
 
   /*  
@@ -65,6 +68,16 @@ public class ShootSubsystem extends SubsystemBase {
     leftMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
     rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity); 
   }*/
+
+  public void setBrake(){
+    leftMotor.setIdleMode(IdleMode.kBrake);
+    rightMotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void setCoast(){
+    leftMotor.setIdleMode(IdleMode.kCoast);
+    rightMotor.setIdleMode(IdleMode.kCoast);
+  }
 
   public void handoff(){
     leftMotor.set(0.25);

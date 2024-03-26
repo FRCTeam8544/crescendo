@@ -66,7 +66,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  //private final ShooterElevator m_shootElevator = new ShooterElevator();
+  private final ShooterElevator m_shootElevator = new ShooterElevator();
   private final ClimberElevator m_climber = new ClimberElevator();
 
   //private final Cameras cameras = new Cameras(m_robotDrive);
@@ -161,52 +161,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-    //shooter commands
-    /*
-     * 
-    new JoystickButton(m_romeo, Button.kA.value) //A Button
-        .whileTrue(new RunCommand(
-            () -> m_shooter.shoot(ShooterConstants.shootSetpoint),
-            m_shooter))
-            .onFalse(new RunCommand(
-            () -> m_shooter.stop(StopConstant.stopSetpoint), m_shooter));
-    */
-    /* This is a kill switch that could be removed whenever, but it probably shouldnt be for now 
-    new JoystickButton(m_romeo, Button.kB.value) // B Button
-        .whileTrue(new RunCommand(
-        () -> m_shooter.stop(StopConstant.stopSetpoint),
-        m_shooter));
-    */
-    /*
-        Likely uneeded since we won't intake via shooter anymore
 
-    new JoystickButton(m_romeo, Button.k-.value) X button now conflicts with intaking fron ground,
-        .whileTrue(new RunCommand(                          which is worth noting if we ever re-implement this
-        () -> m_shooter.sourceIntake(ShooterConstants.intakeSetpoint), 
-            m_shooter))
-                .onFalse(new RunCommand(
-                () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
-    */
-    /*new JoystickButton(m_juliet, Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> m_climber.moveClimber(0.1), m_climber)).onFalse(
-                new RunCommand(() -> m_climber.stop(), m_climber));
-    new JoystickButton(m_juliet, Button.kBack.value)
-        .whileTrue(new RunCommand(
-            () -> m_climber.moveClimber(-0.1), m_climber)).onFalse(
-                new RunCommand(() -> m_climber.stop(), m_climber));*/
-
-    //intake commands
-    /*new JoystickButton(m_juliet, Button.kB.value) // changed to X from left bumper
-        .whileTrue(new RunCommand(
-            () -> m_intake.suckySuck(), m_intake))
-            .onFalse(new RunCommand(
-            () -> m_intake.stop(), m_intake));*/
-    /*new JoystickButton(m_juliet, Button.kB.value)
-        .onTrue(intakeAuto);
-
-    new JoystickButton(m_juliet, Button.kA.value)
-        .onTrue(intakeStopAuto);*/
 
     new JoystickButton(m_juliet, Button.kB.value)
         .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake));
@@ -216,116 +171,25 @@ public class RobotContainer {
 
 
 
-    /*new JoystickButton(m_romeo, Button.kA.value) // changed to Y from right bumper
-        .whileTrue(new ParallelCommandGroup(
-            new RunCommand(() -> m_intake.feedTheMachine(), m_intake),
-            new RunCommand(() -> m_shooter.shoot(5000), m_shooter))
-        ).onFalse(new ParallelCommandGroup(
-            new RunCommand(() -> m_intake.stop(), m_intake),
-            new RunCommand(() -> m_shooter.shoot(0), m_shooter)));*/
-
-    /*new JoystickButton(m_juliet, Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> m_intake.feedTheMachine(), m_intake))
-            .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));*/
-
-
-            /*
-             * 
-             * old intake code
-             */
-    /*new JoystickButton(m_juliet, Button.kY.value)
-        .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(false)).withTimeout(2))
-            .onFalse(new RunCommand(
-                () -> m_intake.rotateStop(), m_intake));
-
-    new JoystickButton(m_juliet, Button.kX.value)
-        .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(true)).withTimeout(2.5))
-            .onFalse(new RunCommand(
-                () -> m_intake.rotateStop(), m_intake));*/
-
-    /*new JoystickButton(m_juliet, Button.kRightBumper.value)
-        .whileTrue(new RunCommand(
-            () -> m_shooter.shoot(5000), m_shooter))
-            .onFalse(new RunCommand(
-                () -> m_shooter.stop(), m_shooter));*/
-
-
-
-
-
     new JoystickButton(m_juliet, Button.kRightBumper.value)
         .onTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
-
-    new JoystickButton(m_juliet, Button.kLeftBumper.value)
-        .whileTrue(new HandoffCommand(m_intake, m_shooter));
 
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
         
+    /*new  JoystickButton(m_juliet, Button.kY.value)
+        .whileTrue(new RunCommand(
+            () -> m_shootElevator.moveElevator(false), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
 
+    new  JoystickButton(m_juliet, Button.kA.value)
+        .whileTrue(new RunCommand(
+            () -> m_shootElevator.moveElevator(true), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));*/
 
-          //test from earlier  
-    /*new JoystickButton(m_romeo, Button.kA.value)
-        .whileTrue(new IntakeCommand(m_intake, m_romeo));
+    new JoystickButton(m_juliet, Button.kLeftBumper.value)
+        .onTrue(new HandoffCommand(m_intake, m_shooter).withTimeout(0.35));
 
-    new JoystickButton(m_romeo, Button.kY.value)
-        .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_romeo))
-        .onFalse(new RunCommand(
-            () -> m_shooter.shoot(0), m_shooter));
-    */
-    //hand off
-    /*new JoystickButton(m_romeo, Button.kB.value)
-        .whileTrue(new HandoffCommand(m_intake, m_shooter));
-    */
-    //shooter elevator commands
-    /*
-     * 
-    new JoystickButton(m_romeo, Button.kY.value) // Right Bumper
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.muevete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
-        m_shootElevator).onlyIf(init))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
-    
-    new JoystickButton(m_romeo, Button.kY.value) // Left Bumper
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.muevete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
-        m_shootElevator).onlyIf(run))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
-
-    new JoystickButton(m_romeo, Button.kStart.value) // Start Button (no clue where it is)
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for upward motion
-        m_shootElevator))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
-    
-    new JoystickButton(m_romeo, Button.kBack.value) // Back Button (no clue where this is either)
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for downward motion
-        m_shootElevator))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
-
-    //climber commands
-    new JoystickButton(m_romeo, Button.kX.value) // Right Stick pressed in
-        .whileTrue(new RunCommand(
-        () -> m_climber.moveClimber(ClimbElevatorConstants.elevatorSetpoint), //for upward motion
-        m_climber).onlyIf(init))
-        .onFalse(new RunCommand(
-            () -> m_climber.stop(StopConstant.stopSetpoint)));
-    
-    new JoystickButton(m_romeo, Button.kX.value) // Left Stick pressed in
-        .whileTrue(new RunCommand(
-        () -> m_climber.moveClimber(-ClimbElevatorConstants.elevatorSetpoint), //for downward motion
-        m_shootElevator).onlyIf(run))
-        .onFalse(new RunCommand(
-            () -> m_climber.stop(StopConstant.stopSetpoint)));
-    */
 
   }
 

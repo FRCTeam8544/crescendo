@@ -17,7 +17,7 @@ public class HandoffCommand extends Command{
 
     @Override
     public void initialize(){
-
+        shooter.setBrake();
     }
 
     @Override
