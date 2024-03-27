@@ -76,7 +76,6 @@ public class RobotContainer {
 
   //private final Cameras cameras = new Cameras(m_robotDrive);
 
-
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
@@ -135,7 +134,7 @@ public class RobotContainer {
     toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
-    toggle.addOption("2 not auto (center)", m_testAuto);
+    toggle.addOption("2 note auto (center)", m_testAuto);
    // toggle.addOption("Fixed Shoot Only", m_fixedShooter);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
 
@@ -143,13 +142,8 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);*/
 
     //declare commands for path software, this needs to be before configureButtonBindings();
-    NamedCommands.registerCommand("IntakeExtendAuto", new IntakeExtendAuto(m_intake));
-    NamedCommands.registerCommand("IntakeRetractAuto", new IntakeRetractAuto(m_intake));
-    NamedCommands.registerCommand("IntakeRollersAuto", new IntakeRollersAuto(m_intake));
-    NamedCommands.registerCommand("IntakeRollersStopAuto", new IntakeRollersStopAuto(m_intake));
-    NamedCommands.registerCommand("IntakeStopAuto", new IntakeStopAuto(m_intake));
-    NamedCommands.registerCommand("SpeakerAuto", new SpeakerAuto(m_shooter, m_intake));
-
+    NamedCommands.registerCommand("IntakeAuto", new IntakeAuto(m_intake, m_romeo, m_juliet));
+    NamedCommands.registerCommand("SpeakerAuto", new SpeakerAuto(m_shooter, m_intake)); 
     // Configure the button bindings
     configureButtonBindings();
 
@@ -197,7 +191,7 @@ public class RobotContainer {
         .whileTrue(new SourceIntake(m_intake, m_shooter));
   }
 
-  public Command getAutoCommand(){
+  public Command getAutonomousCommand(){
     return toggle.getSelected();
   }
 }

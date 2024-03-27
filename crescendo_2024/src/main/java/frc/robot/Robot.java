@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    //ensures first run isn't slow and delayed
+    //ensures first autonomoous run isn't slow and delayed
     FollowPathCommand.warmupCommand().schedule();
   }
 
@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutoCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();// I feel better in metal than in my own skin
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
