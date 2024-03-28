@@ -9,6 +9,7 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.DriveSubsystem;
 
 /**wwgwtwff
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -86,7 +87,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousExit(){
-    
+    DriveSubsystem.gyroOn = true;
   }
 
   /** This function is called periodically during operator control. */

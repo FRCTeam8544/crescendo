@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -67,6 +70,14 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 4;
 
     public static final boolean kGyroReversed = true;
+
+    public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+      new PIDConstants(1.0, 0, 0), // Translation constants 
+      new PIDConstants(0.0, 0, 0), // Rotation constants 
+      2.0, 
+      .4, // Drive base radius (distance from center to furthest module) 
+      new ReplanningConfig()
+    );
   }
 
   public static final class visionConstants {
