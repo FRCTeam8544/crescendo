@@ -74,6 +74,11 @@ public class ShootSubsystem extends SubsystemBase {
     rightMotor.setIdleMode(IdleMode.kBrake);
   }
 
+  public void setZero(){
+    leftMotorPID.setReference(leftMotor.getEncoder().getPosition(), CANSparkBase.ControlType.kPosition);
+    rightMotorPID.setReference(rightMotor.getEncoder().getPosition(), CANSparkBase.ControlType.kPosition);
+  }
+
   public void setCoast(){
     leftMotor.setIdleMode(IdleMode.kCoast);
     rightMotor.setIdleMode(IdleMode.kCoast);

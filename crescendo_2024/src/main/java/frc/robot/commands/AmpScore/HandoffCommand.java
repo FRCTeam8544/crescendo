@@ -38,6 +38,7 @@ public class HandoffCommand extends Command{
     public void end(boolean interupted){
         intake.stop();
         shooter.stop();
+        shooter.setZero();
     }
 
     @Override

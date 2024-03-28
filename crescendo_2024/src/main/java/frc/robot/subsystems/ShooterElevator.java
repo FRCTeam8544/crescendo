@@ -114,6 +114,8 @@ public class ShooterElevator extends SubsystemBase {
       pivotMotor.set(0);
     }
 
+    SmartDashboard.putNumber("Pivot Encoder", PivotEncoder.getPosition());
+
   }
 
   public void moveElevator(boolean up){//alex honnold would be proud
@@ -130,23 +132,27 @@ public class ShooterElevator extends SubsystemBase {
   }
 
   public void stopElevator(){
-    shooterElevatorMotor.set(0);
+    shooterElevatorMotor.stopMotor();
     dirE = "na";
   }
 
-  public void movePivor(boolean in){
-    if (!inStopRequested && in){
-      pivotMotor.set(0.2);
+  public void movePivor(boolean out){
+    if (!inStopRequested && out){
+      pivotMotor.set(0.1);
       dirP = "in";
-    }else if (!outStopRequested && !in){
-      pivotMotor.set(-0.2);
+    }else if (!outStopRequested && !out){
+      pivotMotor.set(-0.1);
       dirP = "out";
     }
   }
 
   public void stopPivot(){
-    pivotMotor.set(0);
+    pivotMotor.stopMotor();
     dirP = "na";
+  }
+
+  public double getPivotEncoder(){
+    return PivotEncoder.getPosition();
   }
 
 }
