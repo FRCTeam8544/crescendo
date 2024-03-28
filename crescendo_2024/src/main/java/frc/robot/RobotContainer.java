@@ -216,6 +216,13 @@ public class RobotContainer {
             () -> m_shootElevator.movePivor(false), m_shootElevator)).onFalse(
                 new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
 
+    new JoystickButton(stinkyPooPoo, 3).whileTrue(
+        new RunCommand(() -> m_shootElevator.moveElevator(false), m_shootElevator)).onFalse(
+            new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
+
+    new JoystickButton(stinkyPooPoo, 4).whileTrue(
+        new RunCommand(() -> m_shootElevator.moveElevator(true), m_shootElevator)).onFalse(
+            new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
   }
 
   /**

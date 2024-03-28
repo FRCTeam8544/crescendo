@@ -120,7 +120,7 @@ public class ShooterElevator extends SubsystemBase {
 
   public void moveElevator(boolean up){//alex honnold would be proud
     if (!upStopRequested && up){
-      shooterElevatorMotor.set(0.2);
+      shooterElevatorMotor.set(0.3);
       //rightElevatorMotor.set(-0.2);
       dirE = "fr";
     }else if (!downStopRequested && !up){
