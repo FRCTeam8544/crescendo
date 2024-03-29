@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.44,
-        "y": 6.66
+        "x": 2.6,
+        "y": 6.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5949509167536853,
-        "y": 6.151865257434219
+        "x": 2.3534940356917753,
+        "y": 6.506686916151611
       },
       "isLocked": false,
       "linkedName": null
@@ -36,7 +36,31 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Wait + Shoot",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "ShooterAuto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
