@@ -1,86 +1,189 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ClimbElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.StopConstant;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxLimitSwitch.Direction;
+
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 
 public class ShooterElevator extends SubsystemBase {
-/*
-  private static CANSparkMax elevatorMotor = new CANSparkMax(Constants.ShooterConstants.leftMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
-  private static CANSparkMax pivotMotor = new CANSparkMax(Constants.ShooterConstants.rightMotorCANID, CANSparkLowLevel.MotorType.kBrushless);
-  private AbsoluteEncoder elevatorEncoder = elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle);
-  private SparkPIDController elevatorMotorPID = elevatorMotor.getPIDController();
-  private SparkPIDController pivotMotorPID = pivotMotor.getPIDController();
-  private static DigitalInput bobsFavoritePart = new DigitalInput(IntakeConstants.IntakeLimitSwPort); //trust - this is the limit switch
+
+  private static CANSparkMax shooterElevatorMotor = new CANSparkMax(Constants.ShootElevatorConstants.ElevatorCANID, CANSparkLowLevel.MotorType.kBrushless);
+  private static CANSparkMax pivotMotor = new CANSparkMax(Constants.ShootElevatorConstants.PivotCANID, CANSparkLowLevel.MotorType.kBrushless);
+  private static DigitalInput upLimit = new DigitalInput(7);
+  private static DigitalInput downLimit = new DigitalInput(6);
+  private static DigitalInput outLimit = new DigitalInput(5);
+  private static DigitalInput inLimit = new DigitalInput(4);
+  //private SparkPIDController elevatorMotorPID = elevatorMotor.getPIDController();
+  private RelativeEncoder ElevatorEncoder = shooterElevatorMotor.getEncoder();
+  private AbsoluteEncoder PivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+  private boolean upStopRequested = false;
+  private boolean downStopRequested = true;
+  private boolean outStopRequested = false;
+  private boolean inStopRequested = false;
+
+  private String dirE = "na";
+  private String dirP = "na";
+
+  public BooleanSupplier noUp = () -> {//can we get much higher
+    return !upLimit.get();//so high
+  };//so high
+  public BooleanSupplier noDown = () -> {//diver dung
+    return !downLimit.get();
+  };
+  public BooleanSupplier noOut = () -> {
+    return !outLimit.get();
+  };
+  public BooleanSupplier noIn = () -> {
+    return !inLimit.get();
+  };
 
   public ShooterElevator() {
-  
-    elevatorMotor.restoreFactoryDefaults();
+    
+
+    shooterElevatorMotor.restoreFactoryDefaults();
     pivotMotor.restoreFactoryDefaults();
-    elevatorMotorPID.setFeedbackDevice(elevatorEncoder);
+    
 
-    elevatorMotorPID.setP(ShootElevatorConstants.elevkP);
-    elevatorMotorPID.setI(ShootElevatorConstants.elevkI);
-    elevatorMotorPID.setD(ShootElevatorConstants.elevkD);
+    shooterElevatorMotor.setIdleMode(IdleMode.kBrake);
+    pivotMotor.setIdleMode(IdleMode.kBrake);
 
-    pivotMotorPID.setP(ShootElevatorConstants.pivotkP);
-    pivotMotorPID.setI(ShootElevatorConstants.pivotkI);
-    pivotMotorPID.setD(ShootElevatorConstants.pivotkD);
+    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 60);
+    pivotMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
+    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    pivotMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+    shooterElevatorMotor.burnFlash();
+    pivotMotor.burnFlash();
+
+
+    /*elevatorMotorPID.setP(ClimbElevatorConstants.elevkP);
+    elevatorMotorPID.setI(ClimbElevatorConstants.elevkI);
+    elevatorMotorPID.setD(ClimbElevatorConstants.elevkD);*/
   }
 
   //github desktop is the worst part of my setup
 
   @Override
-  public void periodic(){
-    if(bobsFavoritePart.get())
-      stopElevator(StopConstant.stopSetpoint);
-    updateDashboard();
+  public void periodic(){//T = 1/f
+    if (noUp.getAsBoolean()){ //|| elevatorEncoder.getPosition() > 40){
+      upStopRequested = true;
+    }else{
+      upStopRequested = false;
+    }
+    
+    if (noDown.getAsBoolean()){// || elevatorEncoder.getPosition() < 2){
+      downStopRequested = true;
+    }else{
+      downStopRequested = false;
+    }
+
+    if (noIn.getAsBoolean()){
+      inStopRequested = true;
+    }else{
+      inStopRequested = false;
+    }
+
+    if (noOut.getAsBoolean()){
+      outStopRequested = true;
+    }else{
+      outStopRequested = false;
+    }
+    
+    if (downStopRequested && dirE == "re"){
+      shooterElevatorMotor.set(0);
+      //rightElevatorMotor.set(0);
+    }else if (upStopRequested && dirE == "fr"){
+      shooterElevatorMotor.set(0);
+      //rightElevatorMotor.set(0);
+    }
+
+    if (inStopRequested && dirP == "in"){
+      pivotMotor.set(0);
+    }else if (outStopRequested && dirP == "out"){
+      pivotMotor.set(0);
+    }
+
+    SmartDashboard.putNumber("Pivot Encoder", PivotEncoder.getPosition());
+
   }
 
-  public void muevete(double setpoint){
-    //the setpoint can be pos or neg for up and down movement respectively
-    //TODO implement limit switch for safety
-    elevatorMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+  public void moveElevator(boolean up){//alex honnold would be proud
+    if (!upStopRequested && up){
+      shooterElevatorMotor.set(0.3);
+      //rightElevatorMotor.set(-0.2);
+      dirE = "fr";
+    }else if (!downStopRequested && !up){
+      shooterElevatorMotor.set(-0.2);
+      //rightElevatorMotor.set(0.2);
+      dirE = "re";
+    }
+
   }
 
-  public void rotatePivot(double setpoint){
-    //the setpoint can be pos or neg for up and down movement respectively
-    //TODO implement limit switch for safety
-    pivotMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+  public void stopElevator(){
+    shooterElevatorMotor.stopMotor();
+    dirE = "na";
   }
 
-  public void stopElevator(double setpoint){
-    elevatorMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+  public void movePivor(boolean out){
+    if (!inStopRequested && out){
+      pivotMotor.set(0.1);
+      dirP = "in";
+    }else if (!outStopRequested && !out){
+      pivotMotor.set(-0.1);
+      dirP = "out";
+    }
   }
 
-  public void stopPivot(double setpoint){
-    pivotMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity);
+  public void movePivotWithSpeed(boolean out, double speed){
+    speed = Math.abs(speed);
+    if (!inStopRequested && out){
+      pivotMotor.set(speed);
+      dirP = "in";
+    }else if (!outStopRequested && !out){
+      pivotMotor.set(-1 * speed);
+      dirP = "out";
+    } 
   }
 
-
-  public void updateDashboard(){ 
-    SmartDashboard.putNumber("Elevator Velocity", elevatorMotor.getEncoder().getVelocity());
-    SmartDashboard.putNumber("Elevator Position", elevatorMotor.getEncoder().getPosition());  
-    SmartDashboard.putNumber("Pivot Velocity", elevatorMotor.getEncoder().getVelocity());
-    SmartDashboard.putNumber("Pivot Position", elevatorMotor.getEncoder().getPosition());  
+  public void stopPivot(){
+    pivotMotor.stopMotor();
+    dirP = "na";
   }
 
-  public double getElevatorVelocity(){
-    return elevatorMotor.getEncoder().getVelocity();
+  public double getPivotEncoder(){
+    return PivotEncoder.getPosition();
   }
 
-  public double getElevatorPosition(){
-    return elevatorMotor.getEncoder().getPosition();
-  }*/
+  public double getElevatorEncoder(){
+    return ElevatorEncoder.getPosition();
+  }
+
+  public void teleopElevator(boolean up, boolean down){
+    if (up){moveElevator(true);}
+    else if (down){moveElevator(false);}
+    else{stopElevator();}
+  }
+
 }

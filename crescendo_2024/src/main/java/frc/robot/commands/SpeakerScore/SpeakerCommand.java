@@ -20,7 +20,7 @@ public class SpeakerCommand extends Command{
 
     @Override
     public void initialize(){
-
+        shooter.setCoast();
     }
 
     @Override
