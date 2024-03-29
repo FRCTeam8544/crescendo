@@ -27,7 +27,7 @@ public class ShootSubsystem extends SubsystemBase {
   private SparkPIDController leftMotorPID = leftMotor.getPIDController();
   private SparkPIDController rightMotorPID = rightMotor.getPIDController();
 
-  private DigitalInput limitSwitch = new DigitalInput(3);
+  private DigitalInput limitSwitch = new DigitalInput(3);//optical sensor, poorly named, should be called big brother
 
   public ShootSubsystem() {
 
@@ -57,6 +57,7 @@ public class ShootSubsystem extends SubsystemBase {
     //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
 
     SmartDashboard.putBoolean("Shooter Brake", leftMotor.getIdleMode() == IdleMode.kBrake);
+    SmartDashboard.putBoolean("note in shooter", noteInShooter.getAsBoolean());
   }
 
   /*  

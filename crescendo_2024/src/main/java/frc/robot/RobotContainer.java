@@ -32,6 +32,7 @@ import frc.robot.commands.AmpScore.MovePivotOut;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
 import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoSequences.DriveAndShootAuto;
 import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
 import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
@@ -79,6 +80,7 @@ public class RobotContainer {
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
   private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
+  private final DriveAndShootAuto m_twoNoteAuto = new DriveAndShootAuto(m_robotDrive, m_intake, m_shooter);
   //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
   
 
@@ -131,6 +133,7 @@ public class RobotContainer {
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
     toggle.addOption("2 not auto (center)", m_testAuto);
+    toggle.addOption("2 note auto (fixed)", m_twoNoteAuto);
    // toggle.addOption("Fixed Shoot Only", m_fixedShooter);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
     
@@ -183,7 +186,8 @@ public class RobotContainer {
         .whileTrue(new SourceIntake(m_intake, m_shooter));
 
     new JoystickButton(m_juliet, Button.kLeftBumper.value)
-        .onTrue(new HandoffCommand(m_intake, m_shooter).withTimeout(0.35));
+        .onTrue(new HandoffCommand(m_intake, m_shooter, m_juliet));//.onFalse(
+            //new RunCommand(() -> m_shooter.stop(), m_shooter));//.withTimeout(0.35));
 
 
         
@@ -283,7 +287,7 @@ public class RobotContainer {
    // return m_testAuto;
 
 
-   return m_fixedShooter;
+   return toggle.getSelected();
 
   }
 }

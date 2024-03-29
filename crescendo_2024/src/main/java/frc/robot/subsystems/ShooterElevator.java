@@ -15,7 +15,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxLimitSwitch.Direction;
 
 import java.util.function.BooleanSupplier;
 
@@ -64,6 +66,12 @@ public class ShooterElevator extends SubsystemBase {
 
     shooterElevatorMotor.setIdleMode(IdleMode.kBrake);
     pivotMotor.setIdleMode(IdleMode.kBrake);
+
+    pivotMotor.setSoftLimit(SoftLimitDirection.kForward, 60);
+    pivotMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
+    pivotMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    pivotMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     shooterElevatorMotor.burnFlash();
     pivotMotor.burnFlash();

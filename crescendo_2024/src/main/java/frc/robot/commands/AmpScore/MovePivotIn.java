@@ -18,7 +18,7 @@ public class MovePivotIn extends Command{
     @Override
     public void execute(){
 
-        if (pivot.getPivotEncoder() > 0.1){
+        if (pivot.getPivotEncoder() > 0.01){
             pivot.movePivor(false);
         }else{
             pivot.stopPivot();
@@ -33,7 +33,7 @@ public class MovePivotIn extends Command{
 
     @Override
     public boolean isFinished(){
-        return pivot.getPivotEncoder() < 0.1;
+        return pivot.getPivotEncoder() < 0.01;
     }
     
 }
