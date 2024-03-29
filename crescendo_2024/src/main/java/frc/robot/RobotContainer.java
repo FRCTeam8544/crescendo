@@ -152,6 +152,12 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
                 true, true),
             m_robotDrive));
+
+    m_shootElevator.setDefaultCommand(
+        new RunCommand(
+            () -> m_shootElevator.teleopElevator(
+                m_juliet.getPOV() == 0, m_juliet.getPOV() == 180), 
+             m_shootElevator));
   }
 
   /**
@@ -202,25 +208,25 @@ public class RobotContainer {
                 new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));*/
 
 
-    new JoystickButton(m_juliet, Button.kY.value)
+    new JoystickButton(m_juliet, Button.kA.value)
         .toggleOnTrue(new MovePivotIn(m_shootElevator));
 
-    new JoystickButton(m_juliet, Button.kA.value)
+    new JoystickButton(m_juliet, Button.kY.value)
         .toggleOnTrue(new MovePivotOut(m_shootElevator));
 
 
 
     new JoystickButton(stinkyPooPoo, 1)
         .whileTrue(new RunCommand( 
-            () -> m_shootElevator.movePivor(true), m_shootElevator)).onFalse(
-                new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
-
-    new JoystickButton(stinkyPooPoo, 2)
-        .whileTrue(new RunCommand( 
             () -> m_shootElevator.movePivor(false), m_shootElevator)).onFalse(
                 new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
 
-    new JoystickButton(stinkyPooPoo, 3).whileTrue(
+    new JoystickButton(stinkyPooPoo, 3)
+        .whileTrue(new RunCommand( 
+            () -> m_shootElevator.movePivor(true), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
+
+    new JoystickButton(stinkyPooPoo, 2).whileTrue(
         new RunCommand(() -> m_shootElevator.moveElevator(false), m_shootElevator)).onFalse(
             new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
 

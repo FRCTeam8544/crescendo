@@ -154,6 +154,17 @@ public class ShooterElevator extends SubsystemBase {
     }
   }
 
+  public void movePivotWithSpeed(boolean out, double speed){
+    speed = Math.abs(speed);
+    if (!inStopRequested && out){
+      pivotMotor.set(speed);
+      dirP = "in";
+    }else if (!outStopRequested && !out){
+      pivotMotor.set(-1 * speed);
+      dirP = "out";
+    } 
+  }
+
   public void stopPivot(){
     pivotMotor.stopMotor();
     dirP = "na";
@@ -161,6 +172,16 @@ public class ShooterElevator extends SubsystemBase {
 
   public double getPivotEncoder(){
     return PivotEncoder.getPosition();
+  }
+
+  public double getElevatorEncoder(){
+    return ElevatorEncoder.getPosition();
+  }
+
+  public void teleopElevator(boolean up, boolean down){
+    if (up){moveElevator(true);}
+    else if (down){moveElevator(false);}
+    else{stopElevator();}
   }
 
 }

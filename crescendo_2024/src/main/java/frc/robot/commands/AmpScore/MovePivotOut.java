@@ -12,13 +12,13 @@ public class MovePivotOut extends Command{
 
     @Override
     public void initialize(){
-
+        System.out.println("pivot Out Initialized");
     }
 
     @Override
     public void execute(){
         if (pivot.getPivotEncoder() < 0.28){
-            pivot.movePivor(true);
+            pivot.movePivotWithSpeed(true, 0.2);
         }else{
             pivot.stopPivot();
         }
@@ -26,12 +26,13 @@ public class MovePivotOut extends Command{
 
     @Override
     public void end(boolean interupted){
+        System.out.println("pivot out finished");
         pivot.stopPivot();
     }
 
     @Override
     public boolean isFinished(){
-        return pivot.getPivotEncoder() > 0.28;
+        return pivot.getPivotEncoder() > 0.28 || pivot.getPivotEncoder() > 0.9;
     }
     
 }

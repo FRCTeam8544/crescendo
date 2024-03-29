@@ -19,7 +19,7 @@ public class MovePivotIn extends Command{
     public void execute(){
 
         if (pivot.getPivotEncoder() > 0.01){
-            pivot.movePivor(false);
+            pivot.movePivotWithSpeed(false, 0.2);
         }else{
             pivot.stopPivot();
         }
