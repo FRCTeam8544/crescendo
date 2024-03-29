@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -26,9 +27,12 @@ import frc.robot.Constants.ShootElevatorConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
+import frc.robot.commands.AmpScore.MovePivotIn;
+import frc.robot.commands.AmpScore.MovePivotOut;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
 import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoSequences.DriveAndShootAuto;
 import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
 import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
@@ -66,7 +70,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShootSubsystem m_shooter = new ShootSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  //private final ShooterElevator m_shootElevator = new ShooterElevator();
+  private final ShooterElevator m_shootElevator = new ShooterElevator();
   private final ClimberElevator m_climber = new ClimberElevator();
 
   //private final Cameras cameras = new Cameras(m_robotDrive);
@@ -76,16 +80,19 @@ public class RobotContainer {
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
   private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
+  private final DriveAndShootAuto m_twoNoteAuto = new DriveAndShootAuto(m_robotDrive, m_intake, m_shooter);
   //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
   
 
   // romeo and juliet, this is where our humble tale begins 
   XboxController m_romeo = new XboxController(OIConstants.kDriverControllerPort);
   XboxController m_juliet = new XboxController(1);
+  GenericHID stinkyPooPoo = new GenericHID(2);
   //XboxController m_romeo = m_juliet;
 
   private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
   private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
+
 
   /*public BooleanSupplier intakeAutoRunning = () -> {
     return intakeAuto.isScheduled();
@@ -126,6 +133,7 @@ public class RobotContainer {
     toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
     toggle.addOption("null", null);//cloud bong
     toggle.addOption("2 not auto (center)", m_testAuto);
+    toggle.addOption("2 note auto (fixed)", m_twoNoteAuto);
    // toggle.addOption("Fixed Shoot Only", m_fixedShooter);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
     
@@ -144,6 +152,12 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
                 true, true),
             m_robotDrive));
+
+    m_shootElevator.setDefaultCommand(
+        new RunCommand(
+            () -> m_shootElevator.teleopElevator(
+                m_juliet.getPOV() == 0, m_juliet.getPOV() == 180), 
+             m_shootElevator));
   }
 
   /**
@@ -161,52 +175,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-    //shooter commands
-    /*
-     * 
-    new JoystickButton(m_romeo, Button.kA.value) //A Button
-        .whileTrue(new RunCommand(
-            () -> m_shooter.shoot(ShooterConstants.shootSetpoint),
-            m_shooter))
-            .onFalse(new RunCommand(
-            () -> m_shooter.stop(StopConstant.stopSetpoint), m_shooter));
-    */
-    /* This is a kill switch that could be removed whenever, but it probably shouldnt be for now 
-    new JoystickButton(m_romeo, Button.kB.value) // B Button
-        .whileTrue(new RunCommand(
-        () -> m_shooter.stop(StopConstant.stopSetpoint),
-        m_shooter));
-    */
-    /*
-        Likely uneeded since we won't intake via shooter anymore
 
-    new JoystickButton(m_romeo, Button.k-.value) X button now conflicts with intaking fron ground,
-        .whileTrue(new RunCommand(                          which is worth noting if we ever re-implement this
-        () -> m_shooter.sourceIntake(ShooterConstants.intakeSetpoint), 
-            m_shooter))
-                .onFalse(new RunCommand(
-                () -> m_shooter.stopMovement(StopConstant.stopSetpoint), m_shooter));
-    */
-    /*new JoystickButton(m_juliet, Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> m_climber.moveClimber(0.1), m_climber)).onFalse(
-                new RunCommand(() -> m_climber.stop(), m_climber));
-    new JoystickButton(m_juliet, Button.kBack.value)
-        .whileTrue(new RunCommand(
-            () -> m_climber.moveClimber(-0.1), m_climber)).onFalse(
-                new RunCommand(() -> m_climber.stop(), m_climber));*/
-
-    //intake commands
-    /*new JoystickButton(m_juliet, Button.kB.value) // changed to X from left bumper
-        .whileTrue(new RunCommand(
-            () -> m_intake.suckySuck(), m_intake))
-            .onFalse(new RunCommand(
-            () -> m_intake.stop(), m_intake));*/
-    /*new JoystickButton(m_juliet, Button.kB.value)
-        .onTrue(intakeAuto);
-
-    new JoystickButton(m_juliet, Button.kA.value)
-        .onTrue(intakeStopAuto);*/
 
     new JoystickButton(m_juliet, Button.kB.value)
         .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake));
@@ -216,117 +185,54 @@ public class RobotContainer {
 
 
 
-    /*new JoystickButton(m_romeo, Button.kA.value) // changed to Y from right bumper
-        .whileTrue(new ParallelCommandGroup(
-            new RunCommand(() -> m_intake.feedTheMachine(), m_intake),
-            new RunCommand(() -> m_shooter.shoot(5000), m_shooter))
-        ).onFalse(new ParallelCommandGroup(
-            new RunCommand(() -> m_intake.stop(), m_intake),
-            new RunCommand(() -> m_shooter.shoot(0), m_shooter)));*/
-
-    /*new JoystickButton(m_juliet, Button.kA.value)
-        .whileTrue(new RunCommand(
-            () -> m_intake.feedTheMachine(), m_intake))
-            .onFalse(new RunCommand(() -> m_intake.stop(), m_intake));*/
-
-
-            /*
-             * 
-             * old intake code
-             */
-    /*new JoystickButton(m_juliet, Button.kY.value)
-        .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(false)).withTimeout(2))
-            .onFalse(new RunCommand(
-                () -> m_intake.rotateStop(), m_intake));
-
-    new JoystickButton(m_juliet, Button.kX.value)
-        .whileTrue(new RunCommand(
-            () -> m_intake.testRotate(true)).withTimeout(2.5))
-            .onFalse(new RunCommand(
-                () -> m_intake.rotateStop(), m_intake));*/
-
-    /*new JoystickButton(m_juliet, Button.kRightBumper.value)
-        .whileTrue(new RunCommand(
-            () -> m_shooter.shoot(5000), m_shooter))
-            .onFalse(new RunCommand(
-                () -> m_shooter.stop(), m_shooter));*/
-
-
-
-
-
     new JoystickButton(m_juliet, Button.kRightBumper.value)
         .onTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
 
-    new JoystickButton(m_juliet, Button.kLeftBumper.value)
-        .whileTrue(new HandoffCommand(m_intake, m_shooter));
-
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
+
+    new JoystickButton(m_juliet, Button.kLeftBumper.value)
+        .onTrue(new HandoffCommand(m_intake, m_shooter, m_juliet));//.onFalse(
+            //new RunCommand(() -> m_shooter.stop(), m_shooter));//.withTimeout(0.35));
+
+
         
+    /*new  JoystickButton(m_juliet, Button.kY.value)
+        .whileTrue(new RunCommand(
+            () -> m_shootElevator.movePivor(true), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
+
+    new  JoystickButton(m_juliet, Button.kA.value)
+        .whileTrue(new RunCommand(
+            () -> m_shootElevator.movePivor(false), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));*/
 
 
-          //test from earlier  
-    /*new JoystickButton(m_romeo, Button.kA.value)
-        .whileTrue(new IntakeCommand(m_intake, m_romeo));
+    new JoystickButton(m_juliet, Button.kA.value)
+        .toggleOnTrue(new MovePivotIn(m_shootElevator));
 
-    new JoystickButton(m_romeo, Button.kY.value)
-        .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_romeo))
-        .onFalse(new RunCommand(
-            () -> m_shooter.shoot(0), m_shooter));
-    */
-    //hand off
-    /*new JoystickButton(m_romeo, Button.kB.value)
-        .whileTrue(new HandoffCommand(m_intake, m_shooter));
-    */
-    //shooter elevator commands
-    /*
-     * 
-    new JoystickButton(m_romeo, Button.kY.value) // Right Bumper
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.muevete(ShootElevatorConstants.elevatorSetpoint), //for upward motion
-        m_shootElevator).onlyIf(init))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
-    
-    new JoystickButton(m_romeo, Button.kY.value) // Left Bumper
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.muevete(-ShootElevatorConstants.elevatorSetpoint), //for downward motion
-        m_shootElevator).onlyIf(run))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopElevator(StopConstant.stopSetpoint)));
+    new JoystickButton(m_juliet, Button.kY.value)
+        .toggleOnTrue(new MovePivotOut(m_shootElevator));
 
-    new JoystickButton(m_romeo, Button.kStart.value) // Start Button (no clue where it is)
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for upward motion
-        m_shootElevator))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
-    
-    new JoystickButton(m_romeo, Button.kBack.value) // Back Button (no clue where this is either)
-        .whileTrue(new RunCommand(
-        () -> m_shootElevator.rotatePivot(ShootElevatorConstants.pivotSetpoint), //for downward motion
-        m_shootElevator))
-        .onFalse(new RunCommand(
-            () -> m_shootElevator.stopPivot(StopConstant.stopSetpoint)));
 
-    //climber commands
-    new JoystickButton(m_romeo, Button.kX.value) // Right Stick pressed in
-        .whileTrue(new RunCommand(
-        () -> m_climber.moveClimber(ClimbElevatorConstants.elevatorSetpoint), //for upward motion
-        m_climber).onlyIf(init))
-        .onFalse(new RunCommand(
-            () -> m_climber.stop(StopConstant.stopSetpoint)));
-    
-    new JoystickButton(m_romeo, Button.kX.value) // Left Stick pressed in
-        .whileTrue(new RunCommand(
-        () -> m_climber.moveClimber(-ClimbElevatorConstants.elevatorSetpoint), //for downward motion
-        m_shootElevator).onlyIf(run))
-        .onFalse(new RunCommand(
-            () -> m_climber.stop(StopConstant.stopSetpoint)));
-    */
 
+    new JoystickButton(stinkyPooPoo, 1)
+        .whileTrue(new RunCommand( 
+            () -> m_shootElevator.movePivor(false), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
+
+    new JoystickButton(stinkyPooPoo, 3)
+        .whileTrue(new RunCommand( 
+            () -> m_shootElevator.movePivor(true), m_shootElevator)).onFalse(
+                new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
+
+    new JoystickButton(stinkyPooPoo, 2).whileTrue(
+        new RunCommand(() -> m_shootElevator.moveElevator(false), m_shootElevator)).onFalse(
+            new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
+
+    new JoystickButton(stinkyPooPoo, 4).whileTrue(
+        new RunCommand(() -> m_shootElevator.moveElevator(true), m_shootElevator)).onFalse(
+            new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
   }
 
   /**
@@ -387,7 +293,7 @@ public class RobotContainer {
    // return m_testAuto;
 
 
-   return m_fixedShooter;
+   return toggle.getSelected();
 
   }
 }

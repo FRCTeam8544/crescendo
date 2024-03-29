@@ -12,6 +12,7 @@ import frc.robot.Constants.ShooterConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import java.util.function.BooleanSupplier;
 
@@ -26,7 +27,7 @@ public class ShootSubsystem extends SubsystemBase {
   private SparkPIDController leftMotorPID = leftMotor.getPIDController();
   private SparkPIDController rightMotorPID = rightMotor.getPIDController();
 
-  private DigitalInput limitSwitch = new DigitalInput(3);
+  private DigitalInput limitSwitch = new DigitalInput(3);//optical sensor, poorly named, should be called big brother
 
   public ShootSubsystem() {
 
@@ -54,6 +55,9 @@ public class ShootSubsystem extends SubsystemBase {
     //updateDashboard();
     //topMotor.set(shooter.calculate(shootingEncoder.getVelocity()));
     //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
+
+    SmartDashboard.putBoolean("Shooter Brake", leftMotor.getIdleMode() == IdleMode.kBrake);
+    SmartDashboard.putBoolean("note in shooter", noteInShooter.getAsBoolean());
   }
 
   /*  
@@ -65,6 +69,21 @@ public class ShootSubsystem extends SubsystemBase {
     leftMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
     rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity); 
   }*/
+
+  public void setBrake(){
+    leftMotor.setIdleMode(IdleMode.kBrake);
+    rightMotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void setZero(){
+    leftMotorPID.setReference(leftMotor.getEncoder().getPosition(), CANSparkBase.ControlType.kPosition);
+    rightMotorPID.setReference(rightMotor.getEncoder().getPosition(), CANSparkBase.ControlType.kPosition);
+  }
+
+  public void setCoast(){
+    leftMotor.setIdleMode(IdleMode.kCoast);
+    rightMotor.setIdleMode(IdleMode.kCoast);
+  }
 
   public void handoff(){
     leftMotor.set(0.25);

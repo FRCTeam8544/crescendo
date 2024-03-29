@@ -110,7 +110,7 @@ public class IntakeSubsystem extends SubsystemBase{
     }
     
     public void rageAgainsTheMachine(){
-        rollerMotor.set(0.15);
+        rollerMotor.set(0.30);
     }
 
     public void stop(){
