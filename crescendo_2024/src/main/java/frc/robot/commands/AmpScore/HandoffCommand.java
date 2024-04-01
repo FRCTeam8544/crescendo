@@ -35,7 +35,7 @@ public class HandoffCommand extends Command{
             shooter.handoff();
             //count = 0;
         }
-        else if (count < 6){
+        else if (count < 7){
             //intake.stop();
             count = count + 1;
             //shooter.stop();
@@ -56,7 +56,7 @@ public class HandoffCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        if ((shooter.noteInShooter.getAsBoolean() && count >= 6) || !controller.getLeftBumper()){
+        if ((shooter.noteInShooter.getAsBoolean() && count >= 7) || !controller.getLeftBumper()){
             System.out.println("handOffEnded");
             return true;
         }

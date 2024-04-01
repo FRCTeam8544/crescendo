@@ -14,11 +14,12 @@ import frc.robot.subsystems.ShootSubsystem;
 
 public class DriveAndShootAuto extends SequentialCommandGroup{
 
-    public DriveAndShootAuto(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ShootSubsystem shootSubsystem){
+    public DriveAndShootAuto(DriveSubsystem driveSubsystem, IntakeSubsystem intakeSubsystem, ShootSubsystem shootSubsystem){//SpeakerAuto speakerAuto){//
+        
         addCommands(
             new SequentialCommandGroup(
                 new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(1.5),
-
+                //speakerAuto,
                 
                    
                 new IntakeExtendAuto(intakeSubsystem).withTimeout(1.25),
@@ -32,7 +33,8 @@ public class DriveAndShootAuto extends SequentialCommandGroup{
                     new NewDriveAuto(driveSubsystem, 0, 0.5, 0).withTimeout(1.5)
                 ),
                 new WaitCommand(0.5),
-                new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(3)
+                new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(1.5)
+                //speakerAuto
             )
         );
     }

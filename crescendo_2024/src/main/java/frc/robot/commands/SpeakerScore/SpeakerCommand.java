@@ -15,6 +15,7 @@ public class SpeakerCommand extends Command{
         this.shooter = shooter;
         this.controller = controller;
         this.intake = intake;
+        addRequirements(shooter, intake);
     }
 
 
@@ -37,19 +38,19 @@ public class SpeakerCommand extends Command{
 
     @Override
     public void end(boolean interupted){
-        if (interupted){
+        //if (interupted){
             shooter.stop();
             intake.stop();
-        }
+        //}
     }
 
     @Override
     public boolean isFinished(){
-        if (controller.getRightBumperReleased()){
+        /*if (controller.getRightBumperReleased()){
             shooter.stop();
             intake.stop();
             return true;
-        }
+        }*/
         return false;
     }
 }
