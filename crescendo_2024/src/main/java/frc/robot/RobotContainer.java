@@ -73,6 +73,8 @@ public class RobotContainer {
   private final ShooterElevator m_shootElevator = new ShooterElevator();
   private final ClimberElevator m_climber = new ClimberElevator();
 
+  private final SpeakerAuto shootAuto = new SpeakerAuto(m_shooter, m_intake);
+
   //private final Cameras cameras = new Cameras(m_robotDrive);
 
 
@@ -81,6 +83,7 @@ public class RobotContainer {
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
   private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
   private final DriveAndShootAuto m_twoNoteAuto = new DriveAndShootAuto(m_robotDrive, m_intake, m_shooter);
+  //private final DriveAndShootAuto driveAndShootAuto = new DriveAndShootAuto(m_robotDrive, m_intake, shootAuto);
   //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
   
 
@@ -186,7 +189,8 @@ public class RobotContainer {
 
 
     new JoystickButton(m_juliet, Button.kRightBumper.value)
-        .onTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
+        .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
+        //.onTrue(speakerAuto);
 
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
