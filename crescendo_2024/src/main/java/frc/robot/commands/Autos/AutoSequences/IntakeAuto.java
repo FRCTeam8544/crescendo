@@ -12,6 +12,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeAuto extends SequentialCommandGroup{
 
     public IntakeAuto(IntakeSubsystem intake, XboxController juliet, XboxController romeo){
+        addRequirements(intake);
         addCommands(
             new ParallelCommandGroup(
                 new SequentialCommandGroup(

@@ -12,6 +12,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class IntakeStopAuto extends SequentialCommandGroup{
 
     public IntakeStopAuto(IntakeSubsystem intake){
+        addRequirements(intake);
         addCommands(
             new ParallelCommandGroup(
                 new RunCommand(() -> intake.stop(), intake),

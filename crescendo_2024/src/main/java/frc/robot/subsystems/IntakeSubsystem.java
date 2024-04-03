@@ -37,6 +37,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
         rollerMotor.setIdleMode(IdleMode.kBrake);
 
+        
         armEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
         /*armPID = armMotor.getPIDController();
         armPID.setFeedbackDevice(armEncoder);
@@ -52,6 +53,8 @@ public class IntakeSubsystem extends SubsystemBase{
         //armMotor.setSoftLimit(SoftLimitDirection.kReverse, -3);
 
         pubSet = armEncoder.getPosition();
+
+        armMotor.setSmartCurrentLimit(20);
 
         armMotor.burnFlash();
     }
