@@ -96,6 +96,8 @@ public class RobotContainer {
   private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
   private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
+  private Pose2d zeroPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+
 
   /*public BooleanSupplier intakeAutoRunning = () -> {
     return intakeAuto.isScheduled();
@@ -153,7 +155,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_romeo.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_romeo.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
-                true, true),
+                true, true, true),
             m_robotDrive));
 
     m_shootElevator.setDefaultCommand(
@@ -177,6 +179,10 @@ public class RobotContainer {
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
+
+    new JoystickButton(m_romeo, Button.kBack.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.resetOdometry(zeroPose2d) , m_robotDrive));
 
 
 

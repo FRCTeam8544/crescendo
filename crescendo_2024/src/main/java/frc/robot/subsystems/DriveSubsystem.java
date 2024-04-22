@@ -21,6 +21,7 @@ import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -51,6 +52,10 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
+  private double xPos, yPos;
+
+  private double kXPos =  3.24, kYPos = 7.31; // found by (|ln(0.1)/a^2|)^(1/2) where a is the x value for tappering off
+  private double speedCapX, speedCapY;
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
@@ -123,9 +128,72 @@ public class DriveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
+   * 
+   * @param imaginaryBox  box for demos
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit, boolean imaginaryBox) {
     
+    SmartDashboard.putNumber("Y Position", yPos);
+    SmartDashboard.putNumber("X Position", xPos);
+    SmartDashboard.putNumber("X Max Speed", speedCapX);
+    SmartDashboard.putNumber("Y Max Speed", speedCapY);
+
+    if (imaginaryBox){
+      xSpeed = xSpeed/4;
+      ySpeed = ySpeed/4;
+
+      xPos = m_odometry.getPoseMeters().getTranslation().getX(); 
+      yPos = m_odometry.getPoseMeters().getTranslation().getY();
+
+      speedCapX = Math.pow(2.72, (-1 * kXPos * Math.pow(xPos, 2))) / 3;
+      speedCapY = Math.pow(2.72, (-1 * kYPos * Math.pow(yPos, 2))) / 3;
+      //xSpeed = xSpeed > 0? Math.pow(Math.E, -1 * Math.pow(kXPos * m_odometry.getPoseMeters().getX(), 2)) :
+      /*if (xSpeed > 0){
+        xSpeed = xPos > 0? Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2)): xSpeed;
+      }else{
+        xSpeed = xPos < 0? Math.pow(2.7, -1 * Math.pow(kXNeg * xPos, 2)): xSpeed;
+      }*/
+
+      /*if (ySpeed > 0){
+        ySpeed = yPos > 0? Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2)): ySpeed;
+      }else{
+        ySpeed = yPos < 0? Math.pow(2.7, -1 * Math.pow(kYNeg * yPos, 2)): ySpeed;
+      }*/
+      //ySpeed = Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2));
+      //if ((xSpeed > 0 && xPos > 0) || (xSpeed < 0 && xPos < 0)){
+        //xSpeed = Math.abs(xSpeed) > Math.abs(Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2)))? Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2)): xSpeed;
+      //}
+      //if ((ySpeed > 0 && yPos > 0) || (ySpeed < 0 && yPos < 0)){
+        //ySpeed = Math.abs(ySpeed) > Math.abs(Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2)))? Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2)): ySpeed;
+      //}
+
+      //xSpeed = (xSpeed > 0) && xSpeed > Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2))? Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2)): xSpeed;
+      //xSpeed = (xSpeed < 0) && xSpeed < Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2))? Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2)): xSpeed;
+      //ySpeed = ySpeed * Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2));
+      //xSpeed = xSpeed * Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2));
+
+      //ySpeed = (ySpeed > 0) && ySpeed > Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2))? Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2)): ySpeed;
+      //ySpeed = (ySpeed < 0) && ySpeed < Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2))? Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2)): ySpeed;
+
+      if (xPos < 0 && xSpeed * -1 > speedCapX){
+        xSpeed = speedCapX * -1;
+      }else if (xPos > 0 && xSpeed > speedCapX){
+        xSpeed = speedCapX;
+      }
+      if (yPos < 0 && ySpeed * -1 > speedCapY){
+        ySpeed = speedCapY * -1;
+      }else if (yPos > 0 && ySpeed > speedCapY){
+        ySpeed = speedCapY;
+      }
+      
+      if (Math.abs(xSpeed) < 0.007){
+        xSpeed = 0;
+      }
+      if (Math.abs(ySpeed) < 0.007){
+        ySpeed = 0;
+      }
+
+    }
     double xSpeedCommanded;
     double ySpeedCommanded;
 
