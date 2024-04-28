@@ -1,25 +1,13 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.ClimbElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.StopConstant;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
 import java.util.function.BooleanSupplier;
-
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 
 public class ClimberElevator extends SubsystemBase {

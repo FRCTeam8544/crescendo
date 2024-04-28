@@ -5,9 +5,7 @@ import java.util.function.BooleanSupplier;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,7 +21,6 @@ public class IntakeSubsystem extends SubsystemBase{
     private static DigitalInput forwardLimit = new DigitalInput(IntakeConstants.IntakeLimitSwPort);
     private static DigitalInput reverseLimit = new DigitalInput(0);
     private DigitalInput noteSensor = new DigitalInput(Constants.IntakeConstants.NoteLimitSwitchPort);
-    private SparkPIDController armPID;
     private AbsoluteEncoder armEncoder;
     private double pubSet;
     private boolean forwardStopRequested = false;

@@ -5,35 +5,16 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ClimbElevatorConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShootElevatorConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.StopConstant;
 import frc.robot.commands.AmpScore.HandoffCommand;
 import frc.robot.commands.AmpScore.MovePivotIn;
 import frc.robot.commands.AmpScore.MovePivotOut;
-import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
-import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
 import frc.robot.commands.Autos.AutoSequences.DriveAndShootAuto;
-import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
 import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
@@ -41,7 +22,6 @@ import frc.robot.commands.Autos.AutoSequences.PrepareHangAuto;
 import frc.robot.commands.Autos.AutoSequences.ShootAndMove;
 import frc.robot.commands.Autos.AutoSequences.ShootAuto;
 import frc.robot.commands.Autos.AutoSequences.testAuto;
-import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.Intake.SourceIntake;
 import frc.robot.commands.SpeakerScore.SpeakerCommand;
 import frc.robot.subsystems.ClimberElevator;
@@ -49,14 +29,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 import frc.robot.subsystems.ShooterElevator;
-import frc.robot.vision.Cameras;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand; 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
 import java.util.function.BooleanSupplier;
 
 /*
@@ -73,7 +48,7 @@ public class RobotContainer {
   private final ShooterElevator m_shootElevator = new ShooterElevator();
   private final ClimberElevator m_climber = new ClimberElevator();
 
-  private final SpeakerAuto shootAuto = new SpeakerAuto(m_shooter, m_intake);
+  //private final SpeakerAuto shootAuto = new SpeakerAuto(m_shooter, m_intake);
 
   //private final Cameras cameras = new Cameras(m_robotDrive);
 
@@ -93,8 +68,8 @@ public class RobotContainer {
   GenericHID stinkyPooPoo = new GenericHID(2);
   //XboxController m_romeo = m_juliet;
 
-  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
-  private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
+  //private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
+  //private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
 
 
   /*public BooleanSupplier intakeAutoRunning = () -> {

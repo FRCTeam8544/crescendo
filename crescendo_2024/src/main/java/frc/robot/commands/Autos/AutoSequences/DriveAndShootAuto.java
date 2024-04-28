@@ -7,7 +7,7 @@ import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.NewDriveAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
+import frc.robot.commands.Autos.AutoCommands.IntakeRollersAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
@@ -24,7 +24,7 @@ public class DriveAndShootAuto extends SequentialCommandGroup{
                    
                 new IntakeExtendAuto(intakeSubsystem).withTimeout(1.25),
                 new ParallelCommandGroup(
-                    new intakeRollersAuto(intakeSubsystem),
+                    new IntakeRollersAuto(intakeSubsystem),
                     new NewDriveAuto(driveSubsystem, 0,-0.5 ,0).withTimeout(1.5)
                 ),
 

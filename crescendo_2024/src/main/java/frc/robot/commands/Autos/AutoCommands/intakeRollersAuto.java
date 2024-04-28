@@ -3,11 +3,11 @@ package frc.robot.commands.Autos.AutoCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class intakeRollersAuto extends Command{
+public class IntakeRollersAuto extends Command{
 
     IntakeSubsystem intake;
     //int count = 0;
-    public intakeRollersAuto(IntakeSubsystem intake){
+    public IntakeRollersAuto(IntakeSubsystem intake){
         this.intake = intake;
     }
 
