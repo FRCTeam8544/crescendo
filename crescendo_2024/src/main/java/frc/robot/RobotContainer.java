@@ -37,6 +37,7 @@ import frc.robot.commands.Autos.AutoSequences.FinishHangAuto;
 import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
 import frc.robot.commands.Autos.AutoSequences.IntakeStopAuto;
+import frc.robot.commands.Autos.AutoSequences.MathHomeworkSequence;
 import frc.robot.commands.Autos.AutoSequences.PrepareHangAuto;
 import frc.robot.commands.Autos.AutoSequences.ShootAndMove;
 import frc.robot.commands.Autos.AutoSequences.ShootAuto;
@@ -83,6 +84,7 @@ public class RobotContainer {
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
   private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
   private final DriveAndShootAuto m_twoNoteAuto = new DriveAndShootAuto(m_robotDrive, m_intake, m_shooter);
+  private final MathHomeworkSequence m_demoAuto = new MathHomeworkSequence(m_robotDrive);
   //private final DriveAndShootAuto driveAndShootAuto = new DriveAndShootAuto(m_robotDrive, m_intake, shootAuto);
   //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
   
@@ -139,6 +141,7 @@ public class RobotContainer {
     toggle.addOption("null", null);//cloud bong
     toggle.addOption("2 not auto (center)", m_testAuto);
     toggle.addOption("2 note auto (fixed)", m_twoNoteAuto);
+    toggle.addOption("Math Homework / demo", m_demoAuto);
    // toggle.addOption("Fixed Shoot Only", m_fixedShooter);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
     
