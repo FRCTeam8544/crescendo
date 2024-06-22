@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
-import frc.robot.commands.Autos.AutoCommands.IntakeRollersStopAuto;
-import frc.robot.commands.Autos.AutoCommands.intakeRollersAuto;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class IntakeStopAuto extends SequentialCommandGroup{
