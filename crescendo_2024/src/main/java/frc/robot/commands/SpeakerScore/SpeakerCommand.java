@@ -33,6 +33,8 @@ public class SpeakerCommand extends Command{
         }
         else{
             shooter.shoot(5300);
+        }if (controller.getLeftTriggerAxis() > 0){
+            intake.feedTheMachine();
         }
     }
 
