@@ -10,7 +10,7 @@ public class FinishHangAuto extends SequentialCommandGroup{
 
     public FinishHangAuto(IntakeSubsystem intake, ClimberElevator climber){
         addCommands(
-            new ClimbDownAuto(climber),
+            new ClimbDownAuto(climber).withTimeout(1.5),
             new IntakeRetractAuto(intake).withTimeout(1.75)
         );
     }

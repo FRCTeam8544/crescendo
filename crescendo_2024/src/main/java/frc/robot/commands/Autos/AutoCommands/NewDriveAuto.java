@@ -34,7 +34,7 @@ public class NewDriveAuto extends Command{
         x = xPID.calculate(drive.getPose().getX(), desiredX);
         y = xPID.calculate(drive.getPose().getY(), desiredY);
         rot = rotPID.calculate(drive.getPose().getRotation().getDegrees(), desiredRot);
-        drive.drive(desiredY ,desiredX , desiredRot, true, true, false);
+        drive.drive(desiredY ,desiredX , desiredRot, true, true);
     }
 
     @Override

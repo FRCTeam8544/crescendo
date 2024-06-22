@@ -61,6 +61,9 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+  private boolean imaginaryBox = false;
+
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -131,12 +134,15 @@ public class DriveSubsystem extends SubsystemBase {
    * 
    * @param imaginaryBox  box for demos
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit, boolean imaginaryBox) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
     SmartDashboard.putNumber("Y Position", yPos);
     SmartDashboard.putNumber("X Position", xPos);
     SmartDashboard.putNumber("X Max Speed", speedCapX);
     SmartDashboard.putNumber("Y Max Speed", speedCapY);
+
+    SmartDashboard.putBoolean("Imaginary Box", imaginaryBox);
+
 
     if (imaginaryBox){
       xSpeed = xSpeed/4;
@@ -321,6 +327,12 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle() * -1).getDegrees();
+  }
+
+  public void toggleBox(){
+    //my aura is immense 
+    imaginaryBox ^= true;
+    //(this was easily +10,000,000,000)
   }
 
   /**

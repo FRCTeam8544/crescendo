@@ -155,7 +155,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_romeo.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_romeo.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
-                true, true, true),
+                true, true),
             m_robotDrive));
 
     m_shootElevator.setDefaultCommand(
@@ -175,6 +175,43 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
+
+    new JoystickButton(m_romeo, Button.kX.value)//youll never guess what button you gotta press to do this
+        .onTrue(new RunCommand(//thats right its a button combo not gonna tell you how I did it its a secret
+        () -> m_robotDrive.toggleBox(), m_robotDrive));
+
+        /***
+         * This is like my favorite poem btw if you even care
+         * 
+         * 
+O Captain! my Captain! our fearful trip is done,
+The ship has weather’d every rack, the prize we sought is won,
+The port is near, the bells I hear, the people all exulting,
+While follow eyes the steady keel, the vessel grim and daring;
+                         But O heart! heart! heart!
+                            O the bleeding drops of red,
+                               Where on the deck my Captain lies,
+                                  Fallen cold and dead.
+
+O Captain! my Captain! rise up and hear the bells;
+Rise up—for you the flag is flung—for you the bugle trills,
+For you bouquets and ribbon’d wreaths—for you the shores a-crowding,
+For you they call, the swaying mass, their eager faces turning;
+                         Here Captain! dear father!
+                            This arm beneath your head!
+                               It is some dream that on the deck,
+                                 You’ve fallen cold and dead.
+
+My Captain does not answer, his lips are pale and still,
+My father does not feel my arm, he has no pulse nor will,
+The ship is anchor’d safe and sound, its voyage closed and done,
+From fearful trip the victor ship comes in with object won;
+                         Exult O shores, and ring O bells!
+                            But I with mournful tread,
+                               Walk the deck my Captain lies,
+                                  Fallen cold and dead.
+
+         */
 
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
@@ -218,11 +255,11 @@ public class RobotContainer {
                 new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));*/
 
 
-    new JoystickButton(m_juliet, Button.kA.value)
+    /*new JoystickButton(m_juliet, Button.kA.value)
         .toggleOnTrue(new MovePivotIn(m_shootElevator));
 
     new JoystickButton(m_juliet, Button.kY.value)
-        .toggleOnTrue(new MovePivotOut(m_shootElevator));
+        .toggleOnTrue(new MovePivotOut(m_shootElevator));*/
 
 
 
