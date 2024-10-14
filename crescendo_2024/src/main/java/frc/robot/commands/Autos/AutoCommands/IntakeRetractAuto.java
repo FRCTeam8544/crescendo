@@ -27,10 +27,6 @@ public class IntakeRetractAuto extends Command{
     
     @Override
     public boolean isFinished(){
-        /*if (intake.forwardLimitSwitch.getAsBoolean()){
-            intake.stop();
-            return true;
-        }*/
         return false;
     }
 }

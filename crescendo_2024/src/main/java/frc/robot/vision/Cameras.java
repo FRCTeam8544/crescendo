@@ -1,8 +1,7 @@
 package frc.robot.vision;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-public class Cameras extends SubsystemBase{
+import frc.robot.vision.CameraSubsystem;
+public class Cameras extends CameraSubsystem{
     /* I alone can see the truth
     PhotonCamera camA;
     PoseEstimator poseEstimator;
