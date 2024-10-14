@@ -153,9 +153,23 @@ public final class Constants {
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
-  public static final class OIConstants {
+  public static final class IOConstants {
+    // Port delcarations
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
+    public static final int k1800lemonlaw = 2; 
+    
+    // Drive deadband
     public static final double kDriveDeadband = 0.05;
+
+    // Controls are field relatve (y/n)?
+    public static final boolean fieldRelative = true;
+
+    // Buttonbox button assignments
+    public static final int movePivotUp = 1;
+    public static final int movePivotDown = 3;
+    public static final int moveElevatorDown = 2;
+    public static final int moveElevatorUp = 4;
   }
 
   public static final class AutoConstants {
@@ -167,6 +181,28 @@ public final class Constants {
     public static final double kPXController = 1;
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;
+
+    //newDriveAuto.java constants
+    public static final double kPx = 0.4;
+    public static final double kIx = 0;
+    public static final double kDx = 0;
+    public static final double kPy = 0.4;
+    public static final double kIy = 0;
+    public static final double kDy = 0;
+    public static final double kProt = 0.01;
+    public static final double kIrot = 0;
+    public static final double kDrot = 0;
+    public static final double kTolx = 0.1;
+    public static final double kToly = 0.1;
+    public static final double kTolrot = 0.1;
+
+    //Timeouts - in seconds - used for auto timing
+    public static final double speakerAutoTimeout = 1.5;
+    public static final double intakeExtendAutoTimeout = 1.25;
+    public static final double newDriveAutoTimeout = 1.5;
+    public static final double intakeRetractAutoTimeout = 1.75;
+    public static final double waitTime = 0.5;
+    public static final double climbDownTimeout = 1.5;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
@@ -198,15 +234,12 @@ public final class Constants {
     public static final int RollerCANID = 14;
     public static final int IntakeLimitSwPort = 1;
     public static final int NoteLimitSwitchPort = 2;
+    public static final int reverseLimChannel = 0;
+    public static final int smartCurrentLimit = 20;
 
+    public static final double sourceIntakeSpeed = -0.1;
     public static final double suckySuckSpeed = -.95; //percentage please
     public static final double rateMachineIsFed = .95; //percentage please
-
-    //Values are 0 where tuning is required
-    public static final double armkP = 0;
-    public static final double armkI = 0;
-    public static final double armkD = 0;
-    public static final double armkF = 0;
   }
 
   public static final class ShootElevatorConstants {
@@ -233,16 +266,11 @@ public final class Constants {
     public static final int LeftElevatorCANID = 15;
     public static final int RightElevatorCANID = 16;
 
-    //Values are 0 where tuning is required
-    public static final double elevatorSetpoint = 0; //levantanse por favor
-    //only here if follow doesn't work
-    public static final double elevatorRightSetpoint = elevatorSetpoint;
+    public static final int upLimChannel = 9;
+    public static final int downLimChannel = 8;
 
-    public static final double elevkP = 0;
-    public static final double elevkI = 0;
-    public static final double elevkD = 0;
-    public static final double elevkF = 0;
+    public static final int countsPerRevTarget = 8192;
 
-    //Seperate PID values need to be added if follow doesn't work
+    public static final double motorSpeed = 0.2;
   }
 }

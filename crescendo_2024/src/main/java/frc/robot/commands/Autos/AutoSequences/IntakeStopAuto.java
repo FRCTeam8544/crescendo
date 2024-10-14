@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -14,9 +15,9 @@ public class IntakeStopAuto extends SequentialCommandGroup{
         addCommands(
             new ParallelCommandGroup(
                 new RunCommand(() -> intake.stop(), intake),
-                new WaitCommand(0.5),
+                new WaitCommand(AutoConstants.waitTime),
                 //new IntakeRollersStopAuto(intake),
-                new IntakeRetractAuto(intake).withTimeout(1.75)
+                new IntakeRetractAuto(intake).withTimeout(AutoConstants.intakeRetractAutoTimeout)
             )
         );
     }

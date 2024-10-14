@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.Autos.AutoCommands.DriveAuto;
 import frc.robot.commands.Autos.AutoCommands.SpeakerAuto;
 import frc.robot.subsystems.DriveSubsystem;
@@ -23,10 +24,10 @@ public class ShootAndMove extends SequentialCommandGroup{
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     new DriveAuto(drive, initPose2d, emoPose2d, firstTrans, secondTrans).withTimeout(0.2),
-                    new SpeakerAuto(shoot, intake).withTimeout(1.5)
+                    new SpeakerAuto(shoot, intake).withTimeout(AutoConstants.speakerAutoTimeout)
                 ),
                 
-                new DriveAuto(drive, initPose2d, emoPose2d, firstTrans, secondTrans).withTimeout(0.5)
+                new DriveAuto(drive, initPose2d, emoPose2d, firstTrans, secondTrans).withTimeout(0.5)//not a constant since it needs to be shorter than usual
             )
         );
         

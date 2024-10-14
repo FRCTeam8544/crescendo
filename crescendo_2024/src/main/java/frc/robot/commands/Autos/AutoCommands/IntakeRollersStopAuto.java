@@ -15,19 +15,14 @@ public class IntakeRollersStopAuto extends Command{
         intake.stop();
     }
     @Override
-    public void execute(){
-
-    }
+    public void execute(){}
 
     @Override
-    public void end(boolean Interupted){
-        
-    }
+    public void end(boolean Interupted){}
 
     @Override
     public boolean isFinished(){
         intake.stop();
         return true;
     }
-    
 }

@@ -52,23 +52,9 @@ public class ShootSubsystem extends SubsystemBase {
 
   @Override
   public void periodic(){
-    //updateDashboard();
-    //topMotor.set(shooter.calculate(shootingEncoder.getVelocity()));
-    //bottomMotor.set(shooter.calculate(loadingEncoder.getVelocity()));
-
     SmartDashboard.putBoolean("Shooter Brake", leftMotor.getIdleMode() == IdleMode.kBrake);
     SmartDashboard.putBoolean("note in shooter", noteInShooter.getAsBoolean());
   }
-
-  /*  
-    The way that the shooter works currently, and will likely work, 
-    we don't need to intake via shooter
-
-  public void sourceIntake(double setpoint){
-    System.out.println("sourceIntake");
-    leftMotorPID.setReference(-setpoint, CANSparkBase.ControlType.kVelocity);//negative is reverse, used for intaking for the shooter
-    rightMotorPID.setReference(setpoint, CANSparkBase.ControlType.kVelocity); 
-  }*/
 
   public void setBrake(){
     leftMotor.setIdleMode(IdleMode.kBrake);
