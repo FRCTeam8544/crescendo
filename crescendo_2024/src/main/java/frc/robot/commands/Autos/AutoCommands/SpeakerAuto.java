@@ -1,7 +1,6 @@
 package frc.robot.commands.Autos.AutoCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShootSubsystem;
 
@@ -16,11 +15,13 @@ public class SpeakerAuto extends Command{
     }
 
     @Override
-    public void initialize(){}
+    public void initialize(){
+
+    }
 
     @Override
     public void execute(){
-        shooter.shoot(ShooterConstants.shootSetpoint);
+        shooter.shoot(5000);
         if (shooter.atSpeed.getAsBoolean()){
             intake.feedTheMachine();
         }
@@ -36,6 +37,7 @@ public class SpeakerAuto extends Command{
 
     @Override
     public boolean isFinished(){
+        //return shooter.noteInShooter.getAsBoolean();
         return false;
     }
     

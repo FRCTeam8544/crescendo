@@ -11,7 +11,9 @@ public class ClimbDownAuto extends Command{
     }
 
     @Override
-    public void initialize(){}
+    public void initialize(){
+
+    }
 
     @Override
     public void execute(){

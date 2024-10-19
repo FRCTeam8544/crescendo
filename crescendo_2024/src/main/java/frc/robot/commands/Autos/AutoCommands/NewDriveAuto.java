@@ -2,7 +2,6 @@ package frc.robot.commands.Autos.AutoCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class NewDriveAuto extends Command{
@@ -20,13 +19,13 @@ public class NewDriveAuto extends Command{
 
     @Override
     public void initialize(){
-        xPID = new PIDController(AutoConstants.kPx, AutoConstants.kIx, AutoConstants.kDx);
-        yPID = new PIDController(AutoConstants.kPy, AutoConstants.kIy, AutoConstants.kDy);
-        rotPID = new PIDController(AutoConstants.kProt, AutoConstants.kProt, AutoConstants.kProt);
+        xPID = new PIDController(0.4, 0, 0);
+        yPID = new PIDController(0.4, 0, 0);
+        rotPID = new PIDController(0.01, 0, 0);
 
-        xPID.setTolerance(AutoConstants.kTolx);
-        yPID.setTolerance(AutoConstants.kToly);
-        rotPID.setTolerance(AutoConstants.kTolrot);
+        xPID.setTolerance(0.1);
+        yPID.setTolerance(0.1);
+        rotPID.setTolerance(0.1);
         drive.zeroHeading();
     }
 
@@ -39,7 +38,9 @@ public class NewDriveAuto extends Command{
     }
 
     @Override
-    public void end(boolean interupted){}
+    public void end(boolean interupted){
+
+    }
 
     @Override
     public boolean isFinished(){

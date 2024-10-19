@@ -11,14 +11,19 @@ public class MovePivotIn extends Command{
     }
 
     @Override
-    public void initialize(){}
+    public void initialize(){
+
+    }
 
     @Override
     public void execute(){
-        if (pivot.getPivotEncoder() > 0.01)
+
+        if (pivot.getPivotEncoder() > 0.01){
             pivot.movePivotWithSpeed(false, 0.2);
-        else
+        }else{
             pivot.stopPivot();
+        }
+
     }
 
     @Override

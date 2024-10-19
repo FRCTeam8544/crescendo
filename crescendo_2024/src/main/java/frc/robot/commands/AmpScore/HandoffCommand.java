@@ -16,7 +16,9 @@ public class HandoffCommand extends Command{
         this.shooter = shooter;
         this.intake = intake;
         this.controller = controller;
+
     }
+    
 
     @Override
     public void initialize(){
@@ -31,16 +33,24 @@ public class HandoffCommand extends Command{
         if (!shooter.noteInShooter.getAsBoolean()){
             intake.rageAgainsTheMachine();
             shooter.handoff();
+            //count = 0;
         }
-        else if (count < 7)
+        else if (count < 7){
+            //intake.stop();
             count = count + 1;
-        else
+            //shooter.stop();
+        }else{
+            //shooter.stop();
             intake.stop();
+        }
+        
+
     }
 
     @Override
     public void end(boolean interupted){
         intake.stop();
+        //shooter.stop();
         shooter.setZero();
     }
 
@@ -50,6 +60,7 @@ public class HandoffCommand extends Command{
             System.out.println("handOffEnded");
             return true;
         }
+        //return shooter.noteInShooter.getAsBoolean() && count > 6;
         return false;
     }
 }

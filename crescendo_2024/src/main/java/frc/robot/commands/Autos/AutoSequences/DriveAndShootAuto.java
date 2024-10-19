@@ -3,7 +3,6 @@ package frc.robot.commands.Autos.AutoSequences;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.Autos.AutoCommands.IntakeExtendAuto;
 import frc.robot.commands.Autos.AutoCommands.IntakeRetractAuto;
 import frc.robot.commands.Autos.AutoCommands.NewDriveAuto;
@@ -19,18 +18,23 @@ public class DriveAndShootAuto extends SequentialCommandGroup{
         
         addCommands(
             new SequentialCommandGroup(
-                new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(AutoConstants.speakerAutoTimeout),
-                new IntakeExtendAuto(intakeSubsystem).withTimeout(AutoConstants.intakeExtendAutoTimeout),
+                new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(1.5),
+                //speakerAuto,
+                
+                   
+                new IntakeExtendAuto(intakeSubsystem).withTimeout(1.25),
                 new ParallelCommandGroup(
                     new intakeRollersAuto(intakeSubsystem),
-                    new NewDriveAuto(driveSubsystem, 0,-0.5 ,0).withTimeout(AutoConstants.newDriveAutoTimeout)
+                    new NewDriveAuto(driveSubsystem, 0,-0.5 ,0).withTimeout(1.5)
                 ),
+
                 new ParallelCommandGroup(
-                    new IntakeRetractAuto(intakeSubsystem).withTimeout(AutoConstants.intakeRetractAutoTimeout),
-                    new NewDriveAuto(driveSubsystem, 0, 0.5, 0).withTimeout(AutoConstants.newDriveAutoTimeout)
+                    new IntakeRetractAuto(intakeSubsystem).withTimeout(1.75),
+                    new NewDriveAuto(driveSubsystem, 0, 0.5, 0).withTimeout(1.5)
                 ),
-                new WaitCommand(AutoConstants.waitTime),
-                new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(AutoConstants.speakerAutoTimeout)
+                new WaitCommand(0.5),
+                new SpeakerAuto(shootSubsystem, intakeSubsystem).withTimeout(1.5)
+                //speakerAuto
             )
         );
     }
