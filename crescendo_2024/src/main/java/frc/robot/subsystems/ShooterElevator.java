@@ -133,7 +133,7 @@ public class ShooterElevator extends SubsystemBase {
     dirE = "na";
   }
 
-  public void movePivot(boolean out){
+  public void movePivor(boolean out){
     if (!inStopRequested && out){
       pivotMotor.set(0.1);
       dirP = "in";

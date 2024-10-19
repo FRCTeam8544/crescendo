@@ -13,7 +13,9 @@ public class ControllerVibrate extends Command{
         this.secondController = secondController;
     }
 
-    public void initialize(){}
+    public void initialize(){
+
+    }
 
     public void execute(){
         controller.setRumble(RumbleType.kBothRumble, 1);

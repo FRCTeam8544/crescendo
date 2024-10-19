@@ -19,13 +19,14 @@ public class IntakeSubsystem extends SubsystemBase{
     private static CANSparkMax rollerMotor = new CANSparkMax(Constants.IntakeConstants.RollerCANID, CANSparkLowLevel.MotorType.kBrushless);
     private static CANSparkMax armMotor = new CANSparkMax(Constants.IntakeConstants.ArmCANID, CANSparkLowLevel.MotorType.kBrushless);
     private static DigitalInput forwardLimit = new DigitalInput(IntakeConstants.IntakeLimitSwPort);
-    private static DigitalInput reverseLimit = new DigitalInput(IntakeConstants.reverseLimChannel);
+    private static DigitalInput reverseLimit = new DigitalInput(0);
     private DigitalInput noteSensor = new DigitalInput(Constants.IntakeConstants.NoteLimitSwitchPort);
+    //private SparkPIDController armPID;
     private AbsoluteEncoder armEncoder;
     private double pubSet;
     private boolean forwardStopRequested = false;
     private boolean reverseStopRequested = false;
-    private String dir = "n/a";
+    private String dir = "na";
     public boolean noteInside = false;
 
     public IntakeSubsystem() {
@@ -34,12 +35,25 @@ public class IntakeSubsystem extends SubsystemBase{
 
         rollerMotor.setIdleMode(IdleMode.kBrake);
 
+        
         armEncoder = armMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        /*armPID = armMotor.getPIDController();
+        armPID.setFeedbackDevice(armEncoder);
+        
+        armPID.setP(0.02);
+        armPID.setI(1e-7);
+        armPID.setD(0.002);
+        armPID.setFF(0);
+        armPID.setOutputRange(-0.5, 0.5);*/
         armMotor.setIdleMode(IdleMode.kCoast);
+
+        //armMotor.setSoftLimit(SoftLimitDirection.kForward, 25);
+        //armMotor.setSoftLimit(SoftLimitDirection.kReverse, -3);
 
         pubSet = armEncoder.getPosition();
 
-        armMotor.setSmartCurrentLimit(IntakeConstants.smartCurrentLimit);
+        armMotor.setSmartCurrentLimit(20);
+
         armMotor.burnFlash();
     }
 
@@ -69,14 +83,17 @@ public class IntakeSubsystem extends SubsystemBase{
         }else{
             reverseStopRequested = false;
         }
-        if (reverseStopRequested && dir == "reverse"){
+        if (reverseStopRequested && dir == "re"){
             armMotor.set(0);
-        }else if (forwardStopRequested && dir == "forward"){
+        }else if (forwardStopRequested && dir == "fr"){
             armMotor.set(0);
         }
 
         if (noteInIntake.getAsBoolean()){noteInside = true;}
         else{noteInside = false;}
+        /*else{
+            armPID.setReference(pubSet, CANSparkMax.ControlType.kPosition);
+        }*/
         updateDashboard();
     }
 
@@ -86,7 +103,7 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void sourceIntake(){
-        rollerMotor.set(IntakeConstants.sourceIntakeSpeed);
+        rollerMotor.set(-0.1);
     }
 
     public void feedTheMachine(){
@@ -104,7 +121,7 @@ public class IntakeSubsystem extends SubsystemBase{
     public void rotateStop(){
         armMotor.set(0);
         pubSet = armEncoder.getPosition();
-        dir = "n/a";
+        dir = "na";
     }
 
     public void moveArm(double setpoint){
@@ -114,10 +131,10 @@ public class IntakeSubsystem extends SubsystemBase{
     public void testRotate(boolean reverse){//low key messed up forward and reversed so the names are all wrong so dont touch
         if (!forwardStopRequested && reverse){
            armMotor.set(0.25); 
-           dir = "forward";
+           dir = "fr";
         }else if (!reverseStopRequested && !reverse){
             armMotor.set(-0.35);
-            dir = "reverse";
+            dir = "re";
         }
     }
 

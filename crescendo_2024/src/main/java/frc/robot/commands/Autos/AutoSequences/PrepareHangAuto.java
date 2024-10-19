@@ -12,7 +12,7 @@ public class PrepareHangAuto extends SequentialCommandGroup{
     public PrepareHangAuto(IntakeSubsystem intake, ClimberElevator climber, XboxController controller){
         addCommands(
             new SequentialCommandGroup(
-                new IntakeExtendAuto(intake).withTimeout(1),//this one isnt a constant because it needs to be shorter than normal
+                new IntakeExtendAuto(intake).withTimeout(1),
                 new ClimbUpAuto(climber, controller),
                 new FinishHangAuto(intake, climber)
             )

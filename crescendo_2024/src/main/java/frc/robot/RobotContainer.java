@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.IOConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AmpScore.HandoffCommand;
+import frc.robot.commands.AmpScore.MovePivotIn;
+import frc.robot.commands.AmpScore.MovePivotOut;
 import frc.robot.commands.Autos.AutoSequences.DriveAndShootAuto;
 import frc.robot.commands.Autos.AutoSequences.FixedShoot;
 import frc.robot.commands.Autos.AutoSequences.IntakeAuto;
@@ -48,20 +50,38 @@ public class RobotContainer {
   private final ShooterElevator m_shootElevator = new ShooterElevator();
   private final ClimberElevator m_climber = new ClimberElevator();
 
-  // The robot's autonomousies
+  //private final SpeakerAuto shootAuto = new SpeakerAuto(m_shooter, m_intake);
+  //private final Cameras cameras = new Cameras(m_robotDrive);
+
+
   private final testAuto m_testAuto = new testAuto(m_robotDrive, m_shooter, m_intake);
   private final ShootAndMove m_shootAndMoveAuto = new ShootAndMove(m_robotDrive, m_intake, m_shooter);
   private final ShootAuto m_shootOnlyAuto = new ShootAuto(m_shooter, m_intake, m_robotDrive);
   private final FixedShoot m_fixedShooter = new FixedShoot(m_shooter, m_intake);
   private final DriveAndShootAuto m_twoNoteAuto = new DriveAndShootAuto(m_robotDrive, m_intake, m_shooter);
+  //private final DriveAndShootAuto driveAndShootAuto = new DriveAndShootAuto(m_robotDrive, m_intake, shootAuto);
+  //private final ShootAuto m_FixedShoot = new SpeakerAuto(m_shooter, m_intake).withTimeout(1.5);
+  
 
   // romeo and juliet, this is where our humble tale begins 
-  XboxController m_romeo = new XboxController(IOConstants.kDriverControllerPort);
-  XboxController m_juliet = new XboxController(IOConstants.kOperatorControllerPort);
-  GenericHID stinkyPooPoo = new GenericHID(IOConstants.k1800lemonlaw);
+  XboxController m_romeo = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_juliet = new XboxController(1);
+  GenericHID stinkyPooPoo = new GenericHID(2);
+  
+  //XboxController m_romeo = m_juliet;
 
-  // relax and rewind
+  private final IntakeAuto intakeAuto = new IntakeAuto(m_intake, m_juliet, m_romeo);
+  private final IntakeStopAuto intakeStopAuto = new IntakeStopAuto(m_intake);
+
   private Pose2d zeroPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+
+
+  /*public BooleanSupplier intakeAutoRunning = () -> {
+    return intakeAuto.isScheduled();
+  };*/
+
+  //private final PrepareHangAuto prepareHangAuto = new PrepareHangAuto(m_intake, m_climber, m_juliet);
+  //private final FinishHangAuto finishHangAuto = new FinishHangAuto(m_intake, m_climber)
 
   BooleanSupplier init = () -> {
     return (m_romeo.getLeftTriggerAxis() > 0.5);
@@ -88,10 +108,10 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    toggle.setDefaultOption("fixed shoot only", m_fixedShooter);
-    toggle.addOption("speaker only", m_shootOnlyAuto);//queens gambit
-    toggle.addOption("shoot and move", m_shootAndMoveAuto);//london system
-    toggle.addOption("sitting duck", null);//cloud bong
+    toggle.setDefaultOption("Fixed shoot only", m_fixedShooter);
+    toggle.addOption("speaker Only", m_shootOnlyAuto);//queens gambit
+    toggle.addOption("shoot And Move", m_shootAndMoveAuto);//london system
+    toggle.addOption("null", null);//cloud bong
     toggle.addOption("2 not auto (center)", m_testAuto);
     toggle.addOption("2 note auto (fixed)", m_twoNoteAuto);
     SmartDashboard.putData("Select Autonomous", toggle);//the puppet master
@@ -106,10 +126,10 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(//I drive
-                -MathUtil.applyDeadband(m_romeo.getLeftY(), IOConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_romeo.getLeftX(), IOConstants.kDriveDeadband),
-                MathUtil.applyDeadband(m_romeo.getRightX(), IOConstants.kDriveDeadband),
-                IOConstants.fieldRelative, true),
+                -MathUtil.applyDeadband(m_romeo.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_romeo.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_romeo.getRightX(), OIConstants.kDriveDeadband) * -1,
+                true, true),
             m_robotDrive));
 
     m_shootElevator.setDefaultCommand(
@@ -128,63 +148,95 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureButtonBindings() { //ALL BUTTON BINDINGS ARE SUBJECT TO CHANGE
 
-    // Domain expansion (robot is trapped in a box)
     new JoystickButton(m_romeo, Button.kX.value)//youll never guess what button you gotta press to do this
         .onTrue(new RunCommand(//thats right its a button combo not gonna tell you how I did it its a secret
         () -> m_robotDrive.toggleBox(), m_robotDrive));
 
-    // Reset robot gyro (because the gyro was installed backward)
+        /***
+         * This is like my favorite poem btw if you even care
+         * 
+         * 
+O Captain! my Captain! our fearful trip is done,
+The ship has weather’d every rack, the prize we sought is won,
+The port is near, the bells I hear, the people all exulting,
+While follow eyes the steady keel, the vessel grim and daring;
+                         But O heart! heart! heart!
+                            O the bleeding drops of red,
+                               Where on the deck my Captain lies,
+                                  Fallen cold and dead.
+
+O Captain! my Captain! rise up and hear the bells;
+Rise up—for you the flag is flung—for you the bugle trills,
+For you bouquets and ribbon’d wreaths—for you the shores a-crowding,
+For you they call, the swaying mass, their eager faces turning;
+                         Here Captain! dear father!
+                            This arm beneath your head!
+                               It is some dream that on the deck,
+                                 You’ve fallen cold and dead.
+
+My Captain does not answer, his lips are pale and still,
+My father does not feel my arm, he has no pulse nor will,
+The ship is anchor’d safe and sound, its voyage closed and done,
+From fearful trip the victor ship comes in with object won;
+                         Exult O shores, and ring O bells!
+                            But I with mournful tread,
+                               Walk the deck my Captain lies,
+                                  Fallen cold and dead.
+
+         */
+
     new JoystickButton(m_romeo, Button.kStart.value)//romulus and remus
         .whileTrue(new RunCommand(
         () -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-    // Reset robot odometry 
     new JoystickButton(m_romeo, Button.kBack.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.resetOdometry(zeroPose2d) , m_robotDrive));
 
-    // Intake from ground
-    new JoystickButton(m_juliet, Button.kB.value)
-        .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo))
-        .whileFalse(new IntakeStopAuto(m_intake));
 
-    // Prepare for hanging
+
+    new JoystickButton(m_juliet, Button.kB.value)
+        .toggleOnTrue(new IntakeAuto(m_intake, m_juliet, m_romeo)).whileFalse(new IntakeStopAuto(m_intake));
+
     new JoystickButton(m_juliet, Button.kX.value)
         .toggleOnTrue(new PrepareHangAuto(m_intake, m_climber, m_juliet));
 
-    // Shoot the stored note
+
+
     new JoystickButton(m_juliet, Button.kRightBumper.value)
         .whileTrue(new SpeakerCommand(m_shooter, m_intake, m_juliet));
 
-    // Intake from source directly
     new JoystickButton(m_juliet, Button.kStart.value)
         .whileTrue(new SourceIntake(m_intake, m_shooter));
 
-    // Handoff intake -> shooter to prep for amp
     new JoystickButton(m_juliet, Button.kLeftBumper.value)
         .onTrue(new HandoffCommand(m_intake, m_shooter, m_juliet));
 
-    // Move pivot up
-    new JoystickButton(stinkyPooPoo, IOConstants.movePivotUp)
+    /*new JoystickButton(m_juliet, Button.kA.value)
+        .toggleOnTrue(new MovePivotIn(m_shootElevator));
+
+    new JoystickButton(m_juliet, Button.kY.value)
+        .toggleOnTrue(new MovePivotOut(m_shootElevator));*/
+
+
+
+    new JoystickButton(stinkyPooPoo, 1)
         .whileTrue(new RunCommand( 
-            () -> m_shootElevator.movePivot(false), m_shootElevator)).onFalse(
+            () -> m_shootElevator.movePivor(false), m_shootElevator)).onFalse(
                 new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
 
-    // Move pivot down
-    new JoystickButton(stinkyPooPoo, IOConstants.movePivotDown)
+    new JoystickButton(stinkyPooPoo, 3)
         .whileTrue(new RunCommand( 
-            () -> m_shootElevator.movePivot(true), m_shootElevator)).onFalse(
+            () -> m_shootElevator.movePivor(true), m_shootElevator)).onFalse(
                 new RunCommand(() -> m_shootElevator.stopPivot(), m_shootElevator));
 
-    // Lower elevator
-    new JoystickButton(stinkyPooPoo, IOConstants.moveElevatorDown).whileTrue(
+    new JoystickButton(stinkyPooPoo, 2).whileTrue(
         new RunCommand(() -> m_shootElevator.moveElevator(false), m_shootElevator)).onFalse(
             new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
 
-    // Raise elevator
-    new JoystickButton(stinkyPooPoo, IOConstants.moveElevatorUp).whileTrue(
+    new JoystickButton(stinkyPooPoo, 4).whileTrue(
         new RunCommand(() -> m_shootElevator.moveElevator(true), m_shootElevator)).onFalse(
             new RunCommand(() -> m_shootElevator.stopElevator(), m_shootElevator));
   }

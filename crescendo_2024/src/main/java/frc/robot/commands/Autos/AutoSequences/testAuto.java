@@ -37,7 +37,7 @@ public class testAuto extends SequentialCommandGroup{
             new ParallelCommandGroup(
                 new DriveAuto(driveSubsystem, initPose2d, emoPose2d, fristTrans, secondTrans).withTimeout(0.5),
                 new IntakeExtendAuto(intake).withTimeout(1),
-                new intakeRollersAuto(intake)
+                new intakeRollersAuto(intake)//.withTimeout(3)
             ),
             
             new ParallelCommandGroup(

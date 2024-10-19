@@ -66,7 +66,8 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(-m_gyro.getAngle()),
+      Rotation2d.fromDegrees(m_gyro.getAngle() * -1),
+      //Rotation2d.fromDegrees(0),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -75,7 +76,11 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {}
+  public DriveSubsystem() {
+    //m_gyro.reset();
+  }
+
+  
 
   @Override
   public void periodic() {
@@ -106,7 +111,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(-m_gyro.getAngle()),
+        Rotation2d.fromDegrees(m_gyro.getAngle() * -1),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -134,9 +139,11 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("X Position", xPos);
     SmartDashboard.putNumber("X Max Speed", speedCapX);
     SmartDashboard.putNumber("Y Max Speed", speedCapY);
+
     SmartDashboard.putBoolean("Imaginary Box", imaginaryBox);
 
-    if (imaginaryBox){//everything the light touches is our kingdom
+
+    if (imaginaryBox){
       xSpeed = xSpeed/4;
       ySpeed = ySpeed/4;
 
@@ -145,6 +152,33 @@ public class DriveSubsystem extends SubsystemBase {
 
       speedCapX = Math.pow(2.72, (-1 * kXPos * Math.pow(xPos, 2))) / 3;
       speedCapY = Math.pow(2.72, (-1 * kYPos * Math.pow(yPos, 2))) / 3;
+      //xSpeed = xSpeed > 0? Math.pow(Math.E, -1 * Math.pow(kXPos * m_odometry.getPoseMeters().getX(), 2)) :
+      /*if (xSpeed > 0){
+        xSpeed = xPos > 0? Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2)): xSpeed;
+      }else{
+        xSpeed = xPos < 0? Math.pow(2.7, -1 * Math.pow(kXNeg * xPos, 2)): xSpeed;
+      }*/
+
+      /*if (ySpeed > 0){
+        ySpeed = yPos > 0? Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2)): ySpeed;
+      }else{
+        ySpeed = yPos < 0? Math.pow(2.7, -1 * Math.pow(kYNeg * yPos, 2)): ySpeed;
+      }*/
+      //ySpeed = Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2));
+      //if ((xSpeed > 0 && xPos > 0) || (xSpeed < 0 && xPos < 0)){
+        //xSpeed = Math.abs(xSpeed) > Math.abs(Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2)))? Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2)): xSpeed;
+      //}
+      //if ((ySpeed > 0 && yPos > 0) || (ySpeed < 0 && yPos < 0)){
+        //ySpeed = Math.abs(ySpeed) > Math.abs(Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2)))? Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2)): ySpeed;
+      //}
+
+      //xSpeed = (xSpeed > 0) && xSpeed > Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2))? Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2)): xSpeed;
+      //xSpeed = (xSpeed < 0) && xSpeed < Math.pow(2.7, -1 * Math.pow(kXPos * xPos, 2))? Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2)): xSpeed;
+      //ySpeed = ySpeed * Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2));
+      //xSpeed = xSpeed * Math.pow(2.7, -1*Math.pow(kXPos * xPos, 2));
+
+      //ySpeed = (ySpeed > 0) && ySpeed > Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2))? Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2)): ySpeed;
+      //ySpeed = (ySpeed < 0) && ySpeed < Math.pow(2.7, -1 * Math.pow(kYPos * yPos, 2))? Math.pow(2.7, -1*Math.pow(kYPos * yPos, 2)): ySpeed;
 
       if (xPos < 0 && xSpeed * -1 > speedCapX){
         xSpeed = speedCapX * -1;
@@ -157,7 +191,6 @@ public class DriveSubsystem extends SubsystemBase {
         ySpeed = speedCapY;
       }
       
-      //beyond all you must not go there
       if (Math.abs(xSpeed) < 0.007){
         xSpeed = 0;
       }
@@ -169,7 +202,15 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    rot = setCurve(rot);  
+    rot = setCurve(rot);
+
+    /*if (opController.getAButton()){
+      xSpeed = opController.getLeftX();
+      ySpeed = opController.getLeftY();
+      rot = opController.getRightX();
+    }*/
+    
+    
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -224,7 +265,6 @@ public class DriveSubsystem extends SubsystemBase {
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
-    //honestly at this point if this doesn't work im gonna cry
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle() * -1))
@@ -285,13 +325,13 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(-m_gyro.getAngle()).getDegrees();
+    return Rotation2d.fromDegrees(m_gyro.getAngle() * -1).getDegrees();
   }
 
   public void toggleBox(){
     //my aura is immense 
     imaginaryBox ^= true;
-    //(this was easily +10,000,000,000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     )
+    //(this was easily +10,000,000,000)
   }
 
   /**
